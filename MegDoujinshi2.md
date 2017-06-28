@@ -591,6 +591,10 @@ export LD_PRELOAD='/usr/$LIB/libstdc++.so.6'
 export DISPLAY=:0
 ```
 
+さらに、jupyter内で下記を実行しないといけません。
+```{frame=single}
+%gui qt
+```
 [^cuda]:nVidiaのGPUを使った高速な計算ができる開発環境
 
 # MNE/Cのインストール(脳波、脳磁図をするばあい)
@@ -1124,6 +1128,31 @@ http://omake.accense.com/static/doc-ja/cython/index.html
 まぁ…そういうやり方もあります。正統派なやり方なのですが、本書では触れません。
 車輪の再発明に気をつけましょう。
 
+## 色々やる時のおまじないセット(必須？)
+python関連のおまじないが多いのが作図です。
+僕は以下のようなおまじないをよく唱えます。おすすめです。
+下記はpython部分。
+```{frame=single}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn
+```
+seabornはmatplotlibを拡張したもので、作図が可愛くなるので僕は好きです。
+
+## 作図用おまじないセット(必須)
+下記はjupyterのコマンド
+```{frame=single}
+%matplotlib inline
+%gui qt
+```
+%matplotlib inlineについては、この設定ならjupyter上に表示されます。
+もし、別窓[^betumado]を作りたいなら、inlineをqtに変えてください。
+下の%gui qtはmayaviによる3D表示のためのものです。
+
+python部分は面倒くさいので、毎回おまじないをモジュールにしてしまっています…。
+
+[^betumado]:生の波形を見たいときなどにはそのほうが向いてる
 ## データの読み込みとフィルタリング・リサンプル(公式サイト版)
 
 ついに　MNEを使い始めます。
