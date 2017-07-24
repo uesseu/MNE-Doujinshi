@@ -182,7 +182,7 @@ OSはlinuxかMACが必要で、windowsでは仮想環境なしではつらいで
 freeBSDも出来るかも分かりませんが、僕はしていません。
 僕は新しめのdebian系linuxであるUBUNTU[^ubuntu]またはMACを使います。
 
-[^win]:実はwindowsでもbash on windowsというunix系互換昨日が出来つつありますが、出来たばかりで成熟しているかというと疑問です。
+[^win]:実はwindowsでもbash on windowsというunix系互換機能がありますが、出来たばかりであまりユーザーも多くないでしょう。
 
 [^ubuntu]:UBUNTUはCanonical社によって開発されているオープンソースのlinuxディストリビューションであり、人気があります。debianというディストリビューションをベースに作られています。
 
@@ -211,7 +211,7 @@ https://brew.sh/index_ja.html
 
 [^docker]:最近流行りの仮想化環境です。性能が高いのが特徴ですが、反面使いこなすのには力が必要です。
 
-[^conda]:anacondaとはContinuumAnalytics社で開発されているpythonディストリビューションです。
+[^conda]:anacondaとはContinuumAnalytics社で開発されているデータサイエンティスト向けのpythonディストリビューションです。もちろん好みに応じてpyenvなどを使うのもありと思うのですが、mayaviというインストールの鬼門が存在するのでanacondaが楽です。
 
 https://www.continuum.io/downloads
 
@@ -225,7 +225,7 @@ spyderはとても素直な挙動のIDEでipythonの補完機能も手伝って�
 jupyterはwebベースの開発環境で、他の人とデータやソースコードの共有が容易なので捗ります。[^kirikae]
 
 
-![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。詳しい人に「githubじゃダメなん？」と言われましたが、このコードの共有はもっとこじんまりとした、非プログラマの先輩が後輩に教えながらコーディングする小さなラボを志向したものです。](img/jupyter.png)
+![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。詳しい人に「githubじゃダメなん？」と言われましたが、ここでいう共有ってそういう意味じゃないんですよ。非プログラマの先輩が後輩に教えながらコーディングする小さなラボで…という意味ですよ。まぁ、触ってみればわかります。また、本格的なソースの共有はできないので、git併用するのが良いかと思います。](img/jupyter.png)
 
 ![spyderの画面。ごく普通の素直な挙動のIDE。jupyterより動作が軽いのも魅力。一人で解析するならこれも良いものです。](img/spyder.png)
 
@@ -344,6 +344,9 @@ gitを知らない人は、とりあえずgithub desktopとかsource treeをダ�
 体でそれを知ってください。詳しくはgitでググってください。
 こことか参考になります。
 http://www.backlog.jp/git-guide/
+
+## gitbacket
+git単体でもいけるのですが、折角だからgitbacketを導入してみましょう。
 
 ## jupyterで作ったスクリプトのバージョン管理(小技)
 jupyterを僕は使いますが、jupyterのファイルはgitしにくいです。
