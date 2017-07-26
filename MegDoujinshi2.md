@@ -345,8 +345,59 @@ gitを知らない人は、とりあえずgithub desktopとかsource treeをダ�
 こことか参考になります。
 http://www.backlog.jp/git-guide/
 
-## gitbacket
-git単体でもいけるのですが、折角だからgitbacketを導入してみましょう。
+## gitサーバー
+git単体でもいけるのですが、折角だからgitのサーバーを導入してみましょう。
+一番いいのはgithubのプライベートリポジトリを使うことなんですが有料です。
+他にもbitbucketだとかgitlabとか色々あるのですが…僕自身は研究室のローカルなサーバーで
+実現したかったんです~~趣味もある~~
+なので、gitbucketを採用しました。gitbucketはgithubのクローンを目指して開発されたものです。
+
+### gitbucket導入
+gitbucketをググってgitbucket.warをダウンロードしてください。
+で、javaというか、jdkをインストールします。めんどいんで詳しくはググってください。
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+このまま
+```{frame=single}
+java -jar gitbucket.war
+```
+でも動くのですが、安定性に欠けるらしいので僕はPostgreSqlを導入します。
+
+とりあえず、いくつかunixユーザーを作りましょう…。
+そんで、データベース上に自分とgitbucketを登録します。
+
+```{frame=single}
+useradd postgres
+passwd postgres
+su postgres
+createuser -d hoge
+createdb hoge
+createdb gitbucket
+exit
+```
+
+上記で一応なんとかなると思うのですが、念のため確認を…
+postgresqlにログインして下記を叩けばちゃんとデータベースが出来たかを確認できます。
+
+```{frame=single}
+\du
+```
+
+.gitbucket/database.confを下記のように書き直します。
+```{frame=single}
+db {
+  url = "jdbc:postgresql://localhost/gitbucket"
+  user = "test"
+  password = "test"
+}
+```
+で、
+```{frame=single}
+java -jar gitbucket.war
+```
+
+これでip+:8080にアクセスすればgitbucket動いてます。
+(もちろん、これだけではセキュリティ面等、不十分です。ローカルだけで使いましょう。)
 
 ## jupyterで作ったスクリプトのバージョン管理(小技)
 jupyterを僕は使いますが、jupyterのファイルはgitしにくいです。
