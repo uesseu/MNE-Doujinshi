@@ -1399,7 +1399,7 @@ raw.save('fuga')
 なにしろ、脳磁図と違って脳波は沢山の形式があるのです。
 例えば、ヘッダーファイルを要求する形式があったりもしますし、
 モンタージュや眼球運動チャンネルの設定を追加せねばならぬ場合もあります。
-このセクションは闇が深いので、例文を書いて終わりにしたいと思います。
+このセクションは闇が深く、試行錯誤が要求されます。例文を書いて終わりにしたいと思います。
 
 脳波は以下の情報が入っています。
 
@@ -1407,40 +1407,54 @@ raw.save('fuga')
 - チャンネル名と空間データ
 - 測定条件
 
-例えば、僕がbiosemiでやったときは実験時に64番から72番チャンネルが眼球運動に割り当てられていました。
-また、モンタージュを指定せねばなりませんでした。そのため、下記のように書く必要がありました。
-その時は僕は眼球運動用チャンネルを下記のように番号割り振って指定しました。
+例えば、僕がbiosemiでやったときは実験時に64番から65番チャンネルに
+眼球運動が割り当てられていました。それぞれの名前は'X1','X2'でした。
+また、モンタージュ(センサーの空間情報)を指定せねばなりませんでした。
+そのため、下記のように書きました。
 
 ```{frame=single}
 raw=mne.io.read_raw_edf(filename,preload=True,
        montage='biosemi64',
-       eog=[64,65,66,67,68,69,70,71,72])
+       eog=[64,65],exclude=[66,67,68,69])
 ```
 
-このmontageは後で指定する事も可能です。
-montageは何かというと、センサースペースの位置情報です。
+上記のmontageはMNEpythonに組み込まれている出来合いのやつです。
+もしmontageのファイルが有るなら読み込むことも出来るのだそうです。
+excludeを指定すると要らないチャンネルを読み込まない、
+eogを指定するとそれは眼球運動チャンネルにするなど色々なオプションがあります。
+このmontageとかは下記のようにrawを読み込んだ後で指定する事も可能です。
 
+```{frame=single}
+raw.set_montage(mont)
+```
+
+### チャンネルの名前、空間との結びつけ
 さらに、眼球運動のチャンネルがどれがどれか分からなくなるのを
 防ぐために、僕は眼球運動のチャンネルに名前を割り当てました。
 ```{frame=single}
-raw.rename_channels(
-    mapping={
-      raw.info['ch_names'][64]:'LMASTOID',
-      raw.info['ch_names'][65]:'RMASTOID',
-      raw.info['ch_names'][66]:'LVEOGUP',
-      raw.info['ch_names'][67]:'LVEOGLO',
-      raw.info['ch_names'][68]:'HEOGL',
-      raw.info['ch_names'][69]:'HEOGR',
-      raw.info['ch_names'][70]:'RVEOGUP',
-      raw.info['ch_names'][71]:'RVEOGLO'})
+raw.rename_channels({'X1':'LeftEye','X2':'RightEye'})
 ```
 
-この時は番号順で振りましたが、例えば下記のように名前を変える感じでやる事もできます。
+実は、このチャンネルの名前というのはかなり重要なものです。
+MNEpythonでは脳波のチャンネル名前と空間情報をリンクした状態で読み込めないことがあります。
+そんな時はMNEpythonの中の出来合いの空間情報を名前と対応させます。
+例えば、下記コードを走らせてみてください。
+```{frame=single}
+mont=mne.channels.read_montage('standard_alphabetic')
+```
+jupyterやipythonならオブジェクトが吐き出されたはずです。
+これは、MNEpythonの中の出来合いのチャンネル☓空間情報です。
+例えば
+```{frame=single}
+print(mont.ch_names)
+mont.plot()
+```
+などとしてみればこれがどんなものか分かるかと思います。
+つまり、montageを使う時はMNEpythonはmont.ch_namesの文字列に合致した
+所に脳波のセンサーがあると仮定して動いてくれるのです。
 
-raw.infoはpythonの辞書形式のデータであり、
-例えば上の例なら64チャンネル目は'LMASTOID'という名前にしています。
-
-また、基準電極の設定は下記のような感じでできます。
+### 基準電極
+基準電極の設定は下記のような感じでできます。
 ```{frame=single}
 raw = mne.set_eeg_reference(
   raw, ref_channels=['LMASTOID'])[0]
@@ -1450,35 +1464,30 @@ raw = mne.set_eeg_reference(
 ```{frame=single}
 raw2=mne.set_eeg_reference(raw)[0]
 ```
-ちなみに、初期設定では全体の平均を基準電極としていますから、この設定はもしかすると不要かもです。
+ちなみに、初期設定では全体の平均を基準電極としていますから、この設定は実は不要です。
 
 末尾の[0]はこの関数がlist形式で結果を出してくるから必要です。
 詳細は
 http://martinos.org/mne/stable/python_reference.html
 を見て、各自読み替えてください。
 
-さて…これを見ると名前は単に見やすくするためだけに見えますが、実はMNEpythonでは
-センサーの位置情報と名前が紐づけされています。
-たとえば、standard_alphabeticというモンタージュなら、'Fz'とか'P3'とかの
-名前にそって位置情報が決定されていきます。
-下記は全ての位置情報、チャンネル名を割り当てないといけなくなった時に書いたスクリプトです。
-
-```{frame=single}
-mont = mne.channels.read_montage('standard_alphabetic')
-chlist = {u'EEG Fp1-Ref': 'Fp1', u'EEG Fp2-Ref': 'Fp2',
-          u'EEG F3-Ref': 'F3', u'EEG F4-Ref': 'F4',
-           u'EEG C3-Ref': 'C3', u'EEG C4-Ref': 'C4',
-          u'EEG P3-Ref': 'P3', u'EEG P4-Ref': 'P4',
-          u'EEG O1-Ref': 'O1', u'EEG O2-Ref': 'O2',
-          u'EEG F7-Ref': 'F7', u'EEG F8-Ref': 'F8',
-           u'EEG T3-Ref': 'T3', u'EEG T4-Ref': 'T4',
-          u'EEG T5-Ref': 'T5', u'EEG T6-Ref': 'T6',
-          u'EEG Fz-Ref': 'Fz', u'EEG Cz-Ref': 'Cz',  u'EEG Pz-Ref': 'Pz'}
-raw.rename_channels(chlist)
-raw.set_montage(mont)
-```
 このようなスクリプトははじめは面倒ですが、
 一度書いてしまえば後は使いまわしたり自動化出来ます。
+
+### トリガーチャンネル
+もう一つの鬼門がトリガーチャンネルです。つまり、刺激提示の時刻を記録したものです。
+これは通常下記で表示できます。
+```{frame=single}
+mne.find_events(raw)
+```
+rawの中に刺激提示チャンネルが読めない場合はどうにかしてテキスト形式とかで書き出してください。
+そこからは…貴方はもちろんpythonistaなので書けるはずです。
+例えば、pandasを使って
+```{frame=single}
+import pandas as pd
+shigeki=pd.read_csv('hoge.csv')
+```
+後はゴリゴリスクリプト書いてください。
 
 ## bad channelの設定
 
@@ -1499,6 +1508,7 @@ badchannelは、例えば明らかに一個だけ滅茶苦茶な波形…
 ```{frame=single}
 raw.interpolate_bads()
 ```
+後でbadchannelを無視したICAを掛けるとか、色々出来るわけです。
 
 ## ICAをかけよう
 
