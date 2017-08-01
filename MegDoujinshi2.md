@@ -999,9 +999,9 @@ pandasやmatplotlibもググってください。qiitaも結構良いです。
 でも、一番いいのは近くにいる人に習うことだと思います。
 あとは、毎日何らかの課題に向けてpythonスクリプトを書きましょう。指が覚えます。
 
-[とほほのpython入門 http://tohoho-web.com/python/index.html](http://tohoho-web.com/python/index.html)
+とほほのpython入門 http://tohoho-web.com/python/index.html](http://tohoho-web.com/python/index.html)
 
-[Python入門から応用までの学習サイト http://www.python-izm.com/](http://www.python-izm.com/)
+Python入門から応用までの学習サイト http://www.python-izm.com/](http://www.python-izm.com/)
 
 pythonを初めて使う場合は、どうせならjupyterを初めから使って
 慣れておけば良いのではないかと思います。
@@ -1017,7 +1017,7 @@ pythonを初めて使う場合は、どうせならjupyterを初めから使っ�
 …ではあんまりなので、ほんのさわりだけ紹介しておきます。
 下記サイトが参考になります。
 
-[Pythonの数値計算ライブラリ NumPy入門 http://rest-term.com/archives/2999/](http://rest-term.com/archives/2999/)
+Pythonの数値計算ライブラリ NumPy入門 http://rest-term.com/archives/2999/](http://rest-term.com/archives/2999/)
 
 ```{frame=single}
 import numpy as np
@@ -2392,12 +2392,19 @@ pythonと数学を学んで使いこなせたなら、十分理解できる分�
 $$y=ax$$
 これは単純な掛け算なわけですが、1センサー1ソースではなく、多センサー多ソースです。
 ここで、沢山になったy,a,xについて、下記のように表すとします。
+$$Y={y_1,y_2,y_3......}$$
+$$X={x_1,x_2,x_3......}$$
+ここで$A$を下記を満たす行列とします。
 $$Y=AX$$
-この連立方程式(連立方程式に見えない人は数学を復習しましょう)を解きます。
-…が、じつは解けません。一時連立方程式はあんまり数が多くなると解けなくなるのです。
-ですが、最も真実に近いのを推定することは出来ます。
-今回、脳全体の波形エネルギーが最も小さくなるような波を推定しましょう。
-そのやり方をMinimum-norm-estimationと言います。(他にもbeamformerとか色々あります)
+この連立方程式を解きます。これがどうしても連立方程式に見えない人は、
+行列代数の入門書でも読んで下さい。ネットで検索するよりこれは本です。
+
+では解きま…じつは解けません。
+一時連立方程式はあんまり数が多くなると解けなくなるのです。
+ですが、最も真実に近いっぽいのを推定することは出来ます。
+今回、脳全体のある一瞬の波が最も小さくなるような波を推定しましょう。
+そのやり方をMinimum-norm-estimationと言います。
+(他に一つ一つの波が一番小さくなるbeamformer法とか色々あります)
 
 つまり、条件$Y=AX$のもとで$X$を小さくしたいのです。
 (ノルムが小さい。中学生風に言うと絶対値)
@@ -2432,7 +2439,7 @@ $$A^T(AA^T)^{-1}Y=X$$
 式になるというわけです。凄いですね！
 
 # dSPMの理屈
-助けてください、脳が溶けそうです
+助けてください、脳が溶けそうです。
 (後日つづき書くことを約束します)
 
 
