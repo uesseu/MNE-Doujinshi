@@ -1000,8 +1000,7 @@ githubにあるpandasチートシートは結構優秀です。
 pandasやmatplotlibもググってください。qiitaも結構良いです。
 でも、一番いいのは近くにいる人に習うことだと思います。
 あとは、毎日何らかの課題に向けてpythonスクリプトを書きましょう。指が覚えます。
-
-とほほのpython入門 http://tohoho-web.com/python/index.html](http://tohoho-web.com/python/index.html)
+適当にググって良いサイトを見つければいいでしょう。
 
 Python入門から応用までの学習サイト http://www.python-izm.com/](http://www.python-izm.com/)
 
