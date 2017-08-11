@@ -123,7 +123,7 @@ C言語で実装されたMNE/Cというのもあり、併用する必要があ�
 導入と紹介を書いていこうと思います。ちなみに、新しければいいというわけではないです。
 python3.6は使いません。(´・ω:;.:...
 
-![wavelet変換の出力例](img/wavelet.png)
+![wavelet変換の出力例](img/wavelet.png){width=14cm}
 
 [^python]:コンピュータ言語の一つ。速度を犠牲にして、書きやすさを追求した言語。科学計算の世界では現時点では広く普及しています。MATLABと似ていますが、pythonは無料でオブジェクト指向の汎用言語なので、応用範囲がスマホアプリにまで及び、習得して損をすることはまずないでしょう。
 
@@ -225,9 +225,9 @@ spyderはとても素直な挙動のIDEでipythonの補完機能も手伝って�
 jupyterはwebベースの開発環境で、他の人とデータやソースコードの共有が容易なので捗ります。[^kirikae]
 
 
-![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。詳しい人に「githubじゃダメなん？」と言われましたが、ここでいう共有ってそういう意味じゃないんですよ。非プログラマの先輩が後輩に教えながらコーディングする小さなラボで…という意味ですよ。まぁ、触ってみればわかります。また、本格的なソースの共有はできないので、git併用するのが良いかと思います。](img/jupyter.png)
+![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。詳しい人に「githubじゃダメなん？」と言われましたが、ここでいう共有ってそういう意味じゃないんですよ。非プログラマの先輩が後輩に教えながらコーディングする小さなラボで…という意味ですよ。まぁ、触ってみればわかります。また、本格的なソースの共有はできないので、git併用するのが良いかと思います。](img/jupyter.jpg){width=14cm}
 
-![spyderの画面。ごく普通の素直な挙動のIDE。jupyterより動作が軽いのも魅力。一人で解析するならこれも良いものです。](img/spyder.png)
+![spyderの画面。ごく普通の素直な挙動のIDE。jupyterより動作が軽いのも魅力。一人で解析するならこれも良いものです。](img/spyder.jpg){width=14cm}
 
 [^kirikae]: 僕がjupyterを推す他の理由としてはクラスタ化して並列計算でゴリ押しが出来ること、有名なスクリプト言語の殆どに対応している事が挙げられます。
 
@@ -485,7 +485,7 @@ picoscope2000というのを使いました。windowsで動きます。かなり
 それで、刺激提示させた刺激を光センサーで捉え、差分を測定用コンピュータで受け取ります。
 
 
-![光センサー＋オシロスコープセット。総額3万円くらいしました。半田ごてを使わないといけないので、やけどに注意する必要があります。手前の小さな箱がオシロスコープ、左にあるのが電池、オシロスコープと電池の間にあるのが光センサーを回路にはんだ付けしたものをヒートシュリンクチューブで保護したもの、奥にあるのはコンピュータです。](img/photo.png)
+![光センサー＋オシロスコープセット。総額3万円くらいしました。半田ごてを使わないといけないので、やけどに注意する必要があります。手前の小さな箱がオシロスコープ、左にあるのが電池、オシロスコープと電池の間にあるのが光センサーを回路にはんだ付けしたものをヒートシュリンクチューブで保護したもの、奥にあるのはコンピュータです。](img/photo.jpg){width=14cm}
 
 \newpage
 ## コンピュータクラスタ(計算量が膨大な場合)
@@ -663,7 +663,7 @@ source $FREESURFER_HOME/SetUpFreeSurfer.sh
 題名はlicence.txtとしてください。
 これでターミナルで'freeview'と叩けばfreesurferは動くはずです。
 
-![freeviewの画面](img/freeview.png)
+![freeviewの画面](img/freeview.png){width=14cm}
 
 しかし、実はこのままでは毎回上記の二行のコマンドを打たねば動かないです。
 そのため、手間を省くために下記の操作を行うことをオススメします。
@@ -783,11 +783,11 @@ MRIの形式の変換に大変有用です。
 mricronはmriの画像の閲覧が出来るソフトですが、
 この中にdcm2niiguiというソフトがあるはずなので、そのソフトを起動します。
 
-![dcm2niiの画面](img/nifti.png)
+![dcm2niiの画面](img/nifti.png){width=14cm}
 
 ちなみに、mricron自体はmri閲覧ソフトで、これもこれで有用です。
 
-![mricronによる3DMRI画像の閲覧](img/mricron.png)
+![mricronによる3DMRI画像の閲覧](img/mricron.png){width=14cm}
 
 例えば手元にあるMRIの形式がdicomならば、方言を吸収するためにNIFTI形式に直した方が
 僕の環境では安定していました。dcm2niiguiの画面にdicomのフォルダをドラッグしてください。
@@ -915,7 +915,7 @@ recon-all  -s <subject>   -autorecon-pial
 ```
 とします。
 
-![freeviewによる編集](img/freeview2.png)
+![freeviewによる編集](img/freeview2.png){width=14cm}
 
 ### 眼球が白質と間違われた時
 
@@ -1569,7 +1569,7 @@ ica.plot_sources(raw)
 ```
 
 
-![icaで分離した波。明らかに眼球運動や心電図が分離された図が出てくると思います。](img/ICA_wave.png)
+![icaで分離した波。明らかに眼球運動や心電図が分離された図が出てくると思います。](img/ICA_wave.png){width=14cm}
 
 個人的には生波形を見るのが明快で好きです。
 ちなみに、これを凄く詳しく見るには下記のようになります。重いですが、これも結構良いです。
@@ -1578,7 +1578,7 @@ ica.plot_sources(raw)
 ica.plot_properties(raw, picks=0)
 ```
 
-![ica propertyの図。左上を御覧ください。これこそが典型的な眼球運動のtopomapです。](img/ICA_property1.png)
+![ica propertyの図。左上を御覧ください。これこそが典型的な眼球運動のtopomapです。](img/ICA_property1.png){width=14cm}
 
 最後に、0番目と10番目の波をrawデータから取り除きます。
 ```{frame=single}
@@ -1635,9 +1635,9 @@ epochs.plot()
 evoked.plot()
 ```
 
-![epochsの例](img/epochs.png)
+![epochsの例](img/epochs.png){width=14cm}
 
-![evokedの例](img/evoked.png)
+![evokedの例](img/evoked.png){width=14cm}
 
 epochsやrawをプロットしたとき、どうなったでしょうか？
 jupyterではどのように表示するかを選ぶことが出来ます。
@@ -1679,13 +1679,13 @@ brain.add_label("BA1.thresh", color="red")
 注意すべき点として、拡張子や左右半球にかんしてはadd_label関数では
 省略して入力する必要があります。
 
-![pysurferで表示したfreesurferのラベルファイル](img/label.png)
+![pysurferで表示したfreesurferのラベルファイル](img/label.png){width=14cm}
 
 ちなみに、labelファイルはそれぞれのsubjectの中のlabelフォルダの中にあります。
 このlabelについてはブロードマンの脳磁図ベースの古典的なものが多いですね。
 新しい系はannotファイルの中に多いです。
 
-![pysurferで表示したfreesurferのannotationファイル](img/annot.png)
+![pysurferで表示したfreesurferのannotationファイル](img/annot.jpg){width=14cm}
 
 ```{frame=single}
 brain = surfer.Brain(subject, "lh", "inflated",
@@ -1741,9 +1741,9 @@ data=[evoked.data[evoked.info['ch_names'].index(ch)] for ch in channel]
 これを理解するためには高校数学を理解する必要があります。
 詳しくは後半の「初心者のための波形解析」を御覧ください。
 
-![waveletの例。これはmorlet waveletという種類。morletはモルレと読む。青は実数部分、緑は虚数部分。](img/wavelet_base.png)
+![waveletの例。これはmorlet waveletという種類。morletはモルレと読む。青は実数部分、緑は虚数部分。](img/wavelet_base.png){width=14cm}
 
-![morlet waveletの実数軸、虚数軸、角度軸による3d plot。](img/3d_wavelet_base.png)
+![morlet waveletの実数軸、虚数軸、角度軸による3d plot。](img/3d_wavelet_base.png){width=14cm}
 
 
 \newpage
@@ -2034,7 +2034,7 @@ mne.viz.plot_bem(subject=subject, subjects_dir=subjects_dir,
 ```
 これでBEMが表示されるはずです。
 
-![BEMの図示。](img/bem.png)
+![BEMの図示。](img/bem.png){width=14cm}
 
 ## 手順2、ソーススペース作成
 
@@ -2053,7 +2053,7 @@ http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space
 区画分けするので、その設定ですね。
 やり方によってソーススペースの数も変わるみたいです。
 
-![ソーススペースの図示。小さい点々がソーススペース。](img/src.png)
+![ソーススペースの図示。小さい点々がソーススペース。](img/src.png){width=14cm}
 
 ## 手順3、trans
 
@@ -2068,7 +2068,7 @@ mne.gui.coregistration(subject=subject,subjects_dir=subjects_dir,
 もし0から立ち上げた場合、山のようにあるMRIのsubjectから該当の
 subjectを探さねばならなくなります。
 
-![mne coregistrationの画面。大して苦行ではない。](img/trans.png)
+![mne coregistrationの画面。大して苦行ではない。](img/trans.png){width=14cm}
 
 手順はこうです。
 
@@ -2114,7 +2114,7 @@ mindist=mindist, n_jobs=4)
 mindistは頭蓋骨からみて、一番浅い部分にあるソーススペースの距離です。
 
 
-## 手順5、コヴァリアンス
+## 手順5、コヴァリアンスマトリックス関連
 
 またかよ、という感じですが、またノイズ取りです。しかし、今回はさほど苦行ではありません。
 covariance matrixというものを使ってソースベースのデータのノイズを取る必要があります。
@@ -2123,7 +2123,7 @@ covariance matrixというものを使ってソースベースのデータのノ
 cov = mne.compute_raw_covariance(raw_empty_room,
    tmin=0, tmax=None)
 ```
-これでコヴァリアンスを行うことになりますが…MNEには更に追加の方法があります。
+これでコヴァリアンスを作ることになりますが…MNEには更に追加の方法があります。
 上記の空室の方法は広く行われている方法ですが、
 誘発電位を見たい場合はrestingstate(脳が何もしていない時の活動電位)
 がノイズ(本来ノイズではないが、ここではノイズ)として乗る可能性があります。
@@ -2312,6 +2312,10 @@ python3なんかは複素数の演算ができるので、$e^i$を計算でき�
 
 ところで、フーリエ変換にはFFTという超速いアルゴリズムがあります。
 これは畳み込みの定理を組み合わせることでwavelet変換にも応用できます。
+
+![再掲。morlet waveletの2Dプロット](img/wavelet_base.png)
+
+![再掲。3Dプロット](img/3d_wavelet_base.png)
 
 [^saihatu]:既に作られているものをもう一回作る無駄のことを、業界では「車輪の再発明」と言います。
 
