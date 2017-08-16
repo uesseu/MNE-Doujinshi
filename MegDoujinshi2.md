@@ -2426,8 +2426,8 @@ $$\frac{\partial g}{\partial x}=
 \frac{\partial g}{\partial y}$$
 の解。…という感じの公式です。
 行列の微分をしないといけないので、行列の微分の仕方を確認しておきます。
-$$\frac{\patrial a^tx}{\partial x}=a$$
-$$\frac{\patrial x^ta}{\partial x}=a$$
+$$\frac{\partial a^tx}{\partial x}=a$$
+$$\frac{\partial x^ta}{\partial x}=a$$
 これにより、
 $$L=||X||^{2}-\lambda (Y-AX)$$
 という式を$x$と$\lambda$でそれぞれ微分して下記のようになります。
