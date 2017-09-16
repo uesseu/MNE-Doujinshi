@@ -12,3 +12,6 @@ if (kind == 'pdf'):
 elif(kind == 'html'):
     os.system('pandoc ' + input_args +
               ' --self-contained --mathml -f markdown+hard_line_breaks '+ ' -o' + output_args )
+elif(kind == 'tex'):
+    os.system('pandoc ' + input_args +
+              ' --self-contained --mathml -f markdown+hard_line_breaks '+ ' -o' + output_args )
