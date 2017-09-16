@@ -715,6 +715,7 @@ http://martinos.org/mne/stable/install_mne_python.html
 - pip install mne --upgrade
 - conda install mayavi
 - pip install PySurfer
+- conda install pyqt=4
 
 CUDA[^cuda](GPGPU)についてもそのサイトに記載があります。
 
