@@ -1,0 +1,28 @@
+{
+  "bib": {
+    "nameNumber": 3,
+    "do": false,
+    "nameSep": ",",
+    "script": "[author]([year]);[title];[journal];[number](pp[pages]);[publisher]"
+  },
+  "writer": [
+    "--toc",
+    "--toc-depth=3"
+  ],
+  "format": "pdf",
+  "markdownextension": [
+    "markdown",
+    "hard_line_breaks"
+  ],
+  "latexengine": [
+    "--latex-engine=lualatex"
+  ],
+  "latex": [
+    "documentclass=ltjarticle",
+    "geometry:margin=1in"
+  ],
+  "latexpackage": [
+    "--listings"
+  ],
+  "sep": "\t"
+}

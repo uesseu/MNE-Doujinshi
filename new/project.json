@@ -1,0 +1,132 @@
+{
+  "introduction": {
+    "file": "/files/introduction.md",
+    "var": "/var/introduction.var",
+    "num": 0
+  },
+  "install-hardware": {
+    "file": "/files/install-hardware.md",
+    "var": "/var/install-hardware.var",
+    "num": 1
+  },
+  "install-os": {
+    "file": "/files/install-os.md",
+    "var": "/var/install-os.var",
+    "num": 2
+  },
+  "install-jupyter": {
+    "file": "/files/install-jupyter.md",
+    "var": "/var/install-jupyter.var",
+    "num": 3
+  },
+  "install-cuda": {
+    "file": "/files/install-cuda.md",
+    "var": "/var/install-cuda.var",
+    "num": 4
+  },
+  "install-git": {
+    "file": "/files/install-git.md",
+    "var": "/var/install-git.var",
+    "num": 5
+  },
+  "photosensor": {
+    "file": "/files/photosensor.md",
+    "var": "/var/photosensor.var",
+    "num": 6
+  },
+  "cluster": {
+    "file": "/files/cluster.md",
+    "var": "/var/cluster.var",
+    "num": 7
+  },
+  "install-maxfilter": {
+    "file": "/files/install-maxfilter.md",
+    "var": "/var/install-maxfilter.var",
+    "num": 8
+  },
+  "install-freesurfer": {
+    "file": "/files/install-freesurfer.md",
+    "var": "/var/install-freesurfer.var",
+    "num": 9
+  },
+  "install-mne": {
+    "file": "/files/install-mne.md",
+    "var": "/var/install-mne.var",
+    "num": 10
+  },
+  "freesurfer": {
+    "file": "/files/freesurfer.md",
+    "var": "/var/freesurfer.var",
+    "num": 11
+  },
+  "install-mricron": {
+    "file": "/files/install-mricron.md",
+    "var": "/var/install-mricron.var",
+    "num": 12
+  },
+  "before-mne": {
+    "file": "/files/before-mne.md",
+    "var": "/var/before-mne.var",
+    "num": 13
+  },
+  "speedup-python": {
+    "file": "/files/speedup-python.md",
+    "var": "/var/speedup-python.var",
+    "num": 14
+  },
+  "mne-omajinai": {
+    "file": "/files/mne-omajinai.md",
+    "var": "/var/mne-omajinai.var",
+    "num": 15
+  },
+  "mne-readdata": {
+    "file": "/files/mne-readdata.md",
+    "var": "/var/mne-readdata.var",
+    "num": 16
+  },
+  "mne-preprocessing": {
+    "file": "/files/mne-preprocessing.md",
+    "var": "/var/mne-preprocessing.var",
+    "num": 17
+  },
+  "mne-plot": {
+    "file": "/files/mne-plot.md",
+    "var": "/var/mne-plot.var",
+    "num": 18
+  },
+  "mne-wavelet": {
+    "file": "/files/mne-wavelet.md",
+    "var": "/var/mne-wavelet.var",
+    "num": 19
+  },
+  "mne-shukei": {
+    "file": "/files/mne-shukei.md",
+    "var": "/var/mne-shukei.var",
+    "num": 20
+  },
+  "mne-source": {
+    "file": "/files/mne-source.md",
+    "var": "/var/mne-source.var",
+    "num": 22
+  },
+  "math-wavelet": {
+    "file": "/files/math-wavelet.md",
+    "var": "/var/math-wavelet.var",
+    "num": 23
+  },
+  "math-mne": {
+    "file": "/files/math-mne.md",
+    "var": "/var/math-mne.var",
+    "num": 24
+  },
+  "books": {
+    "file": "/files/books.md",
+    "var": "/var/books.var",
+    "num": 25
+  },
+  "mne-connectivity": {
+    "file": "/files/mne-connectivity.md",
+    "var": "/var/mne-connectivity.var",
+    "num": 21
+  }
+}
