@@ -95,7 +95,6 @@ filtered_raw=ica.apply(raw,exclude=[0,10])
 これでicaはかけ終わりです。
 上記の出力結果や取り除いたチャンネル、random_stateは保存しておきましょう。
 
-\clearpage
 
 ## EpochとEvoked
 なんのことやら分かりにくい単語ですが、波形解析には重要なものです。

@@ -1,4 +1,3 @@
-\clearpage
 
 ## MRIと脳磁図計とELEKTA製ソフトの準備
 

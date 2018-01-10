@@ -7,7 +7,9 @@
   },
   "writer": [
     "--toc",
-    "--toc-depth=3"
+    "--toc-depth=3",
+    "-T MNE同人誌",
+    "--indented-code-classes=python,bash"
   ],
   "format": "pdf",
   "markdownextension": [
@@ -19,10 +21,13 @@
   ],
   "latex": [
     "documentclass=ltjarticle",
-    "geometry:margin=1in"
+    "geometry:margin=2cm",
+    "CJKmainfont=IPAexGothic",
+    "lang=en-US"
   ],
   "latexpackage": [
-    "--listings"
+    "--listings",
+    "--template eisvogel.tex"
   ],
   "sep": "\t"
 }

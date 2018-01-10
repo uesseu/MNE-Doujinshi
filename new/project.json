@@ -72,52 +72,52 @@
   "speedup-python": {
     "file": "/files/speedup-python.md",
     "var": "/var/speedup-python.var",
-    "num": 14
+    "num": 24
   },
   "mne-omajinai": {
     "file": "/files/mne-omajinai.md",
     "var": "/var/mne-omajinai.var",
-    "num": 15
+    "num": 14
   },
   "mne-readdata": {
     "file": "/files/mne-readdata.md",
     "var": "/var/mne-readdata.var",
-    "num": 16
+    "num": 15
   },
   "mne-preprocessing": {
     "file": "/files/mne-preprocessing.md",
     "var": "/var/mne-preprocessing.var",
-    "num": 17
+    "num": 16
   },
   "mne-plot": {
     "file": "/files/mne-plot.md",
     "var": "/var/mne-plot.var",
-    "num": 18
+    "num": 17
   },
   "mne-wavelet": {
     "file": "/files/mne-wavelet.md",
     "var": "/var/mne-wavelet.var",
-    "num": 19
+    "num": 18
   },
   "mne-shukei": {
     "file": "/files/mne-shukei.md",
     "var": "/var/mne-shukei.var",
-    "num": 20
+    "num": 19
   },
   "mne-source": {
     "file": "/files/mne-source.md",
     "var": "/var/mne-source.var",
-    "num": 22
+    "num": 21
   },
   "math-wavelet": {
     "file": "/files/math-wavelet.md",
     "var": "/var/math-wavelet.var",
-    "num": 23
+    "num": 22
   },
   "math-mne": {
     "file": "/files/math-mne.md",
     "var": "/var/math-mne.var",
-    "num": 24
+    "num": 23
   },
   "books": {
     "file": "/files/books.md",
@@ -127,6 +127,6 @@
   "mne-connectivity": {
     "file": "/files/mne-connectivity.md",
     "var": "/var/mne-connectivity.var",
-    "num": 21
+    "num": 20
   }
 }

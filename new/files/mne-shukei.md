@@ -152,7 +152,7 @@ print(summary(aov(df$value~df$group*df$hemisphere*df$test,data=df)))
 ```
 ここでpythonからいきなりRを書き始めます。
 pythonのscipyでの統計もいいのですが「なんで統計ソフト使わないん？舐めてるん？」
-と査読者からrejectを食らう可能性もありますから辞めましょう。
+とrejectを食らう可能性もありますから辞めましょう。
 今回は多重比較です。多重ANOVAを用います。aovがRのANOVA関数です。
 これをsummary関数に読ませることで結果を簡単にまとめます。
 さらに、print文を使うことで画面上に表示します。
@@ -163,4 +163,3 @@ ANOVA詳しい人は知っていると思いますが、これは相互作用を
 
 [^naihou]:pythonistaはリスト内包表記とか使うんでしょうが、ここは簡単のためにappend使っています。というか、この程度の処理ならappendで困りません。
 
-\clearpage

@@ -2,7 +2,8 @@
 
 ついに　MNEを使い始めます。
 まずは下記リンクを開けてください。
-http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filtering.html
+[http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filtering.html](http://martinos.org/mne/stable/python_reference.html
+)
 ちょっと小難しい文法を使っているように見えます。
 小難しい部分は初心者は混乱するだけなので無視してください。
 難しいなら読み飛ばして、次に移ってください。簡単にまとめています。
@@ -31,7 +32,8 @@ http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filterin
  色々と処理ができるようになります。(付けないと処理できないです…)
  脳波を解析するなら下記公式サイトの**Reading raw data**セクションに
  各種形式に対応した読み込み関数が書いてありますから、読み替えてください。
- http://martinos.org/mne/stable/python_reference.html
+ [http://martinos.org/mne/stable/python_reference.html]( http://martinos.org/mne/stable/python_reference.html)
+
  読み込みの詳細は後で書きます。
 - mne.read_selection:脳磁図の一部を取り出しています。
 - mne.pick_types:データの中から欲しいデータだけ取り出します。
@@ -57,9 +59,10 @@ http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filterin
 次にlow pass filterをかけます。
 
 - filter
-これは分かりやすいでしょう。ある周波数以上の波を除去します。
-ERPをする時は遅い周波数成分を除去するときは注意が必要なようです。
-0.1Hz未満でするのがいいのかもしれません。
+これは分かりやすいでしょう。ある周波数以上、以下の波を除去します。
+バンドパスフィルタと言います。
+ERPをする時は遅い周波数成分を除去するときは注意が必要です。
+その場合は0.1Hz未満でするのがいいのかもしれません。
 また、ICAでノイズ除去する時は1Hzくらいでかけるといいです。
 
 最後にサンプリングレートを変えています。
@@ -69,8 +72,7 @@ ERPをする時は遅い周波数成分を除去するときは注意が必要�
 ここでは100Hzまで下げていますが、最低見たい周波数の2〜3倍以上の周波数が必要です。
 また、周波数は元の周波数の約数である必要があります。
 
-以上…MNEの公式サイトは一寸詳しいです。
-僕にはちょっとつらかったですね…。
+以上…MNEの公式サイトは一寸詳しいです。僕にはちょっとつらかったですね…。
 
 ## データの読み込みとfilter,resample(僕の解説)
 
@@ -122,8 +124,8 @@ raw.save('fuga')
 
 例えば、僕がbiosemi active2という脳波計でやったときは
 出力されたファイル形式はbdf形式でした。
-このbdf形式は広く世界で使われている形式で、日本でよく使われる
-日本光電の脳波計でも新しい機械なら出力できたりします。
+このbdf形式は広く世界で使われているEDF形式の亜種です。日本でよく使われる
+日本光電の脳波計でも新しい機械ならEDFで出力できたりします。
 僕がやったときは実験時に64番から65番チャンネルに
 眼球運動が割り当てられており、それぞれの名前は'X1','X2'でした。
 このあたりは脳波計のユーザーが設定できる所なので、
@@ -151,9 +153,39 @@ raw=mne.io.read_raw_edf(filename,preload=True,
  これは、何番目のチャンネルはいらないよ、というやつです。
  あまりチャンネルが有ることは日常茶飯事です。
 
+### event情報が読み込めない場合
+EDF形式はevent情報が文字列として入ってたりします。
+そんな時はMNEpythonでは読めません。なので、別のソフトを使います。
+使うソフトはpyedflibです。インストールしましょう。
+```{frame=single}
+pip install pyedflib
+```
+そして、コードを書くのですが、たいへん面倒いです。
+```{frame=single}
+import pyedflib
+edf = pyedflib.EdfReader('hoge.edf')
+annot = edf.read_annotation()
+```
+これでannotにイベント情報が入るのですが、たまーにこのannotの中に
+2行で1つのイベントとかが入ってたりして、そいつを1つのイベントとして
+書き直すスクリプトを書かないといけなかったりするので面倒臭さが
+極まっています。githubに僕のコードをアップしておきますので、
+そいつを使ってもいいです。ただし、無保証です(´・ω・｀)
+
+### そもそも少しも読み込めない場合
+EDF形式はメジャーなのですが、そんな中にも色々な形式があります。
+EDF+CだとかEDF+Dだとか。EDF+Dは凄く読み込みにくいです。
+pyedflibはEDF+Dを読めません。しかし、万事休すではありません。
+open sourceのいいソフトがあります。edfbrowserというソフトです。
+
+[https://www.teuniz.net/edfbrowser/](https://www.teuniz.net/edfbrowser/)
+
+このサイトにはwindows版が公開されていますね。
+このソフトはtoolsメニューからEDF+DをEDF+Cに変換する事ができます。
+
+
 ### 脳波のセンサーの位置が変則的な場合
-さて…montageの話をします。
-montageは要するにセンサーの空間情報です。
+さて…montageの話をします。montageは要するにセンサーの空間情報です。
 この世には色々な脳波の取り付け方があります。「は？10-20法しかねえよ！」
 と言われそうですが、あるものは仕方ないのです。センサーの数の違いもありますし。
 
@@ -173,11 +205,10 @@ raw.set_montage(mont)
 
 ### 脳波のセンサーの名前が変則的な場合
 
-で、もう一つかなり面倒くさい問題があります。
+もう一つかなり面倒くさい問題があります。
 MNEpythonはチャンネルの位置情報を自動で設定する時に
 ファイルの中に記述されているチャンネルの名前を参照して
-位置情報を当てはめていきます。
-これの何が困るのでしょうか？
+位置情報を当てはめていきます。これの何が困るのでしょうか？
 
 脳波計がmontageの'Fp1'という風な普通の名前で出力してたら良いのですが、
 例えば'EEG-Fp1'という風な名前だったら名前を変えてあげないと読めないのです。
@@ -262,8 +293,7 @@ shigeki=pd.read_csv('hoge.csv')
 後はゴリゴリスクリプト書いてください。
 
 僕もこのようなトリガーチャンネルについて苦労しました。
-僕の場合はトリガーが脳波と同じように波形として記録されていたのです。
-脳波の波形は
+僕の場合はトリガーが脳波と同じように波形として記録されていたのです。脳波の波形は
 ```{frame=single}
 raw.get_data()
 ```

@@ -66,7 +66,6 @@ brain.add_annotation('aparc.a2009s')
 ```
 
 沢山表示されていますね。僕はちょっと気持ち悪いなぁと思いました。
-\clearpage
 
 ## 多チャンネル抜き出し
 

@@ -4,13 +4,13 @@
 かなり流暢なpythonistaが書いていると思われます。
 そのため、初心者が見るには敷居が高目です。
 一回はそれをなぞろうと思いますが、その後は噛み砕いてシンプルに紹介します。
-http://martinos.org/mne/stable/tutorials.html
-http://martinos.org/mne/stable/auto_examples/index.html
-http://martinos.org/mne/stable/python_reference.html
+[http://martinos.org/mne/stable/tutorials.html](http://martinos.org/mne/stable/tutorials.html)
+[http://martinos.org/mne/stable/auto_examples/index.html](http://martinos.org/mne/stable/auto_examples/index.html)
+[http://martinos.org/mne/stable/python_reference.html](http://martinos.org/mne/stable/python_reference.html)
 
-## jupyterの起動
+## エディタの起動
 
-ターミナルで下記を叩いてください
+jupyterを使うならターミナルで下記を叩いてください
 ```{frame=single}
 jupyter notebook
 ```
@@ -24,6 +24,15 @@ jupyter notebook --ip hoge
 ```
 jupyterはターミナルでctr-cを二回叩けば終了できます。
 では、左上のnewボタンからpython2を起動しましょう。
+
+spyderならターミナルで
+```{frame=single}
+spyder
+```
+です。
+
+もちろん、vimmerならvimを使ってもいいと思います！
+notepad.exeはお勧めしません！
 
 ## MNEpythonを使う前に学んでおくべきモジュール
 
@@ -39,7 +48,8 @@ pandasやmatplotlibもググってください。qiitaも結構良いです。
 毎日何らかの課題に向けてpythonスクリプトを書きましょう。指が覚えます。
 適当にググって良いサイトを見つければいいでしょう。
 
-Python入門から応用までの学習サイト http://www.python-izm.com/](http://www.python-izm.com/)
+Python入門から応用までの学習サイト
+[http://www.python-izm.com/](http://www.python-izm.com/)
 
 pythonを初めて使う場合は、どうせならjupyterを初めから使って
 慣れておけば良いのではないかと思います。
@@ -55,7 +65,8 @@ pythonを初めて使う場合は、どうせならjupyterを初めから使っ�
 …ではあんまりなので、ほんのさわりだけ紹介しておきます。
 下記サイトが参考になります。
 
-Pythonの数値計算ライブラリ NumPy入門 http://rest-term.com/archives/2999/](http://rest-term.com/archives/2999/)
+Pythonの数値計算ライブラリ NumPy入門
+[http://rest-term.com/archives/2999/](http://rest-term.com/archives/2999/)
 
 ```{frame=single}
 import numpy as np
@@ -110,7 +121,7 @@ array([5,7,9,11])
 
 maxfilterをかけると数学的に脳の外のノイズを取ることができます。
 これはMNEpythonでも出来はするのですが、今のところまだ成熟していないらしいので、
-エレクタ社のソフトを使うのが適当です。特許の問題もあり、MNEpythonでは
+エレクタ社のソフトを使うのが適当です。MNEpythonでは
 当面難しいのかもしれません。
 これがないとかなりノイズだらけのデータになりますので、必須です。
 

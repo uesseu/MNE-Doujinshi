@@ -73,7 +73,6 @@ MNEというpythonモジュールを使って自ら解析用スクリプトを�
 文脈上特に何もない場合、ターミナルでそれを叩いてくださいという意味です。
 pythonの文脈になったらpythonです。この辺りは見慣れれば判別できます。
 
-\clearpage
 
 ## それぞれの研究に必要な環境・特色のまとめ
 本書ではまず環境を構築しますので、色々インストールが必要です。
@@ -152,7 +151,6 @@ unix系もコンピュータ言語も触ったことない人には例え話の�
 |mricron|変換・表示用ソフト|画像変換ソフト,通訳|
 |freefurfer/freeview|MRI画像処理ソフト|何でも一人でこなそうとする部下|
 
-\clearpage
 
 ## MRIと脳磁図計とELEKTA製ソフトの準備
 
@@ -586,7 +584,7 @@ picoscope2000というのを使いました。windowsで動きます。かなり
 
 ![光センサー＋オシロスコープセット。総額3万円くらいしました。半田ごてを使わないといけないので、やけどに注意する必要があります。手前の小さな箱がオシロスコープ、左にあるのが電池、オシロスコープと電池の間にあるのが光センサーを回路にはんだ付けしたものをヒートシュリンクチューブで保護したもの、奥にあるのはコンピュータです。](img/photo.jpg){width=14cm}
 
-\clearpage
+
 ## コンピュータクラスタ(計算量が膨大な場合)
 
 これは無いならないでもいいですが、解析したい人数や観察したい場所が
@@ -1126,7 +1124,6 @@ mricronはmriの画像の閲覧が出来るソフトですが、
 
 となります。どれを使っても構わないと思います。
 
-\newpage
 
 # MNEを使う
 
@@ -1134,13 +1131,13 @@ mricronはmriの画像の閲覧が出来るソフトですが、
 かなり流暢なpythonistaが書いていると思われます。
 そのため、初心者が見るには敷居が高目です。
 一回はそれをなぞろうと思いますが、その後は噛み砕いてシンプルに紹介します。
-http://martinos.org/mne/stable/tutorials.html
-http://martinos.org/mne/stable/auto_examples/index.html
-http://martinos.org/mne/stable/python_reference.html
+[http://martinos.org/mne/stable/tutorials.html](http://martinos.org/mne/stable/tutorials.html)
+[http://martinos.org/mne/stable/auto_examples/index.html](http://martinos.org/mne/stable/auto_examples/index.html)
+[http://martinos.org/mne/stable/python_reference.html](http://martinos.org/mne/stable/python_reference.html)
 
-## jupyterの起動
+## エディタの起動
 
-ターミナルで下記を叩いてください
+jupyterを使うならターミナルで下記を叩いてください
 ```{frame=single}
 jupyter notebook
 ```
@@ -1154,6 +1151,15 @@ jupyter notebook --ip hoge
 ```
 jupyterはターミナルでctr-cを二回叩けば終了できます。
 では、左上のnewボタンからpython2を起動しましょう。
+
+spyderならターミナルで
+```{frame=single}
+spyder
+```
+です。
+
+もちろん、vimmerならvimを使ってもいいと思います！
+notepad.exeはお勧めしません！
 
 ## MNEpythonを使う前に学んでおくべきモジュール
 
@@ -1169,7 +1175,8 @@ pandasやmatplotlibもググってください。qiitaも結構良いです。
 毎日何らかの課題に向けてpythonスクリプトを書きましょう。指が覚えます。
 適当にググって良いサイトを見つければいいでしょう。
 
-Python入門から応用までの学習サイト http://www.python-izm.com/](http://www.python-izm.com/)
+Python入門から応用までの学習サイト
+[http://www.python-izm.com/](http://www.python-izm.com/)
 
 pythonを初めて使う場合は、どうせならjupyterを初めから使って
 慣れておけば良いのではないかと思います。
@@ -1185,7 +1192,8 @@ pythonを初めて使う場合は、どうせならjupyterを初めから使っ�
 …ではあんまりなので、ほんのさわりだけ紹介しておきます。
 下記サイトが参考になります。
 
-Pythonの数値計算ライブラリ NumPy入門 http://rest-term.com/archives/2999/](http://rest-term.com/archives/2999/)
+Pythonの数値計算ライブラリ NumPy入門
+[http://rest-term.com/archives/2999/](http://rest-term.com/archives/2999/)
 
 ```{frame=single}
 import numpy as np
@@ -1240,7 +1248,7 @@ array([5,7,9,11])
 
 maxfilterをかけると数学的に脳の外のノイズを取ることができます。
 これはMNEpythonでも出来はするのですが、今のところまだ成熟していないらしいので、
-エレクタ社のソフトを使うのが適当です。特許の問題もあり、MNEpythonでは
+エレクタ社のソフトを使うのが適当です。MNEpythonでは
 当面難しいのかもしれません。
 これがないとかなりノイズだらけのデータになりますので、必須です。
 
@@ -1255,165 +1263,6 @@ pythonを書くのは本気でやればすぐ出来ますが、
 読めていないと正確なところは書けません。
 僕はあまり強くないのでここからは不正確な部分が交じるでしょう。
 本書は純粋な技術書であることに留意し、最新の知識を入れ続けましょう。
-
-## pythonでの高速化のあれこれ
-
-今後、処理速度が大事になります。特にソースレベル解析ともなると膨大な計算量になります。
-その時のやり方をいくつか記しておきます。
-実用上必要になりますので、後ででも良いので見てみてください。
-
-### for文とリスト内包表記
-
-pythonのfor文は絶望的に遅いため、for文の入れ子はやめましょう…と言われています。
-軽い処理なら良いんじゃないかと個人的には思いますが。
-
-代わりと言ってはアレですが、このようなpython構文があります。
-```{frame=single}
-n=[i+4 for i in range(5) ]
-```
-この場合、[4,5,6,7,8]が帰ってきます。この書き方はリスト内包表記と言い、
-広く使われています。詳しくはググってください。
-
-### numpy
-
-numpyは速いので、重い演算の時は使えるなら使いましょう。
-pythonは四則演算とかfor文とかとっても遅いのです。
-
-### 並列化(白魔術、弱)
-
-いつもクラスタ対応な感じで並列化してて、この方法は覚えてないです。ごめんね。
-pyparallelでググってください。
-
-### クラスタレベルの並列化(白魔術、強)
-
-僕は普段からコンピュータが1台でも沢山でも、この方法で並列化しています。
-書き換えがめんどいからです。この方法は元々クラスタ作ってやる方法ですが、
-一人二役(コントローラとエンジン)することで一台でも実現できます。
-
-今回は複数の引数付きでやってみたいと思います。クラスタの作り方については詳しくは述べませんが、
-準備段階については前述していますから参照してください。
-
-その上で、おなじみのアレです。
-
-```{frame=single}
-pip install ipyparallel
-```
-
-クラスタの設定ファイルを作ります。
-```{frame=single}
-ipython profile create --parallel --profile=default
-```
-
-この設定ファイルのいじり方は公式サイトとか、qiitaの記事を見てください。
-
-その後のやり方は色々ありますが、僕のやり方を書きます。
-まず、元締めのコンピュータでクラスタを起動します。ターミナルで以下を叩いてください。
-
-```{frame=single}
-ipcontroller --ip=hogehoge --profile default
-```
-これでdefaultという名前のクラスタのコントローラをip指定で起動しました。
-…もちろん、1台だけの場合はipは要りません。
-次に、下記のように各計算機(子機？)でエンジンを起動していきます。
-
-
-```{frame=single}
-ipcluster engines --n=4 --profile=default
-```
---nは使うコア数です。元締めのコンピュータでも計算するなら同じようにしてください。
-これで準備が整いました。
-
-例えば、貴方が下記のような関数を実装したとします。
-
-```{frame=single}
-calc_source_evokedpower(id,person,tmax,tmin):
-    d=id+person+tmax+tmin
-    return d
-```
-うん、立派な関数ですね。
-
-この関数はグローバル変数を参照できないことに注意してください。
-変数やimport文は全て関数内で宣言するようにしてください。
-宗教的な理由で関数内でimport出来ない方はお引き取りください。
-
-このうち、idとpersonは全ての組み合わせを、tmaxとtminは固定した値を入れたいとします。
-これをクラスタレベルでガン回しします。
-
-```{frame=single}
-import itertools
-from ipyparallel import Client
-client=Client(profile='default')
-print(client.ids)
-
-function=calc_source_evokedpower
-
-product=zip(*list(itertools.product(id,person)))
-plus1=tuple(['20Hz']*len(arglist[0]))
-plus2=tuple(['50Hz']*len(arglist[0]))
-
-arglist=product+[plus1]+[plus2]
-
-view=client.load_balanced_view()
-async=view.map_async(function,*arglist)
-async.wait_interactive()
-```
-まず、ipyparallelをインポートします。一応クライアントを確認しておきます。
-functionに実行したい関数名を入れます。
-
-その後、itertoolsのproduct関数を使ってidとpersonの全ての組み合わせを作ります。
-さらに、固定した20Hzと50Hzを後に加えます。そして、配列を足し算していきます。
-
-その後、3行の呪文を唱えれば出来上がりです。返り値はasync[:]で見れます。
-
-
-### Cython(黒魔術、使いこなせば相当強い？)
-
-Cpython[^cpython]ではありません。Cythonという別ものです。
-pythonをCに変換することで場合によってはpythonの100倍[^hundred]のスピードを
-実現することが可能です。ただし、型を指定するなど加工しないと超速にはならないため、
-一寸手がかかります。さらに、numpyとかは型関係が難しいです。
-純粋かつ簡単なCで実装できるコードを突っ込むべきでしょう。
-jupyterは大変優秀なので、下記のようにするだけでCythonを実行することが出来ます。
-
-```{frame=single}
-%load_ext cython
-```
-これをjupyterで実行した後、関数を実装します。下記はnumpyの例です。
-```{frame=single}
-%%cython -a
-import numpy as np
-cimport numpy as np
-DINT=np.int
-ctypedef np.int_t DINT_t
-DDOUBLE=np.double
-ctypedef np.double_t DDOUBLE_t
-
-def u(np.ndarray[DDOUBLE_t,ndim=1] ar):
-    cdef int n
-    cdef double m
-    for n in xrange(5):
-        m=np.mean(ar)
-        print(m)
-```
-上5行はCythonとnumpyを組み合わせた時の特有の黒魔術です。
-上では、numpyのためにint型とdouble型を用意してあげています。また、cdefは型指定です。
-関数を宣言するときも黒魔術的にnumpyの型を指定してあげねば
-なりません。じゃないと動くけど遅いままになります。ndimはnumpy配列の次元数です。
-
-それ以外はC言語を書いた人からすると型指定が必要なただのpythonなので、
-苦労はあまりないはずです？ちなみに、元々C言語なのでCythonを普通に使おうとすると
-普通のC以上に面倒くさいコンパイルの手続きが必要になります。
-
-詳しくはcythonのホームページをググってください。
-http://omake.accense.com/static/doc-ja/cython/index.html
-
-[^cpython]:pythonの正式名称
-[^hundred]:誇張ではありません。実際に効率の悪いpythonコードを最適化すると100倍速くなったりします。最適化なしでも2倍くらい速くなることもあります。
-
-### C言語、C++、FORTRAN(最終兵器)
-
-まぁ…そういうやり方もあります。正統派なやり方なのですが、本書では触れません。
-車輪の再発明に気をつけましょう。
 
 
 ## 作図用おまじないセット
@@ -1448,7 +1297,8 @@ matplotlibの図を自動で可愛くしてくれるゆるふわパッケージ�
 
 ついに　MNEを使い始めます。
 まずは下記リンクを開けてください。
-http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filtering.html
+[http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filtering.html](http://martinos.org/mne/stable/python_reference.html
+)
 ちょっと小難しい文法を使っているように見えます。
 小難しい部分は初心者は混乱するだけなので無視してください。
 難しいなら読み飛ばして、次に移ってください。簡単にまとめています。
@@ -1477,7 +1327,8 @@ http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filterin
  色々と処理ができるようになります。(付けないと処理できないです…)
  脳波を解析するなら下記公式サイトの**Reading raw data**セクションに
  各種形式に対応した読み込み関数が書いてありますから、読み替えてください。
- http://martinos.org/mne/stable/python_reference.html
+ [http://martinos.org/mne/stable/python_reference.html]( http://martinos.org/mne/stable/python_reference.html)
+
  読み込みの詳細は後で書きます。
 - mne.read_selection:脳磁図の一部を取り出しています。
 - mne.pick_types:データの中から欲しいデータだけ取り出します。
@@ -1503,9 +1354,10 @@ http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filterin
 次にlow pass filterをかけます。
 
 - filter
-これは分かりやすいでしょう。ある周波数以上の波を除去します。
-ERPをする時は遅い周波数成分を除去するときは注意が必要なようです。
-0.1Hz未満でするのがいいのかもしれません。
+これは分かりやすいでしょう。ある周波数以上、以下の波を除去します。
+バンドパスフィルタと言います。
+ERPをする時は遅い周波数成分を除去するときは注意が必要です。
+その場合は0.1Hz未満でするのがいいのかもしれません。
 また、ICAでノイズ除去する時は1Hzくらいでかけるといいです。
 
 最後にサンプリングレートを変えています。
@@ -1515,8 +1367,7 @@ ERPをする時は遅い周波数成分を除去するときは注意が必要�
 ここでは100Hzまで下げていますが、最低見たい周波数の2〜3倍以上の周波数が必要です。
 また、周波数は元の周波数の約数である必要があります。
 
-以上…MNEの公式サイトは一寸詳しいです。
-僕にはちょっとつらかったですね…。
+以上…MNEの公式サイトは一寸詳しいです。僕にはちょっとつらかったですね…。
 
 ## データの読み込みとfilter,resample(僕の解説)
 
@@ -1568,8 +1419,8 @@ raw.save('fuga')
 
 例えば、僕がbiosemi active2という脳波計でやったときは
 出力されたファイル形式はbdf形式でした。
-このbdf形式は広く世界で使われている形式で、日本でよく使われる
-日本光電の脳波計でも新しい機械なら出力できたりします。
+このbdf形式は広く世界で使われているEDF形式の亜種です。日本でよく使われる
+日本光電の脳波計でも新しい機械ならEDFで出力できたりします。
 僕がやったときは実験時に64番から65番チャンネルに
 眼球運動が割り当てられており、それぞれの名前は'X1','X2'でした。
 このあたりは脳波計のユーザーが設定できる所なので、
@@ -1597,9 +1448,39 @@ raw=mne.io.read_raw_edf(filename,preload=True,
  これは、何番目のチャンネルはいらないよ、というやつです。
  あまりチャンネルが有ることは日常茶飯事です。
 
+### event情報が読み込めない場合
+EDF形式はevent情報が文字列として入ってたりします。
+そんな時はMNEpythonでは読めません。なので、別のソフトを使います。
+使うソフトはpyedflibです。インストールしましょう。
+```{frame=single}
+pip install pyedflib
+```
+そして、コードを書くのですが、たいへん面倒いです。
+```{frame=single}
+import pyedflib
+edf = pyedflib.EdfReader('hoge.edf')
+annot = edf.read_annotation()
+```
+これでannotにイベント情報が入るのですが、たまーにこのannotの中に
+2行で1つのイベントとかが入ってたりして、そいつを1つのイベントとして
+書き直すスクリプトを書かないといけなかったりするので面倒臭さが
+極まっています。githubに僕のコードをアップしておきますので、
+そいつを使ってもいいです。ただし、無保証です(´・ω・｀)
+
+### そもそも少しも読み込めない場合
+EDF形式はメジャーなのですが、そんな中にも色々な形式があります。
+EDF+CだとかEDF+Dだとか。EDF+Dは凄く読み込みにくいです。
+pyedflibはEDF+Dを読めません。しかし、万事休すではありません。
+open sourceのいいソフトがあります。edfbrowserというソフトです。
+
+[https://www.teuniz.net/edfbrowser/](https://www.teuniz.net/edfbrowser/)
+
+このサイトにはwindows版が公開されていますね。
+このソフトはtoolsメニューからEDF+DをEDF+Cに変換する事ができます。
+
+
 ### 脳波のセンサーの位置が変則的な場合
-さて…montageの話をします。
-montageは要するにセンサーの空間情報です。
+さて…montageの話をします。montageは要するにセンサーの空間情報です。
 この世には色々な脳波の取り付け方があります。「は？10-20法しかねえよ！」
 と言われそうですが、あるものは仕方ないのです。センサーの数の違いもありますし。
 
@@ -1619,11 +1500,10 @@ raw.set_montage(mont)
 
 ### 脳波のセンサーの名前が変則的な場合
 
-で、もう一つかなり面倒くさい問題があります。
+もう一つかなり面倒くさい問題があります。
 MNEpythonはチャンネルの位置情報を自動で設定する時に
 ファイルの中に記述されているチャンネルの名前を参照して
-位置情報を当てはめていきます。
-これの何が困るのでしょうか？
+位置情報を当てはめていきます。これの何が困るのでしょうか？
 
 脳波計がmontageの'Fp1'という風な普通の名前で出力してたら良いのですが、
 例えば'EEG-Fp1'という風な名前だったら名前を変えてあげないと読めないのです。
@@ -1708,8 +1588,7 @@ shigeki=pd.read_csv('hoge.csv')
 後はゴリゴリスクリプト書いてください。
 
 僕もこのようなトリガーチャンネルについて苦労しました。
-僕の場合はトリガーが脳波と同じように波形として記録されていたのです。
-脳波の波形は
+僕の場合はトリガーが脳波と同じように波形として記録されていたのです。脳波の波形は
 ```{frame=single}
 raw.get_data()
 ```
@@ -1816,7 +1695,6 @@ filtered_raw=ica.apply(raw,exclude=[0,10])
 これでicaはかけ終わりです。
 上記の出力結果や取り除いたチャンネル、random_stateは保存しておきましょう。
 
-\clearpage
 
 ## EpochとEvoked
 なんのことやら分かりにくい単語ですが、波形解析には重要なものです。
@@ -1923,7 +1801,6 @@ brain.add_annotation('aparc.a2009s')
 ```
 
 沢山表示されていますね。僕はちょっと気持ち悪いなぁと思いました。
-\clearpage
 
 ## 多チャンネル抜き出し
 
@@ -1977,9 +1854,6 @@ data=[evoked.data[evoked.info['ch_names'].index(ch)] for ch in channel]
 ![morlet waveletの実数軸、虚数軸、角度軸による3d plot。](img/3d_wavelet_base.png){width=14cm}
 
 
-\clearpage
-
-
 ### wavelet変換にまつわる臨床的な単語
 
 wavelet変換に登場する単語としては以下のものが挙げられます。
@@ -2029,7 +1903,6 @@ evoked_power=mne.time_frequency.tfr_morlet(evoked,n_jobs=4,
 - return_itc : これをTrueにするとphaselocking factorも
  算出してくれます。
 
- \clearpage
 
 この関数はevokedもepochsも引数として取ることが出来ます。
 return_itcがTrueかFalseかでも大きく挙動が違います。
@@ -2205,7 +2078,7 @@ print(summary(aov(df$value~df$group*df$hemisphere*df$test,data=df)))
 ```
 ここでpythonからいきなりRを書き始めます。
 pythonのscipyでの統計もいいのですが「なんで統計ソフト使わないん？舐めてるん？」
-と査読者からrejectを食らう可能性もありますから辞めましょう。
+とrejectを食らう可能性もありますから辞めましょう。
 今回は多重比較です。多重ANOVAを用います。aovがRのANOVA関数です。
 これをsummary関数に読ませることで結果を簡単にまとめます。
 さらに、print文を使うことで画面上に表示します。
@@ -2216,7 +2089,6 @@ ANOVA詳しい人は知っていると思いますが、これは相互作用を
 
 [^naihou]:pythonistaはリスト内包表記とか使うんでしょうが、ここは簡単のためにappend使っています。というか、この程度の処理ならappendで困りません。
 
-\clearpage
 
 
 ## Connectivity
@@ -3040,6 +2912,206 @@ $$X'=\frac{BY}{\sqrt{BCB^{T}}}$$
 とするのが僕のdSPMに対する理解です。
 間違ってたらごめん(´・ω・｀)
 
+# pythonでの高速化のあれこれ
+
+時に、処理速度が大事になります。特にソースレベル解析ともなると膨大な計算量になります。
+その時のやり方をいくつか記しておきます。
+
+## for文とリスト内包表記
+
+pythonのfor文は絶望的に遅いため、for文の入れ子はやめましょう…と言われています。
+軽い処理なら良いんじゃないかと個人的には思いますが。
+
+代わりと言ってはアレですが、このようなpython構文があります。
+```{frame=single}
+n=[i+4 for i in range(5) ]
+```
+この場合、[4,5,6,7,8]が帰ってきます。この書き方はリスト内包表記と言い、
+広く使われています。詳しくはググってください。
+
+## numpy
+
+numpyは速いので、重い演算の時は使えるなら使いましょう。
+pythonは四則演算とかfor文とかとっても遅いのです。
+
+## 並列化(白魔術、弱)
+
+pythonでの並列化はとても簡単です。
+```{frame=single}
+from multiprocessing import Pool
+```
+このPoolというのがお手軽並列化ツールです。
+並列化する時は必ず何か関数を定義して下さい。
+```{.python frame=single}
+def test(i):
+    return i*8
+```
+これをPoolの中にぶちこみます。
+```{frame=single}
+p=Pool(5)
+result=p.map(test,[1,2,3,4])
+p.close()
+result.get()
+```
+pという変数に並列化するための箱をつくりました。
+この箱には5つのCPUで並列する機能をつけました。
+そして、箱の中に並列したいtest関数と、それに入れたい変数を配列の形で
+入れました。pの中にmapという関数がありますが、こいつが並列化の関数です。
+こいつを回せば、[8,16,24,32]という結果が出てくるのです。
+
+しかし、これでは引数が1つのものじゃないと無理です。
+複数ある場合は、wrapper[^wrapper]を使わねばなりません。
+```{frame=single}
+from multiprocessing import Pool
+def test(i,j):
+    return i*j
+def wrap(a):
+    return test(*a)
+p=Pool(5)
+result=p.map_async(wrap,[(1,2),(4,6)])
+p.close()
+result.get()
+```
+wrapという関数でtestという関数を包み込み、そいつに引数を渡します。
+ここではmap_asyncという関数を使っています。
+map_asyncはmapよりも頭の良い並列化関数です。
+mapは全員一斉にやる感じ、map_asyncは全員でやるけれど、終わった人は
+次の課題をし始める感じです。
+
+[^wrapper]: 関数を加工する関数みたいなもの。
+
+## クラスタレベルの並列化(白魔術、強)
+
+僕は普段からコンピュータが1台でも沢山でも、この方法で並列化しています。
+書き換えがめんどいからです。この方法は元々クラスタ作ってやる方法ですが、
+一人二役(コントローラとエンジン)することで一台でも実現できます。
+
+今回は複数の引数付きでやってみたいと思います。クラスタの作り方については詳しくは述べませんが、
+準備段階については前述していますから参照してください。
+
+その上で、おなじみのアレです。
+
+```{frame=single}
+pip install ipyparallel
+```
+
+クラスタの設定ファイルを作ります。
+```{frame=single}
+ipython profile create --parallel --profile=default
+```
+
+この設定ファイルのいじり方は公式サイトとか、qiitaの記事を見てください。
+
+その後のやり方は色々ありますが、僕のやり方を書きます。
+まず、元締めのコンピュータでクラスタを起動します。ターミナルで以下を叩いてください。
+
+```{frame=single}
+ipcontroller --ip=hogehoge --profile default
+```
+これでdefaultという名前のクラスタのコントローラをip指定で起動しました。
+…もちろん、1台だけの場合はipは要りません。
+次に、下記のように各計算機(子機？)でエンジンを起動していきます。
+
+
+```{frame=single}
+ipcluster engines --n=4 --profile=default
+```
+--nは使うコア数です。元締めのコンピュータでも計算するなら同じようにしてください。
+これで準備が整いました。
+
+例えば、貴方が下記のような関数を実装したとします。
+
+```{frame=single}
+calc_source_evokedpower(id,person,tmax,tmin):
+    d=id+person+tmax+tmin
+    return d
+```
+うん、立派な関数ですね。
+
+この関数はグローバル変数を参照できないことに注意してください。
+変数やimport文は全て関数内で宣言するようにしてください。
+宗教的な理由で関数内でimport出来ない方はお引き取りください。
+
+このうち、idとpersonは全ての組み合わせを、tmaxとtminは固定した値を入れたいとします。
+これをクラスタレベルでガン回しします。
+
+```{frame=single}
+import itertools
+from ipyparallel import Client
+client=Client(profile='default')
+print(client.ids)
+
+function=calc_source_evokedpower
+
+product=zip(*list(itertools.product(id,person)))
+plus1=tuple(['20Hz']*len(arglist[0]))
+plus2=tuple(['50Hz']*len(arglist[0]))
+
+arglist=product+[plus1]+[plus2]
+
+view=client.load_balanced_view()
+async=view.map_async(function,*arglist)
+async.wait_interactive()
+```
+まず、ipyparallelをインポートします。一応クライアントを確認しておきます。
+functionに実行したい関数名を入れます。
+
+その後、itertoolsのproduct関数を使ってidとpersonの全ての組み合わせを作ります。
+さらに、固定した20Hzと50Hzを後に加えます。そして、配列を足し算していきます。
+
+その後、3行の呪文を唱えれば出来上がりです。返り値はasync[:]で見れます。
+
+
+## Cython(黒魔術、使いこなせば相当強い？)
+
+Cpython[^cpython]ではありません。Cythonという別ものです。
+pythonをCに変換することで場合によってはpythonの100倍[^hundred]のスピードを
+実現することが可能です。ただし、型を指定するなど加工しないと超速にはならないため、
+一寸手がかかります。さらに、numpyとかは型関係が難しいです。
+純粋かつ簡単なCで実装できるコードを突っ込むべきでしょう。
+jupyterは大変優秀なので、下記のようにするだけでCythonを実行することが出来ます。
+
+```{frame=single}
+%load_ext cython
+```
+これをjupyterで実行した後、関数を実装します。下記はnumpyの例です。
+```{frame=single}
+%%cython -a
+import numpy as np
+cimport numpy as np
+DINT=np.int
+ctypedef np.int_t DINT_t
+DDOUBLE=np.double
+ctypedef np.double_t DDOUBLE_t
+
+def u(np.ndarray[DDOUBLE_t,ndim=1] ar):
+    cdef int n
+    cdef double m
+    for n in xrange(5):
+        m=np.mean(ar)
+        print(m)
+```
+上5行はCythonとnumpyを組み合わせた時の特有の黒魔術です。
+上では、numpyのためにint型とdouble型を用意してあげています。また、cdefは型指定です。
+関数を宣言するときも黒魔術的にnumpyの型を指定してあげねば
+なりません。じゃないと動くけど遅いままになります。ndimはnumpy配列の次元数です。
+
+それ以外はC言語を書いた人からすると型指定が必要なただのpythonなので、
+苦労はあまりないはずです？ちなみに、元々C言語なのでCythonを普通に使おうとすると
+普通のC以上に面倒くさいコンパイルの手続きが必要になります。
+
+詳しくはcythonのホームページをググってください。
+http://omake.accense.com/static/doc-ja/cython/index.html
+
+[^cpython]:pythonの正式名称
+[^hundred]:誇張ではありません。実際に効率の悪いpythonコードを最適化すると100倍速くなったりします。最適化なしでも2倍くらい速くなることもあります。
+
+## C言語、C++、FORTRAN(最終兵器)
+
+まぁ…そういうやり方もあります。正統派なやり方なのですが、本書では触れません。
+車輪の再発明に気をつけましょう。
+
+
 # おすすめの参考書
 ステルスマーケティングです。
 
@@ -3051,7 +3123,7 @@ $$X'=\frac{BY}{\sqrt{BCB^{T}}}$$
 
 - 事象関連電位―事象関連電位と神経情報科学の発展
  脳波関連の和書の名著です。なのですが、絶版です。古本を見つけたらすかさず買いましょう。
- 内容的には臨床医学に近い内容で、数学の要素は薄い文系の本です。
+ 内容的には凄く難しい数学はなく、実践的です。
  通読向けではありますが、やはり手を動かしながらじゃないときついです。
 
 - 脳磁気科学-SQUID計測と医学応用
@@ -3064,8 +3136,7 @@ $$X'=\frac{BY}{\sqrt{BCB^{T}}}$$
  これは異色の本です。多くの線形代数の本は文系や医学生には
  冥王星語でも読んでいるように感じるのですが、
  これは日本語で書いてあります。意味がわかります！
- 反面、内容は「分かっている人」からすると薄いのでしょうが、いいのです。
- このくらい噛み砕いてくれないとアホ(僕)にはわからんのです。
+ 反面、内容は「分かっている人」からすると薄いでしょう。
 
 - 統計的信号処理 信号・ノイズ・推定を理解する
  MNEって行列代数なのです。算数の基礎がわかってないと分かりません。

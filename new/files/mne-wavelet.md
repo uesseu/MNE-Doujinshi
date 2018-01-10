@@ -22,9 +22,6 @@
 ![morlet waveletの実数軸、虚数軸、角度軸による3d plot。](img/3d_wavelet_base.png){width=14cm}
 
 
-\clearpage
-
-
 ### wavelet変換にまつわる臨床的な単語
 
 wavelet変換に登場する単語としては以下のものが挙げられます。
@@ -74,7 +71,6 @@ evoked_power=mne.time_frequency.tfr_morlet(evoked,n_jobs=4,
 - return_itc : これをTrueにするとphaselocking factorも
  算出してくれます。
 
- \clearpage
 
 この関数はevokedもepochsも引数として取ることが出来ます。
 return_itcがTrueかFalseかでも大きく挙動が違います。
