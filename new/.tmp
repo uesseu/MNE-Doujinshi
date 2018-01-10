@@ -1549,7 +1549,13 @@ channel_list={
 raw.rename_channels(channel_list)
 ```
 これで、脳波のチャンネルの名前を変え終わりました。
+最後に、用意したmontageと脳波をくっつけます。
 
+```{frame=single}
+mont=mne.channels.read_montage('standard_1020')
+raw.set_montage(mont)
+```
+これで上手くいけば普通にMNEpythonで解析できます。
 
 ### 基準電極
 基準電極の設定は下記のような感じでできます。
