@@ -15,6 +15,10 @@ cd DATA
 recon-all -i ./hoge.nii -subject (患者番号) -all
 ```
 このコマンドを走らせると、完遂するのにおよそ丸１日かかります。
+かかりすぎですね？下記で4コア並列できます。
+```{frame=single}
+recon-all -i ./hoge.nii -subject (患者番号) -all -parallel
+```
 
 やっている事は、頭蓋骨を取り除き、皮質の厚さやボリュームの測定、標準脳への置き換え、
 皮質の機能別の色分け等、色々な事をしてます。詳しくはfreesurferのサイトを見て下さい。
@@ -54,7 +58,7 @@ aparc+aseg.mgzは部位別データ。部位別データには色を付けて読
 色々できますので、遊んで体で覚えるのが良いと思います。
 
 
-## 解析結果の修正の必要性
+## 解析結果のまとめ
 
 recon-allが終わった時点で、下記コマンドを入力しましょう。
 ```{frame=single}
@@ -64,6 +68,9 @@ asegstats2table --subjects hoge1 hoge2 hoge3 ...\
 subjectにはsubject(つまり解析済みデータの通し番号)を入れます。
 segnoには見たい位置を入力します。その位置というのは
 $FREESURFER_HOME/FreeSurferColorLUT.txtに書かれていますので参照しましょう。
+
+ちなみに、freesurfer6.0の時点でこのコマンドはpython2に依存しています。
+python3を使っている人はpython2を何らかの形で併用しましょう。
 
 これでhoge.csvというファイルが出力されます。
 このファイルの中には既に脳の各部位のボリュームや皮質の厚さ等、
