@@ -17,7 +17,7 @@ MNE/pythonやfreesurferを用いて脳内の電源推定…特にソースベー
 僕が個人的に考えている事もちょくちょく書きます。
 僕はelekta社のMEGを使っているのでelekta前提で書きます。
 
-本書の限界は僕のスキル不足（１年と少しかやっていない）と、これが同人誌であることです。
+本書の限界は僕のスキル不足(2年と少しかやっていない)と、これが同人誌であることです。
 不確実なものとして、疑って読んでいただければ幸いです。
 
 本書の対象者は以下のとおりです
@@ -61,6 +61,7 @@ MNEというpythonモジュールを使って自ら解析用スクリプトを�
 
 - hoge:貴方の環境に応じて読み替えてください、という意味のスラング
  fuga,piyoも同じ意味です。ちなみにこれは**日本語**です。
+ 英語が好きな方はfooとかbarとかになりますね。
 - 叩く:(コマンドをターミナルから)実行するという意味の他動詞
 - 回す、走らせる:重い処理を実行するという意味の他動詞
 - ターミナル:いわゆる「黒い画面」のこと。Macならユーティリティフォルダにある。
@@ -84,12 +85,12 @@ pythonの文脈になったらpythonです。この辺りは見慣れれば判�
  脳の深部の信号に強いですが、脳脊髄液や頭蓋骨を伝わって行くうちに
  信号が拡散してしまうため、空間分解能が低いです。
 - MEGセンサーレベル研究
- python(本書ではanaconda使用)、MNE/python、MNE/C、maxfilter
+ python(本書ではanaconda使用)、MNE/python、MNE/C
  ノイズに弱く、脳の深部に弱く、莫大な資金が必要な希少な機器です。
  それさえクリアできれば処理の重い脳波みたいなものです。
  ※ノートでは厳しいです。
 - MRI研究
- freesurfer、mricron
+ freesurfer、mricrogl(mricron)
  莫大な資金が必要ですが、それなりに普及しています。
  ネタが尽きようとも、新たな理論を持ち出してくる根性の分野です。
  ※ノートでは無理です。
@@ -97,8 +98,7 @@ pythonの文脈になったらpythonです。この辺りは見慣れれば判�
 - MEG+MRIソースレベル研究
  MEGとMRIを組み合わせた応用編となるため、紹介したものの全てが必要です。
  本書の本題です。MRIの空間分解能と脳磁図の時間分解能を備えた
- まさに　**†最強の解析†**　…のはずなんですが、どうなんでしょうね？
- あまり頭の良くない僕にはこの理論はあまりに難しく、頭がクラクラします。
+ まさに **†最強の解析†** …のはずなんですが、どうなんでしょうね？
  ※膨大な計算量が必要なため、でかいコンピュータが必要です。
 
 [^qiita]:日本のプログラマ用のSNSの一つです。
@@ -120,10 +120,11 @@ wavelet変換、コネクティビティ、その他あらゆる事が出来ま�
 C言語で実装されたMNE/Cというのもあり、脳磁図やるなら併用する必要があります。
 最近はMNEpythonに機能を移しているそうですが、移行はまだ完全ではないからです。
 両方共フリーウェアですが、MNE-Cは登録が必要です。
-開発は活発で、最近新バージョンは[MNE/python 0.15](http://martinos.org/mne/stable/index.html)です。
-freesurferは[6.0](https://surfer.nmr.mgh.harvard.edu/)が、pythonはpython3.6が最新です。
-導入と紹介を書いていこうと思います。ちなみに、諸事情ありpython2.7を使います。
-python3.6は使いません。(そのうち使えるようになります)
+開発は活発で、最近新バージョンは[MNE/python 0.16](http://martinos.org/mne/stable/index.html)です。
+freesurferは[6.0](https://surfer.nmr.mgh.harvard.edu/)が、pythonはpython3.7が最新です。
+導入と紹介を書いていこうと思います。
+最近MNEがアップデートされて、python3シリーズが使えるようになりました！
+pythonはpython3.6を使っていくことになります。
 
 ![wavelet変換の出力例](img/wavelet.png){width=14cm}
 
@@ -212,8 +213,8 @@ https://brew.sh/index_ja.html
 - 試すだけだとか、質素な開発環境でいい人も読み飛ばして下さい。
 
 開発環境はMNE使うなら必要です。詳しい人からは「docker[^docker]じゃダメなん？」という質問が
-来そうですが、ライセンスの問題がありますし、セットアップは自分でできなければ
-困ることもありましょう。僕はanaconda[^conda]を使います。何故ならインストールが楽だからです。
+来そうですが、セットアップは自分でできなければ困ることもありましょう。
+僕はanaconda[^conda]を使います。何故ならインストールが楽だからです。
 
 [^docker]:最近流行りの仮想化環境です。性能が高いのが特徴ですが、反面使いこなすのには力が必要です。
 
@@ -222,17 +223,48 @@ https://brew.sh/index_ja.html
 https://www.continuum.io/downloads
 
 このサイトからインストールプログラムをダウンロードします。
-anacondaは2と3があり、それぞれpython2と3に対応しています。どちらを選ぶか悩ましいです。
-3は現時点ではソースベース解析出来ませんが、そのうちpython2自体のサポートが切れます…。
-anacondaにspyderというIDEが付いてくるのでそれを使うのもいいでしょう。
-spyderはとても素直な挙動のIDEでipythonの補完機能も手伝って使いやすいです。
-しかし、僕のおすすめはjupyter+anaconda2で多言語切り替えながら使う方法です。
-jupyterはwebベースの開発環境で、他の人とデータやソースコードの共有が容易なので捗ります。[^kirikae]
+anacondaは2と3があり、それぞれpython2と3に対応しています。
+anaconda3を入れるのがいいと思います。
+anacondaにjupyterというrepl[^repl]とspyderというIDEが付いてきます。
+これらを使うのもまたいいと思います。
+
+[^repl]:特定言語用の対話型インターフェイスのこと。
+[^ide]:統合開発環境のこと。
+
+## それぞれの使用感
+開発環境は色々あるので軽く紹介します。
+
+### spyder
+とても素直な挙動のIDEでipythonの補完機能も手伝って使いやすいです。
+ただし、動作が重めなのと、企業のバックアップがなくなって今後が辛いです。
+
+### jupyter, ipython
+replというか、shellと言うかちょっと珍しい開発環境です。
+これだけで完結することも出来なくはないレベルの開発環境です。
+強みとしては
+- webベースなので遠隔操作可能
+- cythonやRといった他言語との連携が容易
+- 対話的インターフェイスがメイン
+僕はjupyterと他のIDEやテキストエディタを組み合わせるのがいいと思います。
+
+### atom, visual studio code
+atomもvscodeも現代的なテキストエディタです。
+python用ではありませんが、プラグインを入れてpythonのIDEとして使うことが出来ます。
+企業のバックアップがしっかりしているので、安心です。
+
+### vim
+漢のエディタ
+
+## 僕の今のおすすめは?
+- jupyter
+- anaconda
+- visual studio code
+という組み合わせです。
 
 
-![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。詳しい人に「githubじゃダメなん？」と言われましたが、ここでいう共有ってそういう意味じゃないんですよ。非プログラマの先輩が後輩に教えながらコーディングする小さなラボで…という意味ですよ。まぁ、触ってみればわかります。また、本格的なソースの共有はできないので、git併用するのが良いかと思います。](img/jupyter.jpg){width=14cm}
+![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。まぁ、触ってみればわかります。git併用するのが良いかと思います。](img/jupyter.jpg){width=14cm}
 
-![spyderの画面。ごく普通の素直な挙動のIDE。jupyterより動作が軽いのも魅力。一人で解析するならこれも良いものです。](img/spyder.jpg){width=14cm}
+![spyderの画面。ごく普通の素直な挙動のIDE。](img/spyder.jpg){width=14cm}
 
 [^kirikae]: 僕がjupyterを推す他の理由としては遠隔操作が簡単であること、有名なスクリプト言語の殆どに対応している事が挙げられます。
 
@@ -241,7 +273,7 @@ linuxではanacondaはダウンロード後、ターミナルで以下のよう�
 インストールします。bashです。ただのshじゃインストールできません。
 
 ```{frame=single}
-bash Anaconda3-4.3.0-Linux-x86_64.sh
+bash Anaconda3-hoge-Linux-x86_64.sh
 ```
 
 インストール先はホームフォルダでいいかとか、色々質問が出てきますが、
@@ -288,32 +320,35 @@ qt5が必要になります。
 ```
 これについては後でまた詳しく記載します。
 
-## python2,3二刀流(現時点では不要)
+## anaconda仮想環境
 
-このセクションは必要ありませんが、将来的にきっと
-python2から3に移行する時がMNEにもやってくると思いますので記しておきます。
+mneはpython3に移行したのですが、freesurferはまだpython2です。
+だから、その辺りを二刀流する必要があります。
+anacondaはpythonの仮想環境[^kasou]を作ることが出来ますのでそれを利用するのが楽です。
 
-python2と3を二刀流すべくキーボードを叩きます。現時点ではmayaviと言う
-結果の図示に必要なモジュールが古い環境でしか動かず、通常はpython2系を使うべきと考えます。
-以下、anaconda2から入れた場合です。逆の場合python2.7と読み替えて下さい。
+[^kasou]:仮想環境にも色々あります。例えば、pipenvなどです。anacondaも同じ様な感じで使えます。
+
+では、ipythonからやっていきましょう。
+ここでは、hogeという名前のpython3.6環境をjupyter上に作ってみましょう。
 
 ```{frame=single}
 ipython kernel install --user
-conda create -n python3 python=3.6 anaconda
-source activate python3
+conda create -n hoge python=3.6 anaconda
+source activate hoge
 ipython kernel install --user
 conda info -e
 ```
 1行目から順に何をやっているか述べます。
 
-1. 今のpython2の環境をjupyterに載せておく
+1. 今のpythonの環境をjupyterに載せておく
 1. condaで別バージョンのpython環境を作る
 1. 切り替える
 1. jupyterに組み込む
 1. 確認
 
-source activateコマンドでpythonの環境を切り替えられます。これでjupyterでpython2と3を
-切り替えられると思います。ちなみに間違って環境を作った場合は以下のコマンドで消せます。
+source activateコマンドでpythonの環境を切り替えられます。
+これでjupyterで色んな環境を切り替えられると思います。
+ちなみに間違って環境を作った場合は以下のコマンドで消せます。
 
 ```{frame=single}
 conda remove -n python3 --all
@@ -327,6 +362,7 @@ conda install libiconv
 conda install -c r r-essentials
 conda install -c r rpy2
 ```
+
 これによりRが動くようになり、貴方は少しだけ楽になります。
 何故なら、実験結果を同じ環境で動くRに吸い込ませられるので、
 「実験結果を入力するだけでワンクリックで統計解析結果まで出る」[^toukei]ような
@@ -334,19 +370,23 @@ conda install -c r rpy2
 ```{frame=single}
 %load_ext rpy2.ipython
 ```
+
 とした後
 ```{frame=single}
 %%R -i input -o output
 hogehoge
 ```
+
 という風に記述すればhogehogeがRとして動きます。plotも出来るし、引数、返り値も
 上述のとおり直感的です。さて、この-iですが、通常の数字や一次元配列は普通に入りますが、
 Rならデータフレームからやりたいものです。その場合はpandasというモジュールを使って
 受け渡しをします。例えばこのような感じです。
+
 ```{frame=single}
 import pandas as pd
 data=pd.Dataframe([二次元配列])
 ```
+
 ```{frame=single}
 %%R -i data
 print(summary(data))
@@ -672,11 +712,17 @@ http://qiita.com/chokkan/items/750cc12fb19314636eb7
 何故か僕がやると正攻法で動いてくれなかったので、下記のやり方をとりました。
 http://qiita.com/uesseu/items/def93d1a0e829aec8e86
 
-# maxfilterのインストール(MEG研究の場合)
+# maxfilterのインストール(elektaのやつ)
 
 maxfilterというフィルタがMEG研究ではほぼ必須です。
-これは外から飛んでくるノイズを数学的に除去するフィルタなのですが、
-MNEでは特許の問題もあって信頼に足る実装が出来ていません。泣き所の一つです。
+これは外から飛んでくるノイズを数学的に除去するフィルタです。
+
+これについてはMNEpythonにもあるのですが、elekta社のmaxfilterもあります。
+一長一短ですが、何も考えずに使うならelekta社でしょうか…。
+僕は以前はelektaのを使っていましたが、最近MNEに移行しました。
+MNEのは後で解説します。
+
+以前、コンテナを使って導入したことがあるので導入方法を説明しておきます。
 DANAというソフトとmaxfilterというソフトをELEKTA社から貰う必要があります。
 また、環境はRedhat5またはCentOs5の64bit版を使うことになっています。
 僕はdocker[^docker]でcentos5のコンテナをダウンロードしてインストールを試みました。
@@ -713,7 +759,7 @@ sh install
 /neuro/databases/sss/sss_cal.dat
 /neuro/databases/ctc/ct_sparse.fif
 この2つが必要です。ライセンスなどは日本法人の人に聞いたほうが良いです。
-細則があります。以上でmaxfilterのインストールは終わりです。
+細則があります。以上でelektaのmaxfilterのインストールは終わりです。
 
 # freesurferを使う(MRI)
 
@@ -874,24 +920,61 @@ recon-all   -s <subject>   -autorecon2-cp   -autorecon3
 # MNE/pythonのインストール(脳波、脳磁図をする場合)
 
 こちらはanacondaの存在下ではかなり簡単です。
+mne 0.16からは少しインストールの仕方が変わりました。
+仮想環境で構築することになります。
+このやり方のメリットは、いつでも同じ環境を整える事ができるので、
+ソフトのバージョンが変わっても対応しやすいということです。
+反面、毎回仮想環境に入らないといけないという小さなデメリットがあります。
+
 公式サイトをみながら頑張りましょう。
 http://martinos.org/mne/stable/install_mne_python.html
 
-要約すれば、下記に列挙するコマンドを順に叩いていけば良いです。
-- conda install scipy matplotlib scikit-learn
-- pip install mne --upgrade
-- conda install mayavi
-- pip install PySurfer
-- conda install pyqt=4
+anacondaのバージョンは新しくしておきましょう。
+新しくすればこのように確認できます。
+```{frame=single}
+$ conda --version && python --version
+conda 4.4.10
+Python 3.6.4 :: Continuum Analytics, Inc.
+```
+
+要約すれば...
+- curlでenvironment.ymlをダウンロードする
+- conda env create -f environment.yml
+
+これでmneの仮想環境が整いました。
+下記のコマンドでmneの環境に入れます。
+```{frame=single}
+source activate mne
+```
+今後はmneを使うときは必ず上記のコマンドを打って下さい。
+
+これで完結…と言いたいところなのですが、残念ながら
+mnepythonとfreesurferのコマンドラインツールにはまだ
+python2依存の部分があります。
+なので、python2の環境も作りましょう。
+ここ、公式に書いてない落とし穴です。
+
+```{frame=single}
+conda create -n python2 python=2.7 anaconda
+```
+この環境に入るには
+```{frame=single}
+source activate mne
+```
+です。
+
+macなら下記も必要です。
+```{frame=single}
+pip install --upgrade pyqt5>=5.10
+```
 
 CUDA[^cuda](GPGPU)についてもそのサイトに記載があります。
-
-この中で特にインストールの鬼門となるのはmayaviです。mayaviは3Dの表示をするソフトで、
-freesurferのデータをMEGとすり合わせる時の必需品となっています。
+CUDAはnvidiaのGPUしか動きません。インストールについては
+nvidiaのサイトも参照して下さい。
+ソースベースの解析をする場合はスピードが6倍くらいになります。
 
 僕の環境では下記二行のコマンドを予め入れていないと動かないです。
 .bash_profileや.bashrcに書き加えておけばいいでしょう。
-また、mayaviは基本、python2系でないと動きません。
 ```{frame=single}
 export LD_PRELOAD='/usr/$LIB/libstdc++.so.6'
 export DISPLAY=:0
@@ -950,6 +1033,10 @@ cd DATA
 recon-all -i ./hoge.nii -subject (患者番号) -all
 ```
 このコマンドを走らせると、完遂するのにおよそ丸１日かかります。
+かかりすぎですね？下記で4コア並列できます。
+```{frame=single}
+recon-all -i ./hoge.nii -subject (患者番号) -all -parallel
+```
 
 やっている事は、頭蓋骨を取り除き、皮質の厚さやボリュームの測定、標準脳への置き換え、
 皮質の機能別の色分け等、色々な事をしてます。詳しくはfreesurferのサイトを見て下さい。
@@ -989,7 +1076,7 @@ aparc+aseg.mgzは部位別データ。部位別データには色を付けて読
 色々できますので、遊んで体で覚えるのが良いと思います。
 
 
-## 解析結果の修正の必要性
+## 解析結果のまとめ
 
 recon-allが終わった時点で、下記コマンドを入力しましょう。
 ```{frame=single}
@@ -999,6 +1086,9 @@ asegstats2table --subjects hoge1 hoge2 hoge3 ...\
 subjectにはsubject(つまり解析済みデータの通し番号)を入れます。
 segnoには見たい位置を入力します。その位置というのは
 $FREESURFER_HOME/FreeSurferColorLUT.txtに書かれていますので参照しましょう。
+
+ちなみに、freesurfer6.0の時点でこのコマンドはpython2に依存しています。
+python3を使っている人はpython2を何らかの形で併用しましょう。
 
 これでhoge.csvというファイルが出力されます。
 このファイルの中には既に脳の各部位のボリュームや皮質の厚さ等、
@@ -1089,7 +1179,7 @@ Control pointsを選んでOKして、選ばれるべきだった白質を
 recon-all   -s <subject>   -autorecon2-cp   -autorecon3
 ```
 
-# mricronのインストールと変換(MRIを使う場合)
+# mricron/crogl(MRIを使う場合)
 
 mricronが必要になることもあるので、入れましょう。UBUNTUなら
 ```{frame=single}
@@ -1098,6 +1188,12 @@ sudo apt install mricron
 MACならhttp://www.mccauslandcenter.sc.edu/crnl/mricron/から
 インストーラーをダウンロードします。このmricronファミリーの中にあるdcm2niiというソフトが
 MRIの形式の変換に大変有用です。
+
+さて、今はより新しいやつがあります。
+mricroglというやつです。(まだ詳しくない)
+これはmricronでは変換できないものを変換することが出来ます。
+ここからダウンロード出来ます。
+[http://www.mccauslandcenter.sc.edu/mricrogl/](http://www.mccauslandcenter.sc.edu/mricrogl/)
 
 以上でfreesurfer/MNE/pythonのインストールは終了しました。
 これでjupyter経由でゴリゴリ計算していくことができます。
@@ -1158,8 +1254,11 @@ spyder
 ```
 です。
 
-もちろん、vimmerならvimを使ってもいいと思います！
+atomでもvisual studio codeでもいいと思います！
+もちろん、vimmer[^vimmer]ならvimを使ってもいいと思います！
 notepad.exeはお勧めしません！
+
+[^vimmer]:vim使いの事。僕は毎日vimを起動しています。
 
 ## MNEpythonを使う前に学んでおくべきモジュール
 
@@ -1177,11 +1276,6 @@ pandasやmatplotlibもググってください。qiitaも結構良いです。
 
 Python入門から応用までの学習サイト
 [http://www.python-izm.com/](http://www.python-izm.com/)
-
-pythonを初めて使う場合は、どうせならjupyterを初めから使って
-慣れておけば良いのではないかと思います。
-素のpythonも悪くはないですが、MNEの公式サイトにはjupyter notebook形式のスクリプトが
-用意されていますから、使わない手はないでしょう。
 
 [^numpy]:python用行列計算ライブラリ。科学計算に広く用いられています。
 
@@ -1605,6 +1699,9 @@ raw.get_data()
 
 苦行その1です。次にダメなチャンネルの設定や眼球運動の除去を行います。
 http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_rejection.html
+これには2つのやり方があります。
+
+### やり方1
 jupyterで%matplotlib qtとしたあとでraw.plot()でデータを見ながらひたすら下記のように
 badchannelを設定していってください。それだけです。
 
@@ -1613,7 +1710,14 @@ raw.info['bads'] = ['MEG 2443']
 ```
 badchannelは、例えば明らかに一個だけ滅茶苦茶な波形…
 振幅が大きくて他のとぜんぜん違う動きしているとか、
-物凄い周波数になっているとか、そういうやつを選んでください。
+物凄い周波数になっているとか、毛虫っぽいとか、そういうやつを選んでください。
+
+### やり方2
+raw.plot()
+をした上で、画面上でポチポチクリックしていけば、rawにbadが
+入っていくように出来ています。便利ですね！
+
+### interpolation
 選び終わったら、badchannelを補正します。
 隣接するチャンネルを平均したようなやつで置き換えることになります。
 それには下記を走らせるだけでいいです。
@@ -1621,6 +1725,46 @@ badchannelは、例えば明らかに一個だけ滅茶苦茶な波形…
 raw.interpolate_bads()
 ```
 後でbadchannelを無視したICAを掛けるとか、色々出来るわけです。
+
+### maxfilter
+MNEpythonにmaxfilterがあります。
+MEG使いの人はこれを使うのも一つの手です。
+[https://mne-tools.github.io/stable/generated/mne.preprocessing.maxwell_filter.html](https://mne-tools.github.io/stable/generated/mne.preprocessing.maxwell_filter.html)
+
+さて、maxfilterには2つファイルが必要です。
+この2つのファイルは、それぞれの施設によって違うものです。
+一つはcalibration用のdatファイル、一つはcrosstalk用のfifファイルです。
+これについてはelektaの機械ならあるはずなので、そこから抜き出すといいでしょう。
+ここについては僕は詳しくないので、周囲の賢者に聞いて下さい。
+
+もう一つ、MNEのmaxfilterには特徴があって、
+badchannelを設定してあげないとうまく動きません。
+因みに、elektaのは自動でbadchannelを設定しちゃうそうです。
+
+```python
+from mne.preprocessing import maxwell_filter
+cal = 'hoge.dat'
+cross = 'fuga.fif'
+raw = maxwell_filter(raw,calibration=cal,
+                     cross_talk=cross, st_duration=10)
+```
+このmaxwell_filter関数で行います。
+calibrationとcross_talkは見てのとおりと思いますが、
+st_durationも大事なやつです。
+MNEpythonの標準の設定ではst_durationはNoneなのですが、
+実際は数値を設定しないと酷いことになります。
+公式サイトには「俺たちのMEGはキレイだからNoneで良いんだ」と
+ドヤ顔していましたが、町中のMEGだと地下鉄通るだけで酷いことになるので、
+大草原の小さなラボとかでないなら設定してあげましょう。
+元祖elekta maxfilterではここが10になっています。
+
+このst_durationの数字は実はhighpass filterの役割も果たします。
+だから、注意が必要です。
+1/st_duration以下の周波数がカットされるので、
+遅い周波数を見たい人は気をつけて下さい。
+その他、いろいろな理由でst_durationは出来れば大きな値が良いそうですが、
+計算コストが上がるという欠点がありますので、程々に。
+
 
 ## ICAをかけよう
 
@@ -2247,7 +2391,7 @@ morlet waveletモードなら[見比べたチャンネルの数 X 周波数 X �
 難しいのです。頑張りましょう。
 
 ソースレベル解析については冒頭の記述を見ていただくとして、
-MRIとMEGをくっつけていきます。
+MRIとMEGをくっつけていきます。(MRIがない場合は標準脳を使える)
 目標は「脳内の信号を算出するための式を作る」事です。
 式さえできればなんとか計算できるわけです。
 手順としては以下のとおりです。
@@ -2284,10 +2428,11 @@ MRIとMEGをくっつけていきます。
 上記の通り、MRIから抽出してくる形データとして、BEMと言うものを使います。
 BEMは脳の全体を包み込むサランラップみたいなデータです。
 頭蓋骨とか皮とか、そういうのいろいろ考慮するために、BEMは三枚一組で
-出力されます。実装上はr3枚あるということを意識しなくても大丈夫です。
+出力されます。実装上は3枚あるということを意識しなくても大丈夫です。
 
 作るためにはfreesurferによる解析データが必要となります。
-ターミナルに戻って下記コマンドを入力しましょう。しばらくかかります。
+ターミナルに戻ってpython2の環境に入り、下記コマンドを入力しましょう。
+python3ではまだうまく動けないようです。しばらくかかります。
 freesurferを既に使っているならSubject関連は既に馴染んだ言葉でしょうか？
 もちろんSUBJECTやSUBJECTS_DIRは読み替えてください。
 ```{frame=single}
@@ -2304,44 +2449,42 @@ mne.viz.plot_bem(subject = subject, subjects_dir = subjects_dir,
 
 ![BEMの図示。](img/bem.png){width=14cm}
 
-## 手順2、ソーススペース作成
-
-脳磁図で見れる空間のうち、どの部分の電源を推定するかを
-設定する必要があります。その設定がソーススペースです。
-```{frame=single}
-src = mne.setup_source_space(subject = subject, spacing = 'oct6',
-      subjects_dir = subjects_dir)
+もし、標準脳を使うなら、以下のコマンドをターミナルから叩いて下さい。
+```bash
+mne coreg
 ```
-これで、srcという変数にソーススペースが入りました。
+guiの画面が現れると思います。
+'fsaverage→SUBJECTS_DIR'というボタンを押して下さい。
+freesurferの標準脳であるfsaverageが現れます。
+以降、subjectにはfsaverageを入れると標準脳を使うことになります。
 
-見慣れぬ単語が出てきました。oct6とは何でしょうか？
-それはここに書いてあります。
-http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space
+## 手順2、trans
 
-ソーススペースを作るためには計算上正十二面体や正八面体で
-区画分けするので、その設定ですね。
-やり方によってソーススペースの数も変わるみたいです。
-臨床的に意味があるかはわかりません。
+GUIでの操作となります。
+下記のコードを実行すると画面が立ち上がります。
 
-![ソーススペースの図示。小さい点々がソーススペース。](img/src.png){width=14cm}
+```{frame=single}
+mne.gui.coregistration()
+```
 
-## 手順3、trans
+subjectやmegへのpathを指定しない場合は、GUI上で指定することになります。
+もし0から立ち上げた場合、山のようにあるMRIのsubjectから該当の
+subjectを探さねばならなくなります。
 
-GUIでの操作となります。今回、freesurferのsubject,subjects_dirが必要なのと、
-MEGのデータへのpathが必要です。フルパスです。下記のコードを実行すると画面が立ち上がります。
+pythonの関数に色々入れてから起動すれば、
+既にデータが読み込まれているので、楽です。
 ```{frame=single}
 mne.gui.coregistration(subject = subject,subjects_dir = subjects_dir,
-  inst = file_path)
+                       inst = file_path)
 ```
 instはmegデータ…rawでもepochでも良いらしいですが、どれかを指定して下さい。
-コードを実行して立ち上げた場合、既にデータが読み込まれているので、楽です。
-もし0から立ち上げた場合、山のようにあるMRIのsubjectから該当の
-subjectを探さねばならなくなります。スクリプト書きましょう。
 
 ![mne coregistrationの画面。大して苦行ではない。](img/trans.png){width=14cm}
 
 手順はこうです。
 
+1. 必要ならば、MRIのsubjectを読み込む
+1. 必要ならば、fifファイルを読み込む
 1. 左側、setのところで耳と眉間の位置を入力(MEGのスタイラスでポチるところです)
 1. それの一寸上の所、lockをポチる。
 1. 右側、Fit LPA/RPAボタンを押す。
@@ -2353,6 +2496,32 @@ subjectを探さねばならなくなります。スクリプト書きましょ�
 trans = mne.read_trans('/Users/hoge/fuga/trans.fif')
 ```
 みたいな感じで読み込んで使います。
+
+## 手順3、ソーススペース作成
+
+脳磁図で見れる空間のうち、どの部分の電源を推定するかを
+設定する必要があります。その設定がソーススペースです。
+subjects_dirは環境変数に設定していれば要らないです。
+```{frame=single}
+src = mne.setup_source_space(subject = subject, spacing = 'oct6',
+      subjects_dir = subjects_dir)
+```
+もちろん、標準脳が欲しい場合は黙ってfsaverage。
+これで、srcという変数にソーススペースが入りました。
+
+見慣れぬ単語が出てきました。oct6とは何でしょうか？
+それはここに書いてあります。
+http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space
+
+ソーススペースを作るためには計算上正十二面体や正八面体で
+区画分けするので、その設定ですね。
+やり方によってソーススペースの数も変わるみたいです。
+臨床的に意味があるかはわかりません。
+
+標準脳を使う場合は'fsaverage'をsubjectに指定して下さい。
+ない場合は手順2のmne.gui.coregistration()でボタンを押して下さい。
+
+![ソーススペースの図示。小さい点々がソーススペース。](img/src.png){width=14cm}
 
 ## 手順4、順問題
 
@@ -2946,7 +3115,7 @@ n=[i+4 for i in range(5) ]
 numpyは速いので、重い演算の時は使えるなら使いましょう。
 pythonは四則演算とかfor文とかとっても遅いのです。
 
-## 並列化(白魔術、弱)
+## 並列化(まずます速い)
 
 pythonでの並列化はとても簡単です。
 ```{frame=single}
@@ -2971,7 +3140,12 @@ pという変数に並列化するための箱をつくりました。
 入れました。pの中にmapという関数がありますが、こいつが並列化の関数です。
 こいつを回せば、[8,16,24,32]という結果が出てくるのです。
 
-しかし、これでは引数が1つのものじゃないと無理です。
+ここではmap_asyncという関数を使う方法もあります。
+map_asyncはmapよりも頭の良い並列化関数です。
+mapは全員一斉にやる感じ、map_asyncは全員でやるけれど、終わった人は
+次の課題をし始める感じです。
+
+今の所引数が1つのものじゃないと無理です。
 複数ある場合は、wrapper[^wrapper]を使わねばなりません。
 ```{frame=single}
 from multiprocessing import Pool
@@ -2984,18 +3158,15 @@ result=p.map_async(wrap,[(1,2),(4,6)])
 p.close()
 result.get()
 ```
+うわ面倒くせえ…
 wrapという関数でtestという関数を包み込み、そいつに引数を渡します。
-ここではmap_asyncという関数を使っています。
-map_asyncはmapよりも頭の良い並列化関数です。
-mapは全員一斉にやる感じ、map_asyncは全員でやるけれど、終わった人は
-次の課題をし始める感じです。
+
+素直に引数一つの関数でやるのが楽で好きです。
 
 [^wrapper]: 関数を加工する関数みたいなもの。
 
-## クラスタレベルの並列化(白魔術、強)
-
-僕は普段からコンピュータが1台でも沢山でも、この方法で並列化しています。
-書き換えがめんどいからです。この方法は元々クラスタ作ってやる方法ですが、
+## クラスタレベルの並列化(数で押す方法)
+ipythonはコンピュータクラスタレベルの並列化をサポートしています。
 一人二役(コントローラとエンジン)することで一台でも実現できます。
 
 今回は複数の引数付きでやってみたいと思います。クラスタの作り方については詳しくは述べませんが、
@@ -3065,6 +3236,8 @@ view=client.load_balanced_view()
 async=view.map_async(function,*arglist)
 async.wait_interactive()
 ```
+これも面倒くせえ！
+
 まず、ipyparallelをインポートします。一応クライアントを確認しておきます。
 functionに実行したい関数名を入れます。
 
@@ -3074,7 +3247,7 @@ functionに実行したい関数名を入れます。
 その後、3行の呪文を唱えれば出来上がりです。返り値はasync[:]で見れます。
 
 
-## Cython(黒魔術、使いこなせば相当強い？)
+## Cython(使いこなせば相当強い)
 
 Cpython[^cpython]ではありません。Cythonという別ものです。
 pythonをCに変換することで場合によってはpythonの100倍[^hundred]のスピードを
@@ -3138,12 +3311,6 @@ http://omake.accense.com/static/doc-ja/cython/index.html
  内容的には凄く難しい数学はなく、実践的です。
  通読向けではありますが、やはり手を動かしながらじゃないときついです。
 
-- 脳磁気科学-SQUID計測と医学応用
- これも絶版の和書です。僕は算数も英語が苦手なのですが、
- この本はかなり数学チックなマニアックな内容の本で、初っ端から微積が出てきておののきます。
- でも、避けて通りながら読むことも出来るので、数学嫌いな人でも読めるかもです。
- 何が嬉しいかというと、大まかにMEGの歴史だとか目的とかが書かれています。
-
 - 意味がわかる線形代数
  これは異色の本です。多くの線形代数の本は文系や医学生には
  冥王星語でも読んでいるように感じるのですが、
@@ -3174,6 +3341,11 @@ http://omake.accense.com/static/doc-ja/cython/index.html
  基礎を学ぶには本当に良いです。その後はchainerだとかtensorflowだとか
  触れば良いんじゃないですかね？
 
+- パターン認識と機械学習(上下)
+通称ぷるむる。
+難しくてとてもつらいですが、機械学習方面では聖書の一つです。
+この領域では機械学習を使うこともあるので、必要になればどうでしょう？
+
 # おすすめサイト
 高校数学の美しい物語
 http://mathtrain.jp
@@ -3203,13 +3375,13 @@ twitterかよ！と思われるかもですが、学者さんのアカウント�
 github
 https://github.com
 プログラマ用SNSの中でも最も有名なものでしょう。
-qiitaはただの記事集ですが、githubは開発ツールです。
-ただし、学習コストがかなり高いのと、真価を発揮するのは団体戦なのとで、熟練者向けですね。
-下記のgitを中心に据えたwebサービスです。余談ですがマスコットキャラのoctocatが可愛いです。
+qiitaはただの記事集ですが、githubは開発ツールです。ただし、学習コストが高いですね。
+下記のgitを中心に据えたwebサービスです。
+余談ですがマスコットキャラのoctocatが可愛いです。
 
 # おすすめソフト
-本書ではjupyterやspyderで環境構築をしました。
-つまり僕のオススメなのですが、それ以外のツールも紹介しておきましょう。
+これまで散々色んなソフトを紹介してきましたが、
+それ以外のツールも紹介しておきましょう。
 当然ながら全てフリーウェアです。
 
 - git
@@ -3224,18 +3396,9 @@ gitは使うための学習コストが結構高いです。
 こいつはgitを簡単に使いこなす為のGUIツールです。
 他にもgithub desktopとかgit kraken等色々あります。好きなの使えばいいです。
 
-- atom
-お前はgithub社の回し者かといわれ言われそうですが、
-github社製のテキストエディタです。
-カスタマイズ可能ですが、ちょっと重いですが、大人気。
-jupyterとは逆方向に恐竜進化したツールですね。
-
-- vim
-vimは暗黒のエディタである。ククク…これを用いるのも一つの方法であろう。
-
 - pandoc
-markdownという形式で書いた文書をあらゆる形式に変換するソフトです。詳しくはコラム参照。
-これの何が嬉しいかというと、markdownで書いたものを
+markdownという形式で書いた文書をあらゆる形式に変換するソフトです。
+詳しくはコラム参照。 これの何が嬉しいかというと、markdownで書いたものを
 word、LaTeX、PDF、HTML等、あらゆる形式に変換してくれるのです。
 つまり、markdownさえかければ、他はいらなかった！
 (細かい所の調整はLaTeX書く必要が有ることもありますが…)
