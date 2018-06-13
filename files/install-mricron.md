@@ -1,4 +1,4 @@
-# mricronのインストールと変換(MRIを使う場合)
+# mricron/crogl(MRIを使う場合)
 
 mricronが必要になることもあるので、入れましょう。UBUNTUなら
 ```{frame=single}
@@ -7,6 +7,12 @@ sudo apt install mricron
 MACならhttp://www.mccauslandcenter.sc.edu/crnl/mricron/から
 インストーラーをダウンロードします。このmricronファミリーの中にあるdcm2niiというソフトが
 MRIの形式の変換に大変有用です。
+
+さて、今はより新しいやつがあります。
+mricroglというやつです。(まだ詳しくない)
+これはmricronでは変換できないものを変換することが出来ます。
+ここからダウンロード出来ます。
+[http://www.mccauslandcenter.sc.edu/mricrogl/](http://www.mccauslandcenter.sc.edu/mricrogl/)
 
 以上でfreesurfer/MNE/pythonのインストールは終了しました。
 これでjupyter経由でゴリゴリ計算していくことができます。

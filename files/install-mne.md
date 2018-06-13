@@ -1,24 +1,47 @@
 # MNE/pythonのインストール(脳波、脳磁図をする場合)
 
 こちらはanacondaの存在下ではかなり簡単です。
+mne 0.16からは少しインストールの仕方が変わりました。
+仮想環境で構築することになります。
+このやり方のメリットは、いつでも同じ環境を整える事ができるので、
+ソフトのバージョンが変わっても対応しやすいということです。
+反面、毎回仮想環境に入らないといけないという小さなデメリットがあります。
+
 公式サイトをみながら頑張りましょう。
 http://martinos.org/mne/stable/install_mne_python.html
 
-要約すれば、下記に列挙するコマンドを順に叩いていけば良いです。
-- conda install scipy matplotlib scikit-learn
-- pip install mne --upgrade
-- conda install mayavi
-- pip install PySurfer
-- conda install pyqt=4
+anacondaのバージョンは新しくしておきましょう。
+新しくすればこのように確認できます。
+```{frame=single}
+$ conda --version && python --version
+conda 4.4.10
+Python 3.6.4 :: Continuum Analytics, Inc.
+```
+
+要約すれば...
+- curlでenvironment.ymlをダウンロードする
+- conda env create -f environment.yml
+
+これでmneの仮想環境が整いました。
+下記のコマンドでmneの環境に入れます。
+```{frame=single}
+source activate mne
+```
+今後はmneを使うときは必ず上記のコマンドを打って下さい。
+
+
+macなら下記も必要です。
+```{frame=single}
+pip install --upgrade pyqt5>=5.10
+```
 
 CUDA[^cuda](GPGPU)についてもそのサイトに記載があります。
-
-この中で特にインストールの鬼門となるのはmayaviです。mayaviは3Dの表示をするソフトで、
-freesurferのデータをMEGとすり合わせる時の必需品となっています。
+CUDAはnvidiaのGPUしか動きません。インストールについては
+nvidiaのサイトも参照して下さい。
+ソースベースの解析をする場合はスピードが6倍くらいになります。
 
 僕の環境では下記二行のコマンドを予め入れていないと動かないです。
 .bash_profileや.bashrcに書き加えておけばいいでしょう。
-また、mayaviは基本、python2系でないと動きません。
 ```{frame=single}
 export LD_PRELOAD='/usr/$LIB/libstdc++.so.6'
 export DISPLAY=:0

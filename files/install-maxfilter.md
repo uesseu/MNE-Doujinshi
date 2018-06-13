@@ -1,8 +1,14 @@
-# maxfilterのインストール(MEG研究の場合)
+# maxfilterのインストール(elektaのやつ)
 
 maxfilterというフィルタがMEG研究ではほぼ必須です。
-これは外から飛んでくるノイズを数学的に除去するフィルタなのですが、
-MNEでは特許の問題もあって信頼に足る実装が出来ていません。泣き所の一つです。
+これは外から飛んでくるノイズを数学的に除去するフィルタです。
+
+これについてはMNEpythonにもあるのですが、elekta社のmaxfilterもあります。
+一長一短ですが、何も考えずに使うならelekta社でしょうか…。
+僕は以前はelektaのを使っていましたが、最近MNEに移行しました。
+MNEのは後で解説します。
+
+以前、コンテナを使って導入したことがあるので導入方法を説明しておきます。
 DANAというソフトとmaxfilterというソフトをELEKTA社から貰う必要があります。
 また、環境はRedhat5またはCentOs5の64bit版を使うことになっています。
 僕はdocker[^docker]でcentos5のコンテナをダウンロードしてインストールを試みました。
@@ -39,4 +45,4 @@ sh install
 /neuro/databases/sss/sss_cal.dat
 /neuro/databases/ctc/ct_sparse.fif
 この2つが必要です。ライセンスなどは日本法人の人に聞いたほうが良いです。
-細則があります。以上でmaxfilterのインストールは終わりです。
+細則があります。以上でelektaのmaxfilterのインストールは終わりです。

@@ -2,6 +2,9 @@
 
 苦行その1です。次にダメなチャンネルの設定や眼球運動の除去を行います。
 http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_rejection.html
+これには2つのやり方があります。
+
+### やり方1
 jupyterで%matplotlib qtとしたあとでraw.plot()でデータを見ながらひたすら下記のように
 badchannelを設定していってください。それだけです。
 
@@ -10,7 +13,14 @@ raw.info['bads'] = ['MEG 2443']
 ```
 badchannelは、例えば明らかに一個だけ滅茶苦茶な波形…
 振幅が大きくて他のとぜんぜん違う動きしているとか、
-物凄い周波数になっているとか、そういうやつを選んでください。
+物凄い周波数になっているとか、毛虫っぽいとか、そういうやつを選んでください。
+
+### やり方2
+raw.plot()
+をした上で、画面上でポチポチクリックしていけば、rawにbadが
+入っていくように出来ています。便利ですね！
+
+### interpolation
 選び終わったら、badchannelを補正します。
 隣接するチャンネルを平均したようなやつで置き換えることになります。
 それには下記を走らせるだけでいいです。
@@ -18,6 +28,46 @@ badchannelは、例えば明らかに一個だけ滅茶苦茶な波形…
 raw.interpolate_bads()
 ```
 後でbadchannelを無視したICAを掛けるとか、色々出来るわけです。
+
+### maxfilter
+MNEpythonにmaxfilterがあります。
+MEG使いの人はこれを使うのも一つの手です。
+[https://mne-tools.github.io/stable/generated/mne.preprocessing.maxwell_filter.html](https://mne-tools.github.io/stable/generated/mne.preprocessing.maxwell_filter.html)
+
+さて、maxfilterには2つファイルが必要です。
+この2つのファイルは、それぞれの施設によって違うものです。
+一つはcalibration用のdatファイル、一つはcrosstalk用のfifファイルです。
+これについてはelektaの機械ならあるはずなので、そこから抜き出すといいでしょう。
+ここについては僕は詳しくないので、周囲の賢者に聞いて下さい。
+
+もう一つ、MNEのmaxfilterには特徴があって、
+badchannelを設定してあげないとうまく動きません。
+因みに、elektaのは自動でbadchannelを設定しちゃうそうです。
+
+```python
+from mne.preprocessing import maxwell_filter
+cal = 'hoge.dat'
+cross = 'fuga.fif'
+raw = maxwell_filter(raw,calibration=cal,
+                     cross_talk=cross, st_duration=10)
+```
+このmaxwell_filter関数で行います。
+calibrationとcross_talkは見てのとおりと思いますが、
+st_durationも大事なやつです。
+MNEpythonの標準の設定ではst_durationはNoneなのですが、
+実際は数値を設定しないと酷いことになります。
+公式サイトには「俺たちのMEGはキレイだからNoneで良いんだ」と
+ドヤ顔していましたが、町中のMEGだと地下鉄通るだけで酷いことになるので、
+大草原の小さなラボとかでないなら設定してあげましょう。
+元祖elekta maxfilterではここが10になっています。
+
+このst_durationの数字は実はhighpass filterの役割も果たします。
+だから、注意が必要です。
+1/st_duration以下の周波数がカットされるので、
+遅い周波数を見たい人は気をつけて下さい。
+その他、いろいろな理由でst_durationは出来れば大きな値が良いそうですが、
+計算コストが上がるという欠点がありますので、程々に。
+
 
 ## ICAをかけよう
 

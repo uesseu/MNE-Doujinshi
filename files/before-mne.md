@@ -31,8 +31,11 @@ spyder
 ```
 です。
 
-もちろん、vimmerならvimを使ってもいいと思います！
+atomでもvisual studio codeでもいいと思います！
+もちろん、vimmer[^vimmer]ならvimを使ってもいいと思います！
 notepad.exeはお勧めしません！
+
+[^vimmer]:vim使いの事。僕は毎日vimを起動しています。
 
 ## MNEpythonを使う前に学んでおくべきモジュール
 
@@ -50,11 +53,6 @@ pandasやmatplotlibもググってください。qiitaも結構良いです。
 
 Python入門から応用までの学習サイト
 [http://www.python-izm.com/](http://www.python-izm.com/)
-
-pythonを初めて使う場合は、どうせならjupyterを初めから使って
-慣れておけば良いのではないかと思います。
-素のpythonも悪くはないですが、MNEの公式サイトにはjupyter notebook形式のスクリプトが
-用意されていますから、使わない手はないでしょう。
 
 [^numpy]:python用行列計算ライブラリ。科学計算に広く用いられています。
 
