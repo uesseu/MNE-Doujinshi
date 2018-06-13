@@ -29,6 +29,20 @@ source activate mne
 ```
 今後はmneを使うときは必ず上記のコマンドを打って下さい。
 
+これで完結…と言いたいところなのですが、残念ながら
+mnepythonとfreesurferのコマンドラインツールにはまだ
+python2依存の部分があります。
+なので、python2の環境も作りましょう。
+ここ、公式に書いてない落とし穴です。
+
+```{frame=single}
+conda create -n python2 python=2.7 anaconda
+```
+この環境に入るには
+```{frame=single}
+source activate mne
+```
+です。
 
 macなら下記も必要です。
 ```{frame=single}

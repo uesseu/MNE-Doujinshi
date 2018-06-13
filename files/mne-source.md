@@ -4,7 +4,7 @@
 難しいのです。頑張りましょう。
 
 ソースレベル解析については冒頭の記述を見ていただくとして、
-MRIとMEGをくっつけていきます。
+MRIとMEGをくっつけていきます。(MRIがない場合は標準脳を使える)
 目標は「脳内の信号を算出するための式を作る」事です。
 式さえできればなんとか計算できるわけです。
 手順としては以下のとおりです。
@@ -41,10 +41,11 @@ MRIとMEGをくっつけていきます。
 上記の通り、MRIから抽出してくる形データとして、BEMと言うものを使います。
 BEMは脳の全体を包み込むサランラップみたいなデータです。
 頭蓋骨とか皮とか、そういうのいろいろ考慮するために、BEMは三枚一組で
-出力されます。実装上はr3枚あるということを意識しなくても大丈夫です。
+出力されます。実装上は3枚あるということを意識しなくても大丈夫です。
 
 作るためにはfreesurferによる解析データが必要となります。
-ターミナルに戻って下記コマンドを入力しましょう。しばらくかかります。
+ターミナルに戻ってpython2の環境に入り、下記コマンドを入力しましょう。
+python3ではまだうまく動けないようです。しばらくかかります。
 freesurferを既に使っているならSubject関連は既に馴染んだ言葉でしょうか？
 もちろんSUBJECTやSUBJECTS_DIRは読み替えてください。
 ```{frame=single}
@@ -61,44 +62,42 @@ mne.viz.plot_bem(subject = subject, subjects_dir = subjects_dir,
 
 ![BEMの図示。](img/bem.png){width=14cm}
 
-## 手順2、ソーススペース作成
-
-脳磁図で見れる空間のうち、どの部分の電源を推定するかを
-設定する必要があります。その設定がソーススペースです。
-```{frame=single}
-src = mne.setup_source_space(subject = subject, spacing = 'oct6',
-      subjects_dir = subjects_dir)
+もし、標準脳を使うなら、以下のコマンドをターミナルから叩いて下さい。
+```bash
+mne coreg
 ```
-これで、srcという変数にソーススペースが入りました。
+guiの画面が現れると思います。
+'fsaverage→SUBJECTS_DIR'というボタンを押して下さい。
+freesurferの標準脳であるfsaverageが現れます。
+以降、subjectにはfsaverageを入れると標準脳を使うことになります。
 
-見慣れぬ単語が出てきました。oct6とは何でしょうか？
-それはここに書いてあります。
-http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space
+## 手順2、trans
 
-ソーススペースを作るためには計算上正十二面体や正八面体で
-区画分けするので、その設定ですね。
-やり方によってソーススペースの数も変わるみたいです。
-臨床的に意味があるかはわかりません。
+GUIでの操作となります。
+下記のコードを実行すると画面が立ち上がります。
 
-![ソーススペースの図示。小さい点々がソーススペース。](img/src.png){width=14cm}
+```{frame=single}
+mne.gui.coregistration()
+```
 
-## 手順3、trans
+subjectやmegへのpathを指定しない場合は、GUI上で指定することになります。
+もし0から立ち上げた場合、山のようにあるMRIのsubjectから該当の
+subjectを探さねばならなくなります。
 
-GUIでの操作となります。今回、freesurferのsubject,subjects_dirが必要なのと、
-MEGのデータへのpathが必要です。フルパスです。下記のコードを実行すると画面が立ち上がります。
+pythonの関数に色々入れてから起動すれば、
+既にデータが読み込まれているので、楽です。
 ```{frame=single}
 mne.gui.coregistration(subject = subject,subjects_dir = subjects_dir,
-  inst = file_path)
+                       inst = file_path)
 ```
 instはmegデータ…rawでもepochでも良いらしいですが、どれかを指定して下さい。
-コードを実行して立ち上げた場合、既にデータが読み込まれているので、楽です。
-もし0から立ち上げた場合、山のようにあるMRIのsubjectから該当の
-subjectを探さねばならなくなります。スクリプト書きましょう。
 
 ![mne coregistrationの画面。大して苦行ではない。](img/trans.png){width=14cm}
 
 手順はこうです。
 
+1. 必要ならば、MRIのsubjectを読み込む
+1. 必要ならば、fifファイルを読み込む
 1. 左側、setのところで耳と眉間の位置を入力(MEGのスタイラスでポチるところです)
 1. それの一寸上の所、lockをポチる。
 1. 右側、Fit LPA/RPAボタンを押す。
@@ -110,6 +109,32 @@ subjectを探さねばならなくなります。スクリプト書きましょ�
 trans = mne.read_trans('/Users/hoge/fuga/trans.fif')
 ```
 みたいな感じで読み込んで使います。
+
+## 手順3、ソーススペース作成
+
+脳磁図で見れる空間のうち、どの部分の電源を推定するかを
+設定する必要があります。その設定がソーススペースです。
+subjects_dirは環境変数に設定していれば要らないです。
+```{frame=single}
+src = mne.setup_source_space(subject = subject, spacing = 'oct6',
+      subjects_dir = subjects_dir)
+```
+もちろん、標準脳が欲しい場合は黙ってfsaverage。
+これで、srcという変数にソーススペースが入りました。
+
+見慣れぬ単語が出てきました。oct6とは何でしょうか？
+それはここに書いてあります。
+http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space
+
+ソーススペースを作るためには計算上正十二面体や正八面体で
+区画分けするので、その設定ですね。
+やり方によってソーススペースの数も変わるみたいです。
+臨床的に意味があるかはわかりません。
+
+標準脳を使う場合は'fsaverage'をsubjectに指定して下さい。
+ない場合は手順2のmne.gui.coregistration()でボタンを押して下さい。
+
+![ソーススペースの図示。小さい点々がソーススペース。](img/src.png){width=14cm}
 
 ## 手順4、順問題
 
