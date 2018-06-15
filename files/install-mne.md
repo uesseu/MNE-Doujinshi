@@ -19,7 +19,7 @@ Python 3.6.4 :: Continuum Analytics, Inc.
 ```
 
 要約すれば...
-- curlでenvironment.ymlをダウンロードする
+- curl[^curl]でenvironment.ymlをダウンロードする
 - conda env create -f environment.yml
 
 これでmneの仮想環境が整いました。
@@ -38,17 +38,59 @@ python2依存の部分があります。
 ```{frame=single}
 conda create -n python2 python=2.7 anaconda
 ```
-この環境に入るには
+mneの環境に入るには
 ```{frame=single}
 source activate mne
 ```
 です。
-
+さっきのpython2に入るのはもちろん
+```{frame=single}
+source activate python2
+```
+ちなみに、出るのは
+```{frame=single}
+source deactivate
+```
 macなら下記も必要です。
 ```{frame=single}
 pip install --upgrade pyqt5>=5.10
 ```
 
+[^curl]:unix界隈では大人気のダウンローダー
+
+## MNE環境を複数作りたい！
+MNEの環境が複数欲しくなることもあると思います。
+僕は欲しくなりましたし、今後MNEがバージョンアップしていくたびに
+古いのを残しながら音故知新する必要が出てくるはずです。
+さっき色々やったなかでcurlでenvironment.ymlをダウンロードしたはずです。
+このenviroment.ymlは普通にテキストエディタで開けます。
+内容はインストールすべきパッケージの列挙です。
+一番上の所に
+```{frame=single}
+name: mne
+```
+とあると思うので、単純にこいつを別の名前に変えてから
+続きのコマンドを叩いていけばいいだけです。
+
+## jupyter kernel
+jupyterを使うのであれば、上記の環境をjupyterに登録する必要があります。
+まずは、仮想環境に入って下さい。
+```{frame=single}
+source activate mne
+```
+では、登録しましょう。下記は「今いる環境をjupyterに登録する」やつです。
+ 
+```{frame=single}
+ipython kernel install --user --name hoge
+```
+もし、要らなくなったら
+
+```{frame=single}
+ipython kernel uninstall --name hoge
+```
+ですね。
+
+## CUDA
 CUDA[^cuda](GPGPU)についてもそのサイトに記載があります。
 CUDAはnvidiaのGPUしか動きません。インストールについては
 nvidiaのサイトも参照して下さい。
