@@ -5,3 +5,5 @@ global.var
 settings.json
 project.json
 files/.tmp
+*.swp
+files/.tmp

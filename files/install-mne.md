@@ -25,7 +25,7 @@ Python 3.6.4 :: Continuum Analytics, Inc.
 これでmneの仮想環境が整いました。
 下記のコマンドでmneの環境に入れます。
 ```{frame=single}
-source activate mne
+conda activate mne
 ```
 今後はmneを使うときは必ず上記のコマンドを打って下さい。
 
@@ -40,16 +40,16 @@ conda create -n python2 python=2.7 anaconda
 ```
 mneの環境に入るには
 ```{frame=single}
-source activate mne
+conda activate mne
 ```
 です。
 さっきのpython2に入るのはもちろん
 ```{frame=single}
-source activate python2
+conda activate python2
 ```
 ちなみに、出るのは
 ```{frame=single}
-source deactivate
+conda deactivate
 ```
 macなら下記も必要です。
 ```{frame=single}
@@ -76,7 +76,7 @@ name: mne
 jupyterを使うのであれば、上記の環境をjupyterに登録する必要があります。
 まずは、仮想環境に入って下さい。
 ```{frame=single}
-source activate mne
+conda activate mne
 ```
 では、登録しましょう。下記は「今いる環境をjupyterに登録する」やつです。
  

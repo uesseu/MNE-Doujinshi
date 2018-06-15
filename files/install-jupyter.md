@@ -124,7 +124,7 @@ anacondaはpythonの仮想環境[^kasou]を作ることが出来ますのでそ�
 ```{frame=single}
 ipython kernel install --user
 conda create -n hoge python=3.6 anaconda
-source activate hoge
+conda activate hoge
 ipython kernel install --user
 conda info -e
 ```
@@ -136,7 +136,7 @@ conda info -e
 1. jupyterに組み込む
 1. 確認
 
-source activateコマンドでpythonの環境を切り替えられます。
+conda activateコマンドでpythonの環境を切り替えられます。
 これでjupyterで色んな環境を切り替えられると思います。
 ちなみに間違って環境を作った場合は以下のコマンドで消せます。
 
