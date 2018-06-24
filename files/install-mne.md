@@ -27,10 +27,12 @@ Python 3.6.4 :: Continuum Analytics, Inc.
 ```{frame=single}
 conda activate mne
 ```
-今後はmneを使うときは必ず上記のコマンドを打って下さい。
+今後はmneを使うときは必ず上記のコマンドを打って下さい。[^conda]
+
+[^conda]:昔はsource activateコマンドでしたが、このコマンドはanaconda以外の仮想環境ツールと衝突してクラッシュするという不具合がありました。今後はconda activateコマンドを使うのがいいでしょう。
 
 これで完結…と言いたいところなのですが、残念ながら
-mnepythonとfreesurferのコマンドラインツールにはまだ
+mnepythonとfreesurferのコマンドラインツール群にはまだ
 python2依存の部分があります。
 なので、python2の環境も作りましょう。
 ここ、公式に書いてない落とし穴です。
@@ -135,6 +137,7 @@ export MNE_ROOT=/home/fuga/MNE-C
 twitterでMEGやMRIの研究者をフォローしてみてください。
 いい情報、最新の情報がピックアップされ、エキサイティングです。
 僕は新着情報はtwitterで研究者、開発者、有名科学雑誌のアカウントを
-フォローしてアンテナはっています。
+フォローしてアンテナはってたこともありました。
+(脳の疾患が増悪して今はしてない)
 ちなみに、若いエンジニアはよくするらしいです。
 ```
