@@ -1,3 +1,4 @@
+
 # maxfilterのインストール(elektaのやつ)
 
 maxfilterというフィルタがMEG研究ではほぼ必須です。

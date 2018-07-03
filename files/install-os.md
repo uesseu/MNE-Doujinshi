@@ -1,6 +1,8 @@
+
 ## OSの準備
 OSはlinuxかMACが普通と思います、windowsではどうなのでしょう？[^win]
 よく分かりませんが、MNEpythonは動きます。
+Unix系コマンドラインツールは動きません。freesurferは辛いです。
 僕は新しめのdebian系linuxであるUBUNTU[^ubuntu]またはMACを使います。
 
 [^win]:anacondaはosの垣根を越えているので、大丈夫なのでしょうけれど僕は試していません。

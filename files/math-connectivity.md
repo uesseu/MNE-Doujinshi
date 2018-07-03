@@ -97,6 +97,9 @@ $$WPLI = \frac{|\overline{Sxy}|}{\overline{|Sxy|}}$$
 
 $$Coherence = \frac{\overline{Im(Sxy)}}{\sqrt{\overline{|Sxx|} * \overline{|Syy|}}}$$
 
+### で、こういうのってロバストなの？
+分からない…僕には何もわからないんです…
+
 ## グラフ理論
 さらなる解析として、グラフ理論があります。
 これは「互いにどんな風に繋がっているかな？」というのを

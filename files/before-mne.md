@@ -38,22 +38,23 @@ notepad.exeはお勧めしません！
 
 [^vimmer]:vim使いの事。僕は毎日vimを起動しています。
 
-## MNEpythonを使う前に学んでおくべきモジュール
+## MNEpythonを使う前に学んでおくべきパッケージ
 
 とりあえず、pythonとnumpy[^numpy]の基礎を学ばねばなりません。
 これは最低限のことです。これが書けないのであればmne/pythonは無理です。
-PySurferはpythonでfreesurferのデータをプロットするために必須です。
 
-他に学んでおくべきモジュールは
+他に学んでおくべきパッケージは
+
 - matplotlib(作図用。seabornで代用可能なこともある。)
-- pandas(python版excel。必須ではないが、劇的にやりやすくなる。)
+- pandas(python版excel。必須ではないが、やりやすくなる。)
+の2つでしょう。
 
 pandasやmatplotlibもググってください。qiitaも結構良いです。
 毎日何らかの課題に向けてpythonスクリプトを書きましょう。指が覚えます。
 適当にググって良いサイトを見つければいいでしょう。
-
 Python入門から応用までの学習サイト
 [http://www.python-izm.com/](http://www.python-izm.com/)
+
 
 [^numpy]:python用行列計算ライブラリ。科学計算に広く用いられています。
 
@@ -116,12 +117,8 @@ array([5,7,9,11])
 出力結果がnumpy配列で出てくるので、MNEがあるとはいえ使い方は覚える必要があります。
 
 
-## データの読み込み…の前にmaxfilter(脳磁図の場合)
 
 maxfilterをかけると数学的に脳の外のノイズを取ることができます。
-これはMNEpythonでも出来はするのですが、今のところまだ成熟していないらしいので、
-エレクタ社のソフトを使うのが適当です。MNEpythonでは
-当面難しいのかもしれません。
 これがないとかなりノイズだらけのデータになりますので、必須です。
 
 ## 解析を始める前のwarning!

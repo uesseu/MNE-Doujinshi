@@ -1,3 +1,4 @@
+
 ## センサーレベルwavelet変換
 
 これは解析のゴールの一つと言えましょう。
@@ -42,7 +43,7 @@ MNEpythonではinduced powerとitcの計算方法が実装されています。[
 ではevoked power,induced power,phase locking factorについて
 解析を行いましょう。
 
-[^plv]: ちなみにphase locking valueという全然別のものがあります。これはコネクティビティ用語ですので分野が違います。
+[^plv]: ちなみにphase locking valueという全然別のものがあります。これはコネクティビティ用語ですので分野が違います。あとで書きます。
 [^evoked_power]: これは実質itcと似たようなもの…という考え方もあります。
 
 ### wavelet変換の実際
@@ -94,3 +95,10 @@ induced_power,plf=mne.time_frequency.tfr_morlet(epochs,n_jobs=4,
   freqs=freqs,n_cycles=n_cycles, use_fft=True,
   return_itc=False, decim=1)
 ```
+
+ここで一つ注意点があります。
+wavelet変換は基準になる波を実際の波に掛け算して行うのですが、
+波の始まりと終わりのところだけは切れちゃうはずです。
+そこは十分注意して下さい。
+どの程度のwaveletの波の長さなのかについては、
+頑張って計算して下さい。(余裕があれば書くかも)
