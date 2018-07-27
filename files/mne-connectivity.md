@@ -19,15 +19,17 @@ morlet waveletは連続wavelet変換です。(今までやってたのと同じ)
 フーリエ変換やwavelet変換をした上で、それぞれの値を比較するのです。
 比較の方法は下記のとおりです。
 
-- Coherence
-- Coherency
-- Imaginary
-- Phase-Locking Value
-- Phase Lag Index
-- Weighted Phase Lag Index
+- Coherence: Coherencyの絶対値
+- Coherency: 純粋に計算で出されたやつ
+- ImaginaryCoherence: 同一ソースの影響を除いたもの
+- Phase-Locking Value: 純粋に計算で出されたやつ
+- Phase Lag Index: 同一ソースの影響を除いたもの
+- Weighted Phase Lag Index: PhaseLagIndexに重みを付けたもの
 
 …多すぎですね(´・ω・｀)
 どれが良いとかは…よくわかりません。色々やってみたり先行研究を見るのが良いかも？
+一応ImaginaryCoherenceとPhaseLagIndex系は同一ソースの影響が少ないので
+性能がちょっといいかもしれません？
 とりあえず、計算方法を書いておきます。まずは、epochを作ります。作り方は前述のとおりです。
 眼球運動や心電図のデータは要らない[^heart]ので、
 pick_channelやdrop_channelで要らないのを外していきます。
@@ -52,8 +54,11 @@ cons = sc(epochs, method=’coh’, indices=None,
           block_size=1000, n_jobs=1)
 
 ```
+
 …基本、我流の僕はソースコードが汚いんですが、今回はあまりにも
-一行あたりが長すぎ、やむを得ず圧縮のためにscと短縮しました…。では、解説いきます。
+一行あたりが長すぎる気がします。オブジェクト指向的にはちょっと…。
+自前でオブジェクト作ったほうが楽かもです。
+やむを得ず圧縮のためにscと短縮しました…。では、解説いきます。
 
 - method: そのままmethodですね。上記の通り。
 - indices: どことどこのconnectivityを見たいかです。

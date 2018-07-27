@@ -89,7 +89,7 @@ ipython kernel install --user --name hoge
 もし、要らなくなったら
 
 ```{frame=single}
-ipython kernel uninstall --name hoge
+ipython kernelsupec uninstall hoge
 ```
 ですね。
 
@@ -112,9 +112,10 @@ export DISPLAY=:0
 ```
 [^cuda]:nVidiaのGPUを使った高速な計算ができる開発環境
 
-# MNE/Cのインストール(脳波、脳磁図をするばあい)
+## MNE/Cのインストール(古い方法)
 
-MNECも必要です。下記サイトにメールアドレスを登録し、ダウンロードさせていただきましょう。
+これは不要かもしれません。
+下記サイトにメールアドレスを登録し、ダウンロードさせていただきましょう。
 http://www.nmr.mgh.harvard.edu/martinos/userInfo/data/MNE_register/index.php
 ダウンロードしたものについてはこのサイトの通りにすればインストールできます。
 http://martinos.org/mne/stable/install_mne_c.html

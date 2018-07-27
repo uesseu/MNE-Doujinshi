@@ -8,15 +8,30 @@
 MRIとMEGをくっつけていきます。(MRIがない場合は標準脳を使える)
 目標は「脳内の信号を算出するための式を作る」事です。
 式さえできればなんとか計算できるわけです。
+必要物品は以下の通り
+
+- 脳の中の見たい場所リスト
+- センサーの位置情報
+- 脳波か脳磁図
+- 皮膚や頭蓋骨の抵抗値や、その分布
+
+これで、脳の中の活動量をX、センサーで捉える活動量をYとすると
+$AX = Y$という形式に落とし込めるはずです。
+ここのAを計算するために、抵抗とか距離とかが必要なんですね！
+このことをForwardSolutionという感じに言います。
+ここから$X = A^{-1}Y$という風に変えればXを計算できます。
+これをInverseSolutionと言い、$A^{-1}$のことを
+InverseOperatorと言います。
+
 手順としては以下のとおりです。
 
-1. MRIから脳の形を取ってきて計算できる形にする。
+1. 「推定するべき脳の部位」とEEG/MEGのセンサーの位置をすり合わせる。
+ この作業は手動で行われる。(やればわかる)
+ この重ね合わせ情報はtransというファイル形式で保存される。
+1. MRIから脳の形を取ってきて、骸骨の抵抗とかも加味して計算できる形にする。
  これをBEMという。
 1. 脳の形から「推定するべき脳の位置」を特定する。
  この脳内の位置情報をソーススペース(source space)という。
-1. 「推定するべき脳の部位」とMEGで取れる頭の形情報を重ねる。
- この作業は手動で行われる。(やればわかる)
- この重ね合わせ情報はtransというファイル形式で保存される。
 1. 脳の部位情報と頭の形情報とセンサーの位置から、
  脳活動によってどのようにセンサーに信号が届くかを計算する。
  これを脳磁図における順問題(forward solution)という。
@@ -37,40 +52,7 @@ MRIとMEGをくっつけていきます。(MRIがない場合は標準脳を使�
 などなど。
 でははじめましょう。
 
-## 手順1、BEM作成
-
-上記の通り、MRIから抽出してくる形データとして、BEMと言うものを使います。
-BEMは脳の全体を包み込むサランラップみたいなデータです。
-頭蓋骨とか皮とか、そういうのいろいろ考慮するために、BEMは三枚一組で
-出力されます。実装上は3枚あるということを意識しなくても大丈夫です。
-
-作るためにはfreesurferによる解析データが必要となります。
-freesurferを既に使っているならSubject関連は既に馴染んだ言葉でしょうか？
-もちろんSUBJECTやSUBJECTS_DIRは読み替えてください。
-```{frame=single}
-mne watershed_bem -s subject -d subjects_dir
-```
-
-これにより、BEM(脳の形情報を変換したやつ)が作成されました。
-再びpythonに戻り、下記を入力してみてください。
-```{frame=single}
-mne.viz.plot_bem(subject = subject, subjects_dir = subjects_dir,
-                 brain_surfaces = 'white', orientation = 'coronal')
-```
-これでBEMが表示されるはずです。
-
-![BEMの図示。](img/bem.png){width=14cm}
-
-もし、標準脳を使うなら、以下のコマンドをターミナルから叩いて下さい。
-```bash
-mne coreg
-```
-guiの画面が現れると思います。
-'fsaverage→SUBJECTS_DIR'というボタンを押して下さい。
-freesurferの標準脳であるfsaverageが現れます。
-以降、subjectにはfsaverageを入れると標準脳を使うことになります。
-
-## 手順2、trans
+## 手順1、trans
 
 GUIでの操作となります。
 下記のコードを実行すると画面が立ち上がります。
@@ -108,6 +90,42 @@ instはmegデータ…rawでもepochでも良いらしいですが、どれか�
 trans = mne.read_trans('/Users/hoge/fuga/trans.fif')
 ```
 みたいな感じで読み込んで使います。
+注意点として、脳波とかの場合は表示がprojectionモードになっているかもしれません。
+そうなっていたらうまく重ね合わせる厳しくなるので、
+
+
+## 手順2、BEM作成
+
+上記の通り、MRIから抽出してくる形データとして、BEMと言うものを使います。
+BEMは脳の全体を包み込むサランラップみたいなデータです。
+頭蓋骨とか皮とか、そういう絶縁体を考慮するために、BEMは三枚一組で
+出力されます。実装上は3枚あるということを意識しなくても大丈夫です。
+
+作るためにはfreesurferによる解析データが必要となります。
+freesurferを既に使っているならSubject関連は既に馴染んだ言葉でしょうか？
+もちろんSUBJECTやSUBJECTS_DIRは読み替えてください。
+```{frame=single}
+mne watershed_bem -s subject -d subjects_dir
+```
+
+これにより、BEMが作成されました。
+再びpythonに戻り、下記を入力してみてください。
+```{frame=single}
+mne.viz.plot_bem(subject = subject, subjects_dir = subjects_dir,
+                 brain_surfaces = 'white', orientation = 'coronal')
+```
+これでBEMが表示されるはずです。
+
+![BEMの図示。](img/bem.png){width=14cm}
+
+もし、標準脳を使うなら、以下のコマンドをターミナルから叩いて下さい。
+```bash
+mne coreg
+```
+guiの画面が現れると思います。
+'fsaverage→SUBJECTS_DIR'というボタンを押して下さい。
+freesurferの標準脳であるfsaverageが現れます。
+以降、subjectにはfsaverageを入れると標準脳を使うことになります。
 
 ## 手順3、ソーススペース作成
 
@@ -322,7 +340,7 @@ max: ラベルの中で最大の信号が出てきます
 実装されています。
 
 induced_powerとphaselocking_factorを算出する関数は下記です。
-※激重注意、要WS！[^gekiomo]
+※labelを選ばなければ激重注意！[^gekiomo]
 ```{frame=single}
 induced_power, itc = source_induced_power(
         epochs, inverse_operator, frequencies, label,
@@ -337,7 +355,7 @@ baseline補正の時間についてはデータの端っこすぎると値がブ
 そこのところはデータ開始時点〜刺激提示の瞬間の間で適切な値にしておいてください。
 これで算出されたwavelet変換の結果の取扱は、前に書いたwavelet変換の結果と同じです。
 
-[^gekiomo]:これは激重です。何故なら306チャンネルのMEGからソースに落とし込むと計算方法によっては10000チャンネルくらいになります。ROIを絞ったとしても「人数×タスク×ROIの数×EPOCHの数」回wavelet変換してpowerとitcに落とし込むのですから…途方もない計算量です。
+[^gekiomo]:labelを選ばない場合これは激重です。何故なら306チャンネルのMEGからソースに落とし込むと計算方法によっては10000チャンネルくらいになります。ROIを絞ったとしても「人数×タスク×ROIの数×EPOCHの数」回wavelet変換してpowerとitcに落とし込むのですから…途方もない計算量です。labelを選びましょう。
 
 ### その後のお楽しみ2、ソースベースconnectivity
 

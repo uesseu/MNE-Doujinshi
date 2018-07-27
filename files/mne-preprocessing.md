@@ -20,6 +20,11 @@ badchannelは、例えば明らかに一個だけ滅茶苦茶な波形…
 raw.plot()
 をした上で、画面上でポチポチクリックしていけば、rawにbadが
 入っていくように出来ています。便利ですね！
+もちろん、あとで保存しないとちゃんと残りません。
+
+```{frame=single}
+raw.save('hoge.fif')
+```
 
 ### interpolation
 選び終わったら、badchannelを補正します。
