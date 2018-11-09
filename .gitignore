@@ -7,3 +7,6 @@ project.json
 files/.tmp
 *.swp
 files/.tmp
+copy.sh
+.gitignore
+files/.tmp
