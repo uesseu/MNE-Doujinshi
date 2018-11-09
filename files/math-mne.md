@@ -25,9 +25,10 @@ $$Y=AX$$
 一時連立方程式はあんまり数が多くなると解けなくなるのです。
 ですが、最も真実に近いっぽいのを推定することは出来ます。
 今回、脳全体のある一瞬の波が最も小さくなるような波を推定しましょう。
-この方法はムーアペンローズの逆行列と言われるものであり、
-そのやり方を脳に応用したものをMinimum-norm-estimation(MNE)と言います。
+Minimum-norm-estimation(MNE)と言います。
 (他に一つ一つの波が一番小さくなるbeamformer法とか色々あります)
+導出は有名なムーアペンローズの逆行列とよく似ていますので、
+それを勉強すれば理解が早まると思います。
 
 つまり、条件$Y=AX$のもとで$X$を小さくしたい[^norm]のです。
 $X$が小さいってことは下記の式が小さいってことです。
@@ -44,30 +45,32 @@ $f(x,y)$が極値になるx,yは
 $$L(x,y,\lambda)=f(x,y)-\lambda g(x,y)$$
 の時に
 
-$$\frac{\partial L}{\partial \lambda}=
-\frac{\partial L}{\partial y}=
-\frac{\partial L}{\partial x}=0$$
+$$\frac{\partial L}{\partial \lambda}= \frac{\partial L}{\partial y}= \frac{\partial L}{\partial x}=0$$
 の解、または
-$$\frac{\partial g}{\partial x}=
-\frac{\partial g}{\partial y}$$
+$$\frac{\partial g}{\partial x}= \frac{\partial g}{\partial y}$$
 の解。…という感じの公式です。
 行列の微分をしないといけないので、行列の微分の仕方を確認しておきます。
 $$\frac{\partial a^tx}{\partial x}=a$$
 $$\frac{\partial x^ta}{\partial x}=a$$
-これにより、
-$$L=||X||^{2}-\lambda (Y-AX)$$
-という式を$x$と$\lambda$でそれぞれ微分して下記のようになります。
-$$2X-A^T\lambda=0$$
-$$Y-AX=0$$
-では変形していきましょう。
-$$Y=AX$$
-$$2X=A^T\lambda$$
-$$Y=A\frac{A^T\lambda}{2}$$
-$$(AA^T)^{-1}Y=\frac{\lambda}{2}$$
-$$A^T(AA^T)^{-1}Y=A^T\frac{\lambda}{2}$$
-$$A^T(AA^T)^{-1}Y=X$$
-これで無事$X$を$A$と$Y$で表せました。
 
+今回はこれを微分します。
+$$L=||X||^{2}-\lambda ||Y-AX||^{2}$$
+
+$$L = X^{T}X - \lambda (Y - AX)^{T}(Y - AX)$$
+$$= X^{T}X - \lambda (Y^{T} - X^{T}A^{T})(Y - AX)$$
+$$= X^{T}X - \lambda (Y^{T}Y - X^{T}A^{T}Y - Y^{T}AX + X^{T}A^{T}AX)$$
+$$\frac{\partial L}{\partial X} = 2X - \lambda(- A^{T}Y - A^{T}Y + (A^{T}A + A^{T}A)X)$$
+$$= 2\lambda(A^{T}Y - A^{T}AX + \frac{X}{\lambda})$$
+これが0になるので
+$$(A^{T}A - \frac{I}{\lambda})X = A^{T}Y$$
+$$X = (A^{T}A - \frac{I}{\lambda})^{-1}A^{T}Y$$
+ここで$\frac{I}{\lambda}$をCとおくと
+$$X = (A^{T}A - CI)^{-1}A^{T}Y$$
+
+これで無事$X$を$A$と$Y$で表せました。
+Cというのが出てきましたが、これはまぁ…定数です。
+
+ものすごくざっくりというとこの様な事です。
 では、次に重み付けをしてみましょう。
 
 ## MNEの重み付け
@@ -75,7 +78,11 @@ $$A^T(AA^T)^{-1}Y=X$$
 これはMEGの場合は特に大事です。何故なら、MEGは計測の
 方法[^grad]によっては脳の表面の皮質の信号しか捉えられないからです。
 どの値を重視して推定していくかが設定できるわけです。
+また、上記の式は不十分な部分があります。
+ノルムの種類がこれでは一寸困るところがあるのです。
+実際はL2ノルムというのを使います。
 では、重みを付けてみましょう。
+
 [^grad]: グラディオメーターのばあい。
 さっきは
 
@@ -84,31 +91,37 @@ $$||X||^2$$
 重みの行列を仮に$w$として、その上で
 $$X^{T}wX$$
 が最小になるような条件を設定してあげればいいです。
-この$w$は縦と横の長さが同じ正方行列です。
-なので、こいつはほぼほぼ逆行列を作ることが出来るはずです。
-さらに、下記も正方行列になるので逆行列が作れます。
-$$Aw^{-1}A^{T}$$
-ではそのことを踏まえて変形していきます。
+この$w$は縦と横の長さが同じ正方行列かつ、対角線上以外全部0の行列です。
+こういうのを掛け算すると重み付けが出来るんですね。
+そりゃそうです。行列Iの要素に順番にスカラー値を掛け算していくわけなので、
+重みになります。
 
-$$Y=AX$$
-$$2wX=A^T\lambda$$
-$$2X=w^{-1}A^T\lambda$$
-$$Y=A\frac{w^{-1}A^T\lambda}{2}$$
-$$(Aw^{-1}A^T)^{-1}Y=\frac{\lambda}{2}$$
-$$A^T(Ax^{-1}A^T)^{-1}Y=A^T\frac{\lambda}{2}$$
-$$A^T(Aw^{-1}A^T)^{-1}Y=wX$$
-$$w^{-1}A^T(Aw^{-1}A^T)^{-1}Y=X$$
+ではそのことを踏まえて今回はこれを微分します。
+$$L = X^{T}wX - \lambda ||Y-AX||^{2}$$
 
-凄いですね！これやこの、MNEの式です。
+$$L = X^{T}wX - \lambda (Y - AX)^{T}(Y - AX)$$
+$$= X^{T}wX - \lambda (Y^{T} - X^{T}A^{T})(Y - AX)$$
+$$= X^{T}wX - \lambda (Y^{T}Y - X^{T}A^{T}Y - Y^{T}AX + X^{T}A^{T}AX)$$
+$$\frac{\partial L}{\partial X} = (w + w^{T})X - \lambda(- A^{T}Y - A^{T}Y + (A^{T}A + A^{T}A)X)$$
+$$= 2\lambda(A^{T}Y - A^{T}AX + \frac{(w + w^{T})X}{2\lambda})$$
+$$= 2\lambda(A^{T}Y - A^{T}AX + \frac{wX}{\lambda})$$
+$$= 2\lambda(A^{T}Y - (A^{T}A + \frac{w}{\lambda})X)$$
 
-## ベイズ推定
+これが0になるので
+$$(A^{T}A + \frac{w}{\lambda})X = A^{T}Y$$
+$$(\lambda A^{T}A + w)X = \lambda A^{T}Y$$
+$$X = \lambda (\lambda A^{T}A + w)^{-1}A^{T}Y$$
+
+凄いですね！これやこの、重み付きMNEの式です。
+
+
+## MAP推定
 今回はラグランジュの未定乗数法で二乗したのがxだけでしたが、
 ここに正規化する変数を入れてやる必要があります。
 その操作をしたのが下記です。
 
 また、YとXについてはベイズ統計学のMAP推定した結果と同じになるのですが、
 これはここに書くのが超絶面倒いので書きません。
-$$w^{-1}A^T(Aw^{-1}A^T+C)^{-1}Y=X$$
 
 これの解説だけで本が一冊書けます。
 
@@ -130,6 +143,14 @@ Bが1だったら空室がうまく説明できませんね？？？
 $$X'=\frac{BY}{||B||}$$
 $$X'=\frac{BY}{\sqrt{BCB^{T}}}$$
 
-これで正規化したものができるはずです。 これが僕のdSPMに対する理解です。
+このように、ノルムが1になるように割り算してあげることを数学の言葉で
+正規化といいます。MNEの結果を正規化したものがdSPMです。
+これが僕のdSPMに対する理解です。
+
+ところで、分散を1にしてあげる方法もあるのですが、
+これを標準化と言います。
+かの有名なsLORETAはdSPMに対して正規化ではなく標準化したものです。
+式はこうです。
+$$X'=\frac{BY}{\sqrt{B}}$$
 
 間違ってたらごめん(´・ω・｀)
