@@ -1,14 +1,14 @@
 # MNEpython実装時の小技
 一応、実装が苦手な人が読者と思っているので、
 ありふれた小技ですが紹介します。
+object指向とかは他の本を読んで下さい。得られるものが多いでしょう。
 
 ## メソッド・チェーン
 今回は超手軽に解析してみましょう！
 何度もフィルタ掛けるの面倒くさいから、一気にかけちゃう方法です。
 メソッド・チェーンを使います。
-メソッド・チェーンとはドットで数珠つなぎに処理をしていく
-プログラミング技法です。
-MNEpythonは割とできる感じです。実際見てみましょう。
+メソッド・チェーンとはドットで数珠つなぎに処理をしていく技法です。
+MNEpythonではrawオブジェクト辺りで割とできる感じです。実際見てみましょう。
 ```
 from mne.io import Raw
 Raw('hoge.fif').filter(1,100).notch_filter(60).save('fuga.fif')
@@ -50,7 +50,7 @@ from functools import partial
 今君は、複数のepochオブジェクトを作りたいとする。
 event_idは1､2､3､4､5､6だ。その都度入力するのはダルいし、
 変数が増えすぎると管理も大変だ。
-そんなときはこのようにすればいいです。
+そんなときはこのようにすればいい。
 ```
 from mne.io import Raw
 from mne.epochs import Epochs 
@@ -61,14 +61,14 @@ events = find_events(raw)
 make_epoch = partial(Epochs, raw, events)
 ```
 
-これでmake_epochという関数が出来ました。以降は例えば
+これでmake_epochという関数が出来た。以降は例えば
 ```
 make_epoch(4)
 ```
-とかでevent_idが4のepochオブジェクトが返ります。
+とかでevent_idが4のepochオブジェクトが返る。
 これで君の怒りが少しでもおさまってくれたら嬉しい。
 
-## まとめ
+## ここまでのまとめ
 というわけで、凄く省略すれば、epochingまで下記のように書けるのです。
 ```
 import mne
