@@ -157,11 +157,8 @@ functionに実行したい関数名を入れます。
 
 Cpython[^cpython]ではありません。Cythonという別ものです。
 pythonをCに変換することで場合によってはpythonの100倍[^hundred]のスピードを
-実現することが可能です。ただし、型を指定するなど加工しないと超速にはならないため、
-一寸手がかかります。さらに、numpyとかは型関係が難しいです。
-純粋かつ簡単なCで実装できるコードを突っ込むべきでしょう。
+実現することが可能です。numpyとかは型関係が難しいです。
 jupyterは大変優秀なので、下記のようにするだけでCythonを実行することが出来ます。
-
 ```{frame=single}
 %load_ext cython
 ```
@@ -182,14 +179,15 @@ def u(np.ndarray[DDOUBLE_t,ndim=1] ar):
         m=np.mean(ar)
         print(m)
 ```
-上5行はCythonとnumpyを組み合わせた時の特有の黒魔術です。
+上5行はCythonとnumpyを組み合わせた時の特有のおまじないです。
 上では、numpyのためにint型とdouble型を用意してあげています。また、cdefは型指定です。
 関数を宣言するときも黒魔術的にnumpyの型を指定してあげねば
 なりません。じゃないと動くけど遅いままになります。ndimはnumpy配列の次元数です。
 
 それ以外はC言語を書いた人からすると型指定が必要なただのpythonなので、
-苦労はあまりないはずです？ちなみに、元々C言語なのでCythonを普通に使おうとすると
-普通のC以上に面倒くさいコンパイルの手続きが必要になります。
+苦労はあまりないはずです？
+ちなみに、新しいpythonでは静的型付け風にコーディングする文法があり、
+これはなんとCython対応ですが、残念ながらnumpy対応ではありません…
 
 詳しくはcythonのホームページをググってください。
 http://omake.accense.com/static/doc-ja/cython/index.html

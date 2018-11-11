@@ -16,8 +16,6 @@ DANAというソフトとmaxfilterというソフトをELEKTA社から貰う必�
 ```{frame=single}
 docker run -it --name centos5 -v ~:/home/hoge centos:5
 ```
-[^docker]:仮想化ソフトの一つ。ほぼネイティブの速度が出るのが特徴です。
-
 これでcentos5がダウンロードされ、centos5の端末に入ります。
 ELEKTA社製のソフトは32bit,64bitのソフトが混在しています。
 依存しているものとしては32bitと64bitのfortran、whichコマンドです。
