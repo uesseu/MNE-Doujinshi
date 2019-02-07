@@ -33,7 +33,7 @@
 
 - Electromagnetic Brain Imaging: A Bayesian Perspective 2015
  割りと平易な英語で書いてある応用数学の本です。
- MNE,beamformer,dSPM,sLORETA等が載っていて重宝します。
+ MNE, beamformer, dSPM, sLORETA等が載っていて重宝します。
  内容は結構噛み砕いてくれていますが、元が僕にとっては難しいものなので大変でした。
  いい本です。算数を理解したいなら買って下さい。
 

@@ -6,7 +6,7 @@ MNEは個人個人のデータを解析するモジュールだからです。
 貴方は個人個人のデータをMNEで解析した後、
 そのデータを**自分で**集計する必要があります。numpyを使う必要性はここで出てきます。
 
-MNEのオブジェクト(itc,power,evoked,epochs,raw等)は
+MNEのオブジェクト(itc, power, evoked, epochs, raw等)は
 ユーザーがいじることが出来るようになっています。
 
 中の実データはそれぞれのオブジェクトの中のdataという変数か、
@@ -73,7 +73,7 @@ itc=mne.time_frequency.read_tfrs('/home/hoge/piyo')[0]
 foo番目からbar番目(秒×サンプリング周波数)の反応までの
 実データを抽出したいなら、
 ```{frame=single}
-itc.data[hoge,huga:piyo,foo:bar]
+itc.data[hoge, huga:piyo, foo:bar]
 ```
 です。ちなみに、wavelet変換時にdecimの値を設定している場合は
 (秒×サンプリング周波数/wavelet変換のdecimの値)となります。
@@ -82,7 +82,7 @@ APIページでtime_frequency.tfr_morlet()関数をご参照ください。
 2はnumpyのmean等で実現します。
 import numpy as npの後
 ```{frame=single}
-np.mean(itc.data[hoge,huga:piyo,foo:bar])
+np.mean(itc.data[hoge, huga:piyo, foo:bar])
 ```
 などとすれば良いと思います。
 
@@ -119,22 +119,22 @@ print(summary(data))
 この数値を仮にnumという変数に入れるとします。これに背景情報を付けます。データの背景情報に
 「疾患群、健常者群」「右脳、左脳」「刺激提示、プラセボ」という分類を作ったとしましょう。
 …日本語は色々と面倒なので、下記のような分類に変えます。
-['disease','normal'],['right','left'],['stimuli','placebo']
+['disease', 'normal'], ['right', 'left'], ['stimuli', 'placebo']
 
 そして、上記で出したデータが
-['disease','left','stimuli']という背景情報に合致するのであれば、
+['disease', 'left', 'stimuli']という背景情報に合致するのであれば、
 次のような配列を作ります。
 ```{frame=single}
-['disease','left','stimuli',num]
+['disease', 'left', 'stimuli', num]
 ```
 この配列をさらに大きな配列に入れていきます。
 ```{frame=single}
-data=[['disease','left','stimuli',num]]
+data=[['disease', 'left', 'stimuli', num]]
 ```
 仮に、次のデータが
-['disease','left','placebo',num2]なら、
+['disease', 'left', 'placebo', num2]なら、
 ```{frame=single}
-data.append(['disease','left','placebo',num2])
+data.append(['disease', 'left', 'placebo', num2])
 ```
 とすれば追加されます。[^naihou]
 さて…これで被験者の背景情報まで含まれた2次元配列が出来ました。
@@ -142,14 +142,14 @@ data.append(['disease','left','placebo',num2])
 ```{frame=single}
 import pandas as pd
 df=pd.DataFrame(data,
-        columns=('group','hemisphere','test','value'))
+        columns=('group', 'hemisphere', 'test', 'value'))
 ```
 これで、横軸にcolumsのラベルの付いたデータフレームが出来ます。
 jupyterのRではこれを読み込めます。具体的には下記のようにします。
 
 ```{frame=single}
 %%R -i df
-print(summary(aov(df$value~df$group*df$hemisphere*df$test,data=df)))
+print(summary(aov(df$value~df$group*df$hemisphere*df$test, data=df)))
 ```
 ここでpythonからいきなりRを書き始めます。
 pythonのscipyでの統計もいいのですが「なんで統計ソフト使わないん？舐めてるん？」

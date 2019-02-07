@@ -10,7 +10,7 @@ MACならhttp://www.mccauslandcenter.sc.edu/crnl/mricron/から
 MRIの形式の変換に大変有用です。
 
 さて、今はより新しいやつがあります。
-mricroglというやつです。(まだ詳しくない)
+mricroglというやつです。
 これはmricronでは変換できないものを変換することが出来ます。
 ここからダウンロード出来ます。
 [http://www.mccauslandcenter.sc.edu/mricrogl/](http://www.mccauslandcenter.sc.edu/mricrogl/)

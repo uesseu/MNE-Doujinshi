@@ -72,8 +72,8 @@ make_epoch(4)
 というわけで、凄く省略すれば、epochingまで下記のように書けるのです。
 ```
 import mne
-raw = mne.io.Raw('hoge').interpolate_bads().filter(1, 100).\
-      notch_filter(60)
+raw = mne.io.Raw('hoge').interpolate_bads().filter(1, 100)
+raw = raw.notch_filter(60)
 make_epochs = partial(raw, mne.find_events(raw), tmin=-0.2, tmax=5.0)
 epochs = [make_epochs(n) for n in range(1,7)]
 ```

@@ -58,7 +58,8 @@ GUIでの操作となります。
 下記のコードを実行すると画面が立ち上がります。
 
 ```{frame=single}
-mne.gui.coregistration()
+from mne.gui import coregistration
+coregistration()
 ```
 
 subjectやmegへのpathを指定しない場合は、GUI上で指定することになります。
@@ -68,8 +69,9 @@ subjectを探さねばならなくなります。
 pythonの関数に色々入れてから起動すれば、
 既にデータが読み込まれているので、楽です。
 ```{frame=single}
-mne.gui.coregistration(subject = subject,subjects_dir = subjects_dir,
-                       inst = file_path)
+coregistration(subject = subject,
+               subjects_dir = subjects_dir,
+               inst = file_path)
 ```
 instはmegデータ…rawでもepochでも良いらしいですが、どれかを指定して下さい。
 
@@ -87,7 +89,8 @@ instはmegデータ…rawでもepochでも良いらしいですが、どれか�
 
 あとで、保存したtransを
 ```{frame=single}
-trans = mne.read_trans('/Users/hoge/fuga/trans.fif')
+from mne import read_trans
+trans = read_trans('/Users/hoge/fuga/trans.fif')
 ```
 みたいな感じで読み込んで使います。
 注意点として、脳波とかの場合は表示がprojectionモードになっているかもしれません。
@@ -111,8 +114,11 @@ mne watershed_bem -s subject -d subjects_dir
 これにより、BEMが作成されました。
 再びpythonに戻り、下記を入力してみてください。
 ```{frame=single}
-mne.viz.plot_bem(subject = subject, subjects_dir = subjects_dir,
-                 brain_surfaces = 'white', orientation = 'coronal')
+from mne.viz import plot_bem
+plot_bem(subject = subject,
+         subjects_dir = subjects_dir,
+         brain_surfaces = 'white',
+         orientation = 'coronal')
 ```
 これでBEMが表示されるはずです。
 
@@ -133,8 +139,10 @@ freesurferの標準脳であるfsaverageが現れます。
 設定する必要があります。その設定がソーススペースです。
 subjects_dirは環境変数に設定していれば要らないです。
 ```{frame=single}
-src = mne.setup_source_space(subject = subject, spacing = 'oct6',
-      subjects_dir = subjects_dir)
+from mne import setup_source_space
+src = setup_source_space(subject = subject,
+                         spacing = 'oct6',
+                         subjects_dir = subjects_dir)
 ```
 もちろん、標準脳が欲しい場合は黙ってfsaverage。
 これで、srcという変数にソーススペースが入りました。
@@ -163,11 +171,13 @@ MEGの場合は一枚だけで十分だそうです。
 
 では、BEMで順問題を解く準備をしましょう。
 ```{frame=single}
+from mne import make_bem_model, make_bem_solution
 conductivity = (0.3,)
-model = mne.make_bem_model(subject = 'sample', ico = 4,
-                           conductivity = conductivity,
-                           subjects_dir = subjects_dir)
-bem = mne.make_bem_solution(model)
+model = make_bem_model(subject = 'sample',
+                       ico = 4,
+                       conductivity = conductivity,
+                       subjects_dir = subjects_dir)
+bem = make_bem_solution(model)
 ```
 これにより、BEMを読み込み、順問題解きモードに入りました。
 icoはどの程度細かく順問題を解くかの数値です。icoの数字が高いほうが詳しいです。
@@ -176,13 +186,17 @@ EEGの場合はこれが(0.3, 0.006, 0.3)とかになったりします。
 
 では、先程作った色々なものと組み合わせて順問題を解きます。
 ```{frame=single}
-trans = mne.read_trans('/hoge/fuga')
+from mne import read_trans, make_forward_solution
+trans = read_trans('/hoge/fuga')
 mindist = 5
-fwd = mne.make_forward_solution(raw.info,
-                             trans = trans,
-                             src = src, bem = bem,meg = True,
-                             eeg = False,
-                             mindist = mindist, n_jobs = 4)
+fwd = make_forward_solution(raw.info,
+                            trans = trans,
+                            src = src,
+                            bem = bem,
+                            meg = True,
+                            eeg = False,
+                            mindist = mindist,
+                            n_jobs = 4)
 ```
 ここまでやった方にとって、上記のパラメータはだいたい分かるでしょう。
 mindistは頭蓋骨から脳までの距離です。単位はmm。
@@ -197,8 +211,10 @@ mindistは頭蓋骨からみて、一番浅い部分にあるソーススペー�
 ノイズ周囲の事を計算していかねばなりません。
 これにはMEGを空撮りした空データを使います。下記でからの部屋データを読み込みます。
 ```{frame=single}
-cov = mne.compute_raw_covariance(raw_empty_room,
-                              tmin = 0, tmax = None)
+from mne import compute_covariance
+cov = compute_raw_covariance(raw_empty_room,
+                             tmin = 0,
+                             tmax = None)
 ```
 これでコヴァリアンスを作ることになりますが…MNEには更に追加の方法があります。
 上記の空室の方法は広く行われている方法ですが、
@@ -207,7 +223,10 @@ cov = mne.compute_raw_covariance(raw_empty_room,
 それを含めるならば、下記のようにすることも出来ます。
 
 ```{frame=single}
-cov = mne.compute_covariance(epochs, tmax = 0., method = 'auto')
+from mne import compute_covariance
+cov = compute_covariance(epochs,
+                         tmax=0.,
+                         method='auto')
 ```
 ちなみに、このmethod = autoというのはMNEに実装された新しいやり方だそうです。
 tmax = 0にしているので、刺激が入る前までの波を取り除きます。
@@ -216,7 +235,9 @@ tmax = 0にしているので、刺激が入る前までの波を取り除きま
 
 他に、rawデータからcovariance matrixを作る方法もあります。
 ```{frame=single}
-compute_raw_covariance(raw, tmin = 0, tmax = 20)
+compute_raw_covariance(raw,
+                       tmin=0,
+                       tmax=20)
 ```
 これはresting stateとかに良さそうですね？
 …最早当然ですが、tmin,tmaxは時間です。単位は秒です。
@@ -226,8 +247,11 @@ compute_raw_covariance(raw, tmin = 0, tmax = 20)
 最終段階です。順問題とコヴァリアンスを組み合わせて逆問題を解きましょう。
 下記のとおりです。
 ```{frame=single}
-inverse_operator = make_inverse_operator(epochs.info, fwd,
-                                 cov,loose = 0.2, depth = 0.8)
+inverse_operator = make_inverse_operator(epochs.info,
+                                         fwd,
+                                         cov,
+                                         loose=0.2,
+                                         depth=0.8)
 ```
 inverse_operatorと言うのは何かというと、逆問題を算出するための式です。
 このinverse_operatorを作るために頑張ってきたと言っても過言なしです。
@@ -303,7 +327,8 @@ annot形式は新しく開発されたアトラスが入っていて、
 label形式はブロードマンと思います。
 annot形式の内容はこのように読みます。
 ```{frame=single}
-mne.read_labels_from_annot(subject,annot_fname = 'hoge')
+mne.read_labels_from_annot(subject,
+                           annot_fname='hoge')
 ```
 詳しくは公式サイト(ry
 他にも読み方があります。
@@ -320,14 +345,17 @@ mne.read_label(filename, subject = None)
 では、labelをベースにデータを抜き出しましょう。
 
 ```{frame=single}
-source_label = mne.extract_label_time_course(stcs,
-                   labels, src, mode = 'mean_flip')
+from mne import extract_label_time_course
+source_label = extract_label_time_course(stcs,
+                                         labels,
+                                         src,
+                                         mode='mean_flip')
 ```
 ここではstcがソースのデータ、srcが左右半球のソーススペースのリストです。
 modeはいくつかあります。
-mean: それぞれのラベルの平均です
-mean_flip: すみません、わかりません＞＜
-pca_flip: すみません、わかりません＞＜
+mean: それぞれのラベルの平均です。これを使うのが普通でしょうか…
+mean_flip: 特異値分解を使ってベクトルが違うやつも取り出すのです。
+pca_flip: PCAを使って取り出してくるのです。
 max: ラベルの中で最大の信号が出てきます
 
 殆どわからなくてごめんなさい。
@@ -342,11 +370,14 @@ max: ラベルの中で最大の信号が出てきます
 induced_powerとphaselocking_factorを算出する関数は下記です。
 ※labelを選ばなければ激重注意！[^gekiomo]
 ```{frame=single}
-induced_power, itc = source_induced_power(
-        epochs, inverse_operator, frequencies, label,
-        baseline = (-0.1, 0),
-        baseline_mode = 'zscore',
-        n_cycles = n_cycles, n_jobs = 4)
+induced_power, itc=source_induced_power(epochs,
+                                        inverse_operator,
+                                        frequencies,
+                                        label,
+                                        baseline=(-0.1, 0),
+                                        baseline_mode='zscore',
+                                        n_cycles=n_cycles,
+                                        n_jobs=4)
 ```
 基本は以前wavelet変換で行った事に、いくつか追記するだけです。
 まず、ベースラインコレクションはここではzscoreでしています。
@@ -362,10 +393,10 @@ baseline補正の時間についてはデータの端っこすぎると値がブ
 ソースベースでコネクティビティ出来ます。
 ```{frame=single}
 from mne.connectivity import spectral_connectivity
-con, freqs, times, n_epochs, n_tapers = spectral_connectivity(
-             source_label, method = 'coh', mode = 'multitaper',
-             sfreq = 500, fmin = 30,
-             fmax = 50, faverage = True, mt_adaptive = True)
+con, freqs, times, n_epochs, n_tapers=spectral_connectivity(
+             source_label, method='coh', mode='multitaper',
+             sfreq=500, fmin=30,
+             fmax=50, faverage=True, mt_adaptive=True)
 ```
 使い方はセンサーベースコネクティビティと同じです。
 この場合、さっき計算して出したラベルごとのデータと、

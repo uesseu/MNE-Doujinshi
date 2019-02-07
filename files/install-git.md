@@ -77,18 +77,21 @@ jupyterを僕は使いますが、jupyterのファイルはgitしにくいです
 ```{frame=single}
 jupyter notebook --generate-config
 ```
-このコマンドでjupyterのコンフィグファイルが作成されます。場所は/home/hoge/.jupyterです。
+このコマンドでjupyterのコンフィグファイルが作成されます。
+場所は/home/user/.jupyterです。
 その上で、下記URLに記載されている通りに書き加えます。
 http://jupyter-notebook.readthedocs.io/en/latest/extending/savehooks.html
 すると、jupyterで編集したファイルがpythonのスクリプトとしても保存されます。
-あとはgit[^git]などで管理すればいいです。ただし、この方法は計算結果がファイル内に残りません。
+あとはgit[^git]などで管理すればいいです。
+ただし、この方法は計算結果がファイル内に残りません。
 しかも散らかります。
-どちらかというと素直にpyファイルにしてダウンロードしてgitを使うほうが良いかもしれません。
+どちらかというと素直にpyファイルにして
+ダウンロードしてgitを使うほうが良いかもしれません。
 
 [^toukei]:同様に、matlabやC等と連携をすることが簡単なのがjupyterの強みの一つと思います。
 [^git]:プログラミング用バージョン管理ソフト。敷居は高いが多機能。
 
-### 方法2
+### 方法2(あまりおすすめしない)
 gitを使いますが、git側の設定だけでもどうにかなります。
 まず、jqをインストールします。
 .gitattibuteに書きを書き加えます。

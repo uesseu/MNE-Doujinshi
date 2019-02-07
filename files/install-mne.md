@@ -29,6 +29,11 @@ Python 3.6.4 :: Continuum Analytics, Inc.
 conda activate mne
 ```
 今後はmneを使うときは必ず上記のコマンドを打って下さい。[^conda]
+面倒くさい？どうしても打ちたくないです？
+それならば、.bashrcや.bash_profileに下記を追記してください。
+```{frame=single}
+conda activate mne
+```
 
 [^conda]:昔はsource activateコマンドでしたが、このコマンドはanaconda以外の仮想環境ツールと衝突してクラッシュするという不具合がありました。今後はconda activateコマンドを使うのがいいでしょう。
 

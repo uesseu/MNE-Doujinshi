@@ -45,7 +45,7 @@ epochs.drop_channels(['fuga'])
 
 
 ```{frame=single}
-from mne.connectivity import spectral_connectivity as sc
+from mne.connectivity import spectral_connectivity
 cons = sc(epochs, method=’coh’, indices=None,
           sfreq=500, mode=’multitaper’, fmin=35, fmax=45, fskip=0,
           faverage=False, tmin=0, tmax=0.5, mt_bandwidth=None,
@@ -56,8 +56,7 @@ cons = sc(epochs, method=’coh’, indices=None,
 ```
 
 …基本、我流の僕はソースコードが汚いんですが、今回はあまりにも
-一行あたりが長すぎる気がします。オブジェクト指向的にはちょっと…。
-自前でオブジェクト作ったほうが楽かもです。
+一行あたりが長すぎる気がします...。
 やむを得ず圧縮のためにscと短縮しました…。では、解説いきます。
 
 - method: そのままmethodですね。上記の通り。

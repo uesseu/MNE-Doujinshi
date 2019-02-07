@@ -16,7 +16,7 @@ badchannelは、例えば明らかに一個だけ滅茶苦茶な波形…
 振幅が大きくて他のとぜんぜん違う動きしているとか、
 物凄い周波数になっているとか、毛虫っぽいとか、そういうやつを選んでください。
 
-### やり方2
+### やり方2(おすすめ)　
 raw.plot()
 をした上で、画面上でポチポチクリックしていけば、rawにbadが
 入っていくように出来ています。便利ですね！
@@ -91,7 +91,8 @@ from mne.preprocessing import create_eog_epochs, create_ecg_epochs
 
 まずは、ICAのモジュールをインポートします。
 ```{frame=single}
-picks_meg = mne.pick_types(raw.info, meg=True, eeg=False, eog=False,
+picks_meg = mne.pick_types(raw.info, meg=True,
+                           eeg=False, eog=False,
                            stim=False, exclude='bads')
 ```
 次に、どのような波にICAをかけるか選びます。基本、解析したい脳磁図(脳波)に
@@ -122,7 +123,7 @@ pythonでは乱数テーブルを指定することが出来ます。
 
 ```{frame=single}
 ica = ICA(n_components=n_components,
-        method=method, random_state=random_state)
+          method=method, random_state=random_state)
 ica.fit(raw, picks=picks_meg, decim=decim,reject = dict( grad=4000e-13))
 ```
 icaのセットを作り、データに適用しています。
@@ -150,6 +151,8 @@ filtered_raw=ica.apply(raw,exclude=[0,10])
 ```
 これでicaはかけ終わりです。
 上記の出力結果や取り除いたチャンネル、random_stateは保存しておきましょう。
+まぁ、random_stateを指定して作ったicaを保存したら
+中にrandom_stateも保存されるんですけどね。
 
 
 ## EpochとEvoked
@@ -177,13 +180,13 @@ array([[ 15628,      0,      2],
        [ 23131,      0,      1],
        [ 25597,      0,      8],
 ```
-この場合刺激チャンネルには1,2,4,8という刺激が入っています。
+この場合刺激チャンネルには1, 2, 4, 8という刺激が入っています。
 このうち、刺激情報1を使って切り出したいときは下記です。
 ```{frame=single}
-epochs=mne.Epochs(raw,event_id=[1],events=events)
+epochs = mne.Epochs(raw, event_id=[1], events=events)
 ```
 先程のeventsを使っています。
-event_idは配列にしてください。ここは[1,2]とかも出来るのでしょう。
+event_idは配列にしてください。ここは[1, 2]とかも出来るのでしょう。
 evokedを作るのはとても簡単で、下記のとおりです。
 ```{frame=single}
 evoked=epochs.average()

@@ -70,13 +70,13 @@ Pythonの数値計算ライブラリ NumPy入門
 
 ```{frame=single}
 import numpy as np
-a=np.array([5,6])
-b=np.array([7,8])
+a = np.array([5, 6])
+b = np.array([7, 8])
 ```
 
 解説します。
 1行目はnumpyを使うけれども長いからnpと略して使うよ、という意味です。
-二行目と三行目で、aとbに5,6と7,8を代入しました。ここから下記を入力します。
+二行目と三行目で、aとbに5, 6と7, 8を代入しました。ここから下記を入力します。
 
 ```{frame=single}
 print(a+b)
@@ -84,20 +84,20 @@ print(a+b)
 
 結果
 ```{frame=single}
-[12,14]
+[12, 14]
 ```
 
 このように計算できます。
 ちなみに、numpyの配列と素のpythonの配列は違うものであり、素のpythonならこうなります。
 
 ```{frame=single}
-a=[5,6]
-b=[7,8]
-print(a+b)
+a = [5, 6]
+b = [7, 8]
+print(a + b)
 ```
 結果
 ```{frame=single}
-[5,6,7,8]
+[5, 6, 7, 8]
 ```
 
 numpyと普通のlistはlist関数やnumpy.array関数で相互に変換できます。
@@ -105,11 +105,11 @@ numpyと普通のlistはlist関数やnumpy.array関数で相互に変換でき�
 
 ```{frame=single}
 import numpy as np
-np.arange(5,13,2)
+np.arange(5, 13, 2)
 ```
 結果
 ```{frame=single}
-array([5,7,9,11])
+array([5, 7, 9, 11])
 ```
 
 これは5〜13までの間、2刻みの数列を作るという意味です。

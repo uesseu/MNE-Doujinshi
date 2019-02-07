@@ -62,7 +62,7 @@ brain.add_label("BA1.thresh", color="red")
 
 ```{frame=single}
 brain = surfer.Brain(subject, "lh", "inflated",
-subjects_dir=subjects_dir)
+subjects_dir = subjects_dir)
 brain.add_annotation('aparc.a2009s')
 ```
 
@@ -75,7 +75,8 @@ brain.add_annotation('aparc.a2009s')
 ここでは脳波のevokedを例にしておきます。他のデータでも応用ききます。
 下記のチャンネルを選択したいとします。
 ```{frame=single}
-channel=['Fz','FCz','FC1','FC2','Cz','C1','C2','F1','F2']
+channels = ['Fz', 'FCz', 'FC1', 'FC2',
+            'Cz', 'C1', 'C2', 'F1', 'F2']
 ```
 
 pythonの配列では、中の項目を逆引きで探し出す.index()関数があります。
@@ -86,12 +87,8 @@ evoked.data[evoked.info['ch_names'].index('Fz')]
 ```
 この'Fz'をfor文で書きかえていけば良いのです。
 ```{frame=single}
-data=[]
-for ch in channel:
-  data.append(evoked.data[evoked.info['ch_names'].index(ch)])
-```
-ちなみに、下記のように書くのがよりpythonicと思われます。
-これはリスト内包表記と言って、pythonistaが好んで使う方法です。
-```{frame=single}
-data=[evoked.data[evoked.info['ch_names'].index(ch)] for ch in channel]
+data = []
+for channel in channels:
+  wave = evoked.data[evoled.info['ch_names'].index(ch)
+  data.append(wave)
 ```
