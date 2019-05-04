@@ -6,7 +6,7 @@ http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_rejectio
 これには2つのやり方があります。
 
 ### やり方1
-jupyterで%matplotlib qtとしたあとでraw.plot()でデータを見ながらひたすら下記のように
+raw.plot()でデータを見ながらひたすら下記のように
 badchannelを設定していってください。それだけです。
 
 ```{frame=single}

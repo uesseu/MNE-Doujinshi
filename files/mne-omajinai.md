@@ -1,6 +1,10 @@
 
-## 作図用おまじないセット
-下記はjupyterのコマンド
+## jupyter用作図用おまじないセット
+
+このへんのおまじないは素のpython使っているならいりませんが、
+jupyterやipythonのときは必要でしょう。
+
+下記はjupyter/ipythonのコマンド
 ```{frame=single}
 %matplotlib inline
 %gui qt
