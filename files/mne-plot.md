@@ -66,7 +66,47 @@ subjects_dir = subjects_dir)
 brain.add_annotation('aparc.a2009s')
 ```
 
+
 沢山表示されていますね。僕はちょっと気持ち悪いなぁと思いました。
+
+## numpyのplot
+これ、結構面倒くさいです。では、表示していきましょう。
+numpyの情報をdataとします。
+しかし、例えばwavelet変換をした情報なんかなら、
+時間軸、周波数軸、チャンネルというふうに、多次元です。
+二次元のほうが皆さん見やすくて好きですよね？
+では、二次元にします。
+```{frame=single}
+data_mean = data.mean(axis=0)
+```
+mneではとりあえずaxis=0でうまくいくことが多いですね。
+ここは適当ですが、いい感じに調整して下さい。
+
+さて、僕はゆるふわな方が好きなのでseabornを使います。
+```{frame=single}
+import seaborn as sns
+import matplotlib.pyplot as plt
+def make_and_save_fig(data, fname)-> None:
+    ax = sns.heatmap(data, vmax=0.25,
+                     cbar=True, cmap='rainbow')
+    ax.set_yticks(np.arange(85, 0, -5))
+    ax.set_yticklabels(np.arange(15, 100, 5))
+    ax.set_xticks(np.arange(0, 1000, 100))
+    ax.set_xticklabels(np.arange(-300, 700, 100))
+    ax.invert_yaxis()
+    plt.savefig(fname)
+    plt.clf()
+```
+何故snsと略すんでしょうね？一応習慣であるそうです。
+で、heatmapはseabornのもので、matplotlibで言うimshowです。
+二次元の画像データをplotするやつですね。
+set_yticksはデータのどの部分に目盛りをつけるかを指定したもの。
+set_yticklabelsはデータの目盛りに書き込む内容です。
+ここでは、15から100Hzの周波数について解析して、
+5Hzずつ目盛りをつけていったのですね。
+matplotlibは突然pltとして出てきていますが、これは仕様です。
+axに吐き出したものはpltで色々するんですね。
+詳しくはググって下さい。
 
 ## 多チャンネル抜き出し
 
