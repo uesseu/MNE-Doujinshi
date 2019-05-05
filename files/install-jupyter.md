@@ -16,7 +16,7 @@ https://www.continuum.io/downloads
 このサイトからインストールプログラムをダウンロードします。
 anacondaは2と3があり、それぞれpython2と3に対応しています。
 anaconda3を入れるのがいいと思います。
-anacondaにjupyterというrepl[^repl]とspyderというIDEが付いてきます。
+anacondaにjupyterというrepl[^repl]とspyderというIDE[^ide]が付いてきます。
 これらを使うのもまたいいと思います。
 
 [^repl]:特定言語用の対話型インターフェイスのこと。
