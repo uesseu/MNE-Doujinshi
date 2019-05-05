@@ -31,10 +31,16 @@ files = files/introduction.md \
 
 outfile = out.pdf
 
-latex = -V documentclass=ltjarticle \
+latex_twoside = -V documentclass=ltjarticle \
   -V geometry:left=3cm \
   -V geometry:right=1cm \
   -V geometry:twoside \
+  -V CJKmainfont=IPAexGothic \
+  -V lang=en-US
+
+latex = -V documentclass=ltjarticle \
+  -V geometry:left=2cm \
+  -V geometry:right=2cm \
   -V CJKmainfont=IPAexGothic \
   -V lang=en-US
 
@@ -46,9 +52,9 @@ writer = --toc \
     --indented-code-classes=python,bas \
     --pdf-engine=lualatex
 
-out.pdf: $(files)
+all: $(files)
 	pandoc -o out.pdf $(writer) $(latex_packages) $(latex) $(markdown_extention) $(files)
 
 
-twoside.pdf:
-	pandoc -o twoside.pdf $(writer) $(latex_packages) $(latex) $(markdown_extention) $(files)
+twoside:
+	pandoc -o twoside.pdf $(writer) $(latex_packages) $(latex_twoside) $(markdown_extention) $(files)
