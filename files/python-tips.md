@@ -35,7 +35,6 @@ raw2, raw3, raw4と作るうちにraw∞とかなって死にます。
 filtered = raw.copy().filter(1,100).notch_filter(60)
 ```
 raw2など要らなかった。
-まぁ、一寸消費メモリとかは多くなるかも知れません。
 
 ## MNEのAPI引数多すぎだろ死ね！
 確かにMNEのmethodは引数が多すぎである。

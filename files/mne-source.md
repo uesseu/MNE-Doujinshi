@@ -2,10 +2,11 @@
 # ソースレベルMEG解析
 
 ついにソースレベルの解析を行います。これがMNE/pythonの真髄です。
-難しいのです。頑張りましょう。
+すこし難しいのです。頑張りましょう。
 
 ソースレベル解析については冒頭の記述を見ていただくとして、
-MRIとMEGをくっつけていきます。(MRIがない場合は標準脳を使える)
+早速MRIとMEGをくっつけていきます。
+(MRIがない場合は標準脳を使えるけど、あまり感心しない)
 目標は「脳内の信号を算出するための式を作る」事です。
 式さえできればなんとか計算できるわけです。
 必要物品は以下の通り
@@ -15,7 +16,14 @@ MRIとMEGをくっつけていきます。(MRIがない場合は標準脳を使�
 - 脳波か脳磁図
 - 皮膚や頭蓋骨の抵抗値や、その分布
 
-これで、脳の中の活動量をX、センサーで捉える活動量をYとすると
+脳の中の活動と、センサーで鶴亀算を解いてあげるのです。
+さて、これは理工系の人は知っているのですが、実は鶴亀算は割り算です。
+(ここで文系や医学部の人はびっくりする)
+一応、鶴亀算が割り算であることの解説記事を書いたので、
+数学習ってなかった人やサボっていた人はご参照ください。
+https://qiita.com/uesseu/items/750c236bfa706c361b3b
+
+さて、脳の中の活動量をX、センサーで捉える活動量をYとすると
 $AX = Y$という形式に落とし込めるはずです。
 ここのAを計算するために、抵抗とか距離とかが必要なんですね！
 このことをForwardSolutionという感じに言います。
@@ -29,19 +37,24 @@ InverseOperatorと言います。
  この作業は手動で行われる。(やればわかる)
  この重ね合わせ情報はtransというファイル形式で保存される。
 1. MRIから脳の形を取ってきて、骸骨の抵抗とかも加味して計算できる形にする。
- これをBEMという。
+ これをBEMという。これを使って掛け算の形にする。
 1. 脳の形から「推定するべき脳の位置」を特定する。
  この脳内の位置情報をソーススペース(source space)という。
+ (超簡単に言うと鶴亀算の鶴と亀のいる場所)
 1. 脳の部位情報と頭の形情報とセンサーの位置から、
  脳活動によってどのようにセンサーに信号が届くかを計算する。
  これを脳磁図における順問題(forward solution)という。
-1. ノイズについて考慮する。この時、covariance matrixと言うものが必要になる。
+ (超簡単に言うと掛け算)
+1. 綺麗な割り算をするためのcovariance matrixを作る(理屈は後述)。
 1. 上記の脳部位とセンサーの関係性から、特定の脳部位での電源活動の波形を推定する。
  これを脳磁図における逆問題(inverse solution)という。
+ (超かんたんに言うと割り算)
  逆問題を解くために数式を作る。その数式をinverse operatorという。
+  (超簡単に言うと逆数。逆数を掛け算すると割り算。)
  逆問題には決まった解答はない。「最も良い解を得る方法」が幾つか提案されている。
 1. 脳全体で推定した波形のうち、欲しいものをとってくる。
 
+なんと、脳の計算とは割り算であった！
 その後は色々なストーリーがあるでしょう。
 
 - 推定された波形をwavelet変換する。
@@ -54,13 +67,20 @@ InverseOperatorと言います。
 
 ## 手順1、trans
 
-GUIでの操作となります。
+GUIでの操作となります。ふた通りの動かし方があります。
 下記のコードを実行すると画面が立ち上がります。
 
+pythonで
 ```{frame=single}
 from mne.gui import coregistration
 coregistration()
 ```
+
+bashで
+```{frame=single}
+mne coreg
+```
+mne coregコマンド簡単ですね！
 
 subjectやmegへのpathを指定しない場合は、GUI上で指定することになります。
 もし0から立ち上げた場合、山のようにあるMRIのsubjectから該当の
@@ -75,16 +95,18 @@ coregistration(subject = subject,
 ```
 instはmegデータ…rawでもepochでも良いらしいですが、どれかを指定して下さい。
 
-![mne coregistrationの画面。大して苦行ではない。](img/trans.png){width=14cm}
+![mne coregistrationの画面。苦行。](img/trans.png){width=14cm}
 
 手順はこうです。
 
 1. 必要ならば、MRIのsubjectを読み込む
 1. 必要ならば、fifファイルを読み込む
-1. 左側、setのところで耳と眉間の位置を入力(MEGのスタイラスでポチるところです)
+1. 左側、setのところで耳と眉間の位置を入力
+ (MEGならスタイラスでポチるところ)
 1. それの一寸上の所、lockをポチる。
 1. 右側、Fit LPA/RPAボタンを押す。
-1. 中の人の顔データをマウスでグリグリしながら、右上の±ボタンを押して調整。
+1. 表示された黄土色の生首をマウスでグリグリしながら、
+ 右上の±ボタンを押して調整。
 1. ちゃんとfitしたら右下のsave as ボタンを押して保存。
 
 あとで、保存したtransを
@@ -94,7 +116,7 @@ trans = read_trans('/Users/hoge/fuga/trans.fif')
 ```
 みたいな感じで読み込んで使います。
 注意点として、脳波とかの場合は表示がprojectionモードになっているかもしれません。
-そうなっていたらうまく重ね合わせる厳しくなるので、
+色々調整してみてください。
 
 
 ## 手順2、BEM作成
@@ -115,10 +137,10 @@ mne watershed_bem -s subject -d subjects_dir
 再びpythonに戻り、下記を入力してみてください。
 ```{frame=single}
 from mne.viz import plot_bem
-plot_bem(subject = subject,
-         subjects_dir = subjects_dir,
-         brain_surfaces = 'white',
-         orientation = 'coronal')
+plot_bem(subject=subject,
+         subjects_dir=subjects_dir,
+         brain_surfaces='white',
+         orientation='coronal')
 ```
 これでBEMが表示されるはずです。
 
@@ -140,9 +162,9 @@ freesurferの標準脳であるfsaverageが現れます。
 subjects_dirは環境変数に設定していれば要らないです。
 ```{frame=single}
 from mne import setup_source_space
-src = setup_source_space(subject = subject,
-                         spacing = 'oct6',
-                         subjects_dir = subjects_dir)
+src = setup_source_space(subject=subject,
+                         spacing='oct6',
+                         subjects_dir=subjects_dir)
 ```
 もちろん、標準脳が欲しい場合は黙ってfsaverage。
 これで、srcという変数にソーススペースが入りました。
@@ -173,10 +195,10 @@ MEGの場合は一枚だけで十分だそうです。
 ```{frame=single}
 from mne import make_bem_model, make_bem_solution
 conductivity = (0.3,)
-model = make_bem_model(subject = 'sample',
-                       ico = 4,
-                       conductivity = conductivity,
-                       subjects_dir = subjects_dir)
+model = make_bem_model(subject='sample',
+                       ico=4,
+                       conductivity=conductivity,
+                       subjects_dir=subjects_dir)
 bem = make_bem_solution(model)
 ```
 これにより、BEMを読み込み、順問題解きモードに入りました。
@@ -190,13 +212,13 @@ from mne import read_trans, make_forward_solution
 trans = read_trans('/hoge/fuga')
 mindist = 5
 fwd = make_forward_solution(raw.info,
-                            trans = trans,
-                            src = src,
-                            bem = bem,
-                            meg = True,
-                            eeg = False,
-                            mindist = mindist,
-                            n_jobs = 4)
+                            trans=trans,
+                            src=src,
+                            bem=bem,
+                            meg=True,
+                            eeg=False,
+                            mindist=mindist,
+                            n_jobs=4)
 ```
 ここまでやった方にとって、上記のパラメータはだいたい分かるでしょう。
 mindistは頭蓋骨から脳までの距離です。単位はmm。
@@ -206,21 +228,18 @@ mindistは頭蓋骨からみて、一番浅い部分にあるソーススペー�
 
 ## 手順5、コヴァリアンスマトリックス関連
 
-次に、MAP推定という方法を用いて脳活動を推定します。
-この推定にはcovariance matrixというものを使ってソースベースのデータの
-ノイズ周囲の事を計算していかねばなりません。
-これにはMEGを空撮りした空データを使います。下記でからの部屋データを読み込みます。
+MNEによる推定にはcovariance matrixというものを使って
+ソースベースのデータのノイズ周囲の大きさを計算していかねばなりません。
+これにはMEGを空撮りした空データや、
+刺激提示されてないときのデータなどを使います。下記で計算します。
 ```{frame=single}
 from mne import compute_covariance
 cov = compute_raw_covariance(raw_empty_room,
-                             tmin = 0,
-                             tmax = None)
+                             tmin=0,
+                             tmax=None)
 ```
-これでコヴァリアンスを作ることになりますが…MNEには更に追加の方法があります。
-上記の空室の方法は広く行われている方法ですが、
-誘発電位を見たい場合はrestingstate(脳が何もしていない時の活動電位)
-がノイズ(本来ノイズではないが、ここではノイズ)として乗る可能性があります。
-それを含めるならば、下記のようにすることも出来ます。
+
+ちなみに、刺激提示されてないときの計算は下記のとおりです。
 
 ```{frame=single}
 from mne import compute_covariance
@@ -228,24 +247,18 @@ cov = compute_covariance(epochs,
                          tmax=0.,
                          method='auto')
 ```
-ちなみに、このmethod = autoというのはMNEに実装された新しいやり方だそうです。
-tmax = 0にしているので、刺激が入る前までの波を取り除きます。
+ちなみに、このmethod=autoというのはMNEに実装された新しいやり方だそうです。
+tmax=0にしているので、刺激が入る前までの波を取り除きます。
 つまりベースラインコレクションみたいな感じになるのです。
 ちなみに、epochsでcovariance…特にautoですると結構重いです。
 
-他に、rawデータからcovariance matrixを作る方法もあります。
-```{frame=single}
-compute_raw_covariance(raw,
-                       tmin=0,
-                       tmax=20)
-```
-これはresting stateとかに良さそうですね？
-…最早当然ですが、tmin,tmaxは時間です。単位は秒です。
 
 ## 手順6、逆問題
 
-最終段階です。順問題とコヴァリアンスを組み合わせて逆問題を解きましょう。
+最終段階です。
+順問題とcovariance matrixを組み合わせて割り算の形にしましょう。
 下記のとおりです。
+
 ```{frame=single}
 inverse_operator = make_inverse_operator(epochs.info,
                                          fwd,
@@ -297,10 +310,14 @@ write_inverse_operator('/home/hoge/fuga',
 from mne.minimum_norm import apply_inverse
 source = apply_inverse(evoked, inverse_operator)
 ```
-これで出てきたものの中にdataという変数があります。
+
+ちなみに、ここではevokedを使っていますが、
+epochsならapply_inverse_epochs、
+rawならapply_inverse_rawです。
+
+これで出てきたsourceの中にdataという変数があります。
 まさに膨大な数です。脳内の膨大な場所について電流源推定したのです。
-これは、一つ一つが脳内で起こった電流と考えて良いと思います。
-…とは言え、推定ではあるので本物かどうかはわかりませんが。
+これは、一つ一つが脳内で起こった電流と考えて良さそうです。
 細かい所は公式サイト見てください。
 
 さて…こんな膨大な数列があっても困りますよね？
@@ -318,7 +335,8 @@ desikan atlasとかDestrieux Atlasとか色々ありますよね。
 ```{frame=single}
 ls $SUBJECT_DIR
 ```
-freesurferのサブジェクトが沢山出てくるはずです。
+もしfreesurferを既に動かしているならば、
+解析済みのMRIが沢山あるはずです。
 サブジェクトの中身にはlabelというディレクトリがあります。
 この中にいっぱいそういうfreesurferのアトラスが入っています。
 
@@ -351,6 +369,8 @@ source_label = extract_label_time_course(stcs,
                                          src,
                                          mode='mean_flip')
 ```
+
+
 ここではstcがソースのデータ、srcが左右半球のソーススペースのリストです。
 modeはいくつかあります。
 mean: それぞれのラベルの平均です。これを使うのが普通でしょうか…

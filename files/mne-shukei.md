@@ -87,10 +87,17 @@ np.mean(itc.data[hoge, huga:piyo, foo:bar])
 などとすれば良いと思います。
 
 3はpythonの基本構文通りなので解説しません。
+4はどのようにしたいかは人によって違うかと思います。
+最近は僕は単純にcsv形式に書き出しています。
+pandasなんかはとても素敵です。
+numpyでも普通のlistでもcsvに変換してくれます。こうすればいいです。
 
-3と4はjupyterならシームレスに扱うことが出来ます。これは超楽なので僕のオススメのやり方です。
+```{frame=single}
+from pandas import DataFrame
+DataFrame(hoge).to_csv(filename)
+```
 
-## Rとpadasの連携、特にANOVAについて
+## jupyterでのRとpadasの連携
 
 「Rをjupyterで動かすために」である程度書きましたが、再掲します。
 jupyter上で
@@ -103,64 +110,46 @@ jupyter上で
 hogehoge
 ```
 という風に記述すればhogehogeがRとして動きます。
-データの受け渡しにはpandasを使うのが良いです。
+ここのデータの受け渡しにもpandasを使うのが良いです。
+項目には名前をつけることが出来ます。
 
 ```{frame=single}
-import pandas as pd
-data=pd.Dataframe([二次元配列])
-```
-```{frame=single}
-%%R -i data
-print(summary(data))
-```
-
-さて…これを応用します。
-前述のnp.mean()関数で特定の時間、周波数など切り出した数値(配列ではない)があります。
-この数値を仮にnumという変数に入れるとします。これに背景情報を付けます。データの背景情報に
-「疾患群、健常者群」「右脳、左脳」「刺激提示、プラセボ」という分類を作ったとしましょう。
-…日本語は色々と面倒なので、下記のような分類に変えます。
-['disease', 'normal'], ['right', 'left'], ['stimuli', 'placebo']
-
-そして、上記で出したデータが
-['disease', 'left', 'stimuli']という背景情報に合致するのであれば、
-次のような配列を作ります。
-```{frame=single}
-['disease', 'left', 'stimuli', num]
-```
-この配列をさらに大きな配列に入れていきます。
-```{frame=single}
-data=[['disease', 'left', 'stimuli', num]]
-```
-仮に、次のデータが
-['disease', 'left', 'placebo', num2]なら、
-```{frame=single}
-data.append(['disease', 'left', 'placebo', num2])
-```
-とすれば追加されます。[^naihou]
-さて…これで被験者の背景情報まで含まれた2次元配列が出来ました。
-これをpandasを使ってRのDataFrameとほぼ同等のものにします。
-```{frame=single}
-import pandas as pd
-df=pd.DataFrame(data,
-        columns=('group', 'hemisphere', 'test', 'value'))
+from pandas import DataFrame
+data = Dataframe(data
+                 columns=('group',
+                          'hemisphere',
+                          'test', 'value'))
 ```
 これで、横軸にcolumsのラベルの付いたデータフレームが出来ます。
-jupyterのRではこれを読み込めます。具体的には下記のようにします。
+こいつをto_csvを使ったりjupyterとかでRにぶちこみます。
 
 ```{frame=single}
-%%R -i df
-print(summary(aov(df$value~df$group*df$hemisphere*df$test, data=df)))
+%%R -i data
+result <- aov(
+  df$value ~ df$group * df$hemisphere * df$test,
+  data=df))
+cat(result)
 ```
-ここでpythonからいきなりRを書き始めます。
+
+だいたいこんな感じです。
+
+
+
+## RでのANOVAについて
+
 pythonのscipyでの統計もいいのですが「なんで統計ソフト使わないん？舐めてるん？」
 とrejectを食らう可能性もありますから辞めましょう。
-今回は多重比較です。多重ANOVAを用います。aovがRのANOVA関数です。
+
+どうせ多重検定することになるんですから、それについて一寸。
+だいたいANOVAを用います。aovがRのANOVA関数です。
 これをsummary関数に読ませることで結果を簡単にまとめます。
-さらに、print文を使うことで画面上に表示します。
+さらに、cat文を使うことで画面上に表示します。
 中の式は、データフレーム内の掛け算になっています。
+
 ANOVA詳しい人は知っていると思いますが、これは相互作用を算出するものです。
 相互作用を計算しない場合は'+'演算子を使ってください。結果が算出されると思います。
 あとはANOVAの本でも読んで下さい。本書では割愛します。
+Rによるやさしい統計学という本が僕のおすすめです。
 
 [^naihou]:pythonistaはリスト内包表記とか使うんでしょうが、ここは簡単のためにappend使っています。というか、この程度の処理ならappendで困りません。
 
