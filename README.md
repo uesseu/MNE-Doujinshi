@@ -9,7 +9,7 @@ Githubにうｐしました。とても悲しい。
 本書はMNEpythonに関する初心者向け和書です！
 
 ## 本のダウンロード
-[ここ](https://github.com/uesseu/MNE-Doujinshi/raw/source/out.pdf)←を右クリックでダウンロードして読むと良いと思います。
+[ここ](https://github.com/uesseu/MNE-Doujinshi/raw/master/out.pdf)←を右クリックでダウンロードして読むと良いと思います。
 
 ## マサカリについて
 教えてくれると凄くうれしいです。
