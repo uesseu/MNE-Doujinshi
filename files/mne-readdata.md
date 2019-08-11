@@ -14,10 +14,12 @@
 
 
 ここでは
+
 - データの読み込み
 - パワースペクトル密度のプロット(以下psd)[^psd]
 - notch filterとlow pass filterを使って要らない波を除去する
 - サンプリングレートを下げて処理を軽くする
+
 をしています。
 
 [^psd]:各周波数ごとの波の強さをあらわしたもの。フーリエ変換の結果算出されるものの1つ。
@@ -216,6 +218,8 @@ montage変数に入れなきゃなりません。めんどいです。
 
 ちなみに下記のようにrawを読み込んだ後で指定する事も可能です。
 ```{frame=single}
+from mne.channels import read_montage
+mont = read_montage('standard_1020')
 raw.set_montage(mont)
 ```
 
@@ -265,7 +269,7 @@ MNEpythonはチャンネルの位置情報を自動で設定する時に
 まず、チャンネルの名前を表示しましょう。
 いっぱいモンタージュ情報が書いてありますが、ここでは10-20法を見てみます。
 ```{frame=single}
-mont=mne.channels.read_montage('standard_1020')
+mont = mne.channels.read_montage('standard_1020')
 print(mont.ch_names)
 mont.plot()
 ```

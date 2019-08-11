@@ -13,6 +13,7 @@
 何故なら、sin波は未来永劫減衰しない波だからです。
 フーリエ変換において、波は未来永劫つづくのが前提なのです。
 (擬似的に切り取ることは出来る)
+
 そこで、減衰するwaveletという波を使って波を表す方法を使います。
 そのため、減衰する波を単純な数式で表現する必要があります。
 これを理解するためには高校数学を理解する必要があります。
@@ -27,11 +28,11 @@
 
 wavelet変換に登場する単語としては以下のものが挙げられます。
 
-|単語|型|内容|特徴|
-|--|--|--|--|
-|evoked power|波を加算平均した後にwavelet変換、波の強さ|ノイズにやや強い|
-|induced power|waveletした後に結果加算平均、波の強さ|ノイズに弱いが後期成分に強い|
-|phase locking factor|同一部位での位相同期性|ノイズにやや強い|
+| 単語                 | 内容                                      | 特徴                         |
+|----------------------|-------------------------------------------|------------------------------|
+| evoked power         | 波を加算平均した後にwavelet変換、波の強さ | ノイズにやや強い             |
+| induced power        | waveletした後に結果加算平均、波の強さ     | ノイズに弱いが後期成分に強い |
+| phase locking factor | 同一部位での位相同期性                    | ノイズにやや強い             |
 
 このなかで、phase locking factorは別名 inter-trial coherence(itc)といいます。
 MNEpythonではitcという言い方しています。[^plv]
@@ -80,11 +81,11 @@ evoked_power=mne.time_frequency.tfr_morlet(evoked,n_jobs=4,
 return_itcがTrueかFalseかでも大きく挙動が違います。
 挙動の組み合わせについてですが、下記のとおりです。
 
-|return_itc|引数|返り値1つ目|返り値2つ目|
-|--|--|--|--|
-|False|evoked|evoked_power|なし|
-|False|epochs|induced_power|なし|
-|True|epochs|induced_power|phaselocking_factor|
+| return_itc | 引数   | 返り値1つ目   | 返り値2つ目         |
+|------------|--------|---------------|---------------------|
+| False      | evoked | evoked_power  | なし                |
+| False      | epochs | induced_power | なし                |
+| True       | epochs | induced_power | phaselocking_factor |
 
 itcを計算したい時は返り値が2つになりますから、下記のです。
 

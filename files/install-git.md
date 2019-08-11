@@ -6,71 +6,27 @@
 そんなリスクを軽減するために、貴方はスクリプトのコピーを取ります。
 コピーを取り続けるうちに、貴方のコンピュータはスクリプトで埋め尽くされ、収集つかなくなります。
 さらに、他の人がスクリプトを手直しする時、引き継ぎとかも大変です。
-だから、貴方はgitを使ってください。
+そんな貴方はgitを使うと幸せに成れます。
 gitを知らない人は、とりあえずgithub desktopとかsource treeをダウンロードして
 体でそれを知ってください。詳しくはgitでググってください。
 こことか参考になります。
-http://www.backlog.jp/git-guide/
+[git-guide http://www.backlog.jp/git-guide/](http://www.backlog.jp/git-guide/)
 
 ## gitサーバー
-git単体でもいけるのですが、折角だからgitのサーバーを導入してみましょう。
-最近microsoftが気前よくgithubのプライベートリポジトリを無料化したので、
-それを使うのもいいでしょうね。ただ、自分の研究用スクリプトをアップしたくないなら
-自分でそれを管理する方法もあるかと思います。
-なので、gitbucketの使い方を書いておきます。
-gitbucketはgithubのクローンを目指して開発されたものです。
+git単体でもいけるのですが、gitサーバーというのもあります。
+最近Microsoftが気前よくgithubのプライベートリポジトリを無料化したので、
+それを使うのもいいでしょうね。
+ただ、自分の研究用スクリプトをアップしたくないなら自前で鯖立てするのもいいし、
+そもそも鯖立てなくても十分便利です。
+一つ言えるのは、これ間違ってpublicとして個人情報を
+githubに上げちゃったりすると捕まりますので、これだけは注意しましょう。
 
-### gitbucket導入
-gitbucketをググってgitbucket.warをダウンロードしてください。
-で、javaというか、jdkをインストールします。めんどいんで詳しくはググってください。
-http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-
-このまま
-```{frame=single}
-java -jar gitbucket.war
-```
-でも動くのですが、安定性に欠けるらしいので僕はPostgreSqlを導入します。
-
-とりあえず、いくつかunixユーザーを作りましょう…。
-そんで、データベース上に自分とgitbucketを登録します。
-
-```{frame=single}
-useradd postgres
-passwd postgres
-su postgres
-createuser -d hoge
-createdb hoge
-createdb gitbucket
-exit
-```
-
-上記で一応なんとかなると思うのですが、念のため確認を…
-postgresqlにログインして下記を叩けばちゃんとデータベースが出来たかを確認できます。
-
-```{frame=single}
-\du
-```
-
-.gitbucket/database.confを下記のように書き直します。
-```{frame=single}
-db {
-  url = "jdbc:postgresql://localhost/gitbucket"
-  user = "test"
-  password = "test"
-}
-```
-で、
-```{frame=single}
-java -jar gitbucket.war
-```
-
-これでip+:8080にアクセスすればgitbucket動いてます。
-(もちろん、これだけではセキュリティ面等、不十分です。
-  セキュリティ詰める自信がないならローカルだけで使いましょう。)
 
 ## jupyterで作ったスクリプトのバージョン管理(小技)
-jupyterのファイルはgitしにくいのできちんとコーディングする場合は
-あまりオススメしません。でも、何とかなります。
+jupyterのファイルはgitしにくい上にすっごい散らかるので
+きちんとコーディングする場合はオススメしません。
+あくまでサブとして使う事をおすすめします。
+重いしね…
 
 
 ### 方法1
@@ -87,7 +43,7 @@ http://jupyter-notebook.readthedocs.io/en/latest/extending/savehooks.html
 しかも散らかります。
 
 [^toukei]:同様に、matlabやC等と連携をすることが簡単なのがjupyterの強みの一つと思います。
-[^git]:プログラミング用バージョン管理ソフト。敷居は高いが多機能。
+[^git]:プログラミング用バージョン管理ソフト。敷居は高いが多機能で超速。GUIクライアントも豊富。
 
 ### 方法2(あまりおすすめしない)
 gitを使いますが、git側の設定だけでもどうにかなります。
@@ -108,3 +64,4 @@ prompt = false
 .ipynb_checkpoints/
 ```
 これでjupyter notebookのファイルをgitで管理しやすくなります。
+色んな理由でおすすめはしませんけどね…

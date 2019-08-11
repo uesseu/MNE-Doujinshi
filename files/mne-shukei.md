@@ -23,13 +23,13 @@ evoked.data.shape
 
 データの構造としてはこんな感じのようです。括弧がついているのはオブジェクト内の関数です
 
-|形式|データ|1次元目|2次元目|3次元目|
-|--|--|--|--|--|
-|raw|raw.get_data()|チャンネル|波形||
-|epochs|epochs.get_data()|チャンネル|波形||
-|evoked|evoked.data|チャンネル|波形||
-|itc|itc.data|チャンネル|周波数|波形|
-|power|power.data|チャンネル|周波数|波形|
+| 形式   | データ            | 1次元目    | 2次元目 | 3次元目 |
+| --     | --                | --         | --      | --      |
+| raw    | raw.get_data()    | チャンネル | 波形    |         |
+| epochs | epochs.get_data() | チャンネル | 波形    |         |
+| evoked | evoked.data       | チャンネル | 波形    |         |
+| itc    | itc.data          | チャンネル | 周波数  | 波形    |
+| power  | power.data        | チャンネル | 周波数  | 波形    |
 揃っていませんね…。
 (どうせ使うのはevoked以下くらいなので大して困りません。)
 
@@ -38,13 +38,13 @@ object.save(filename)
 とすれば保存できます。
 読み込みは多くの形式に対応する必要があってか一寸複雑です。
 
-|形式|読み込み関数|備考|
-|--|--|--|
-|raw|mne.io.Raw()|脳磁図の場合。脳波とかは公式サイトAPI参照|
-|epochs|mne.read_epochs()|
-|evoked|mne.read_evoked()|条件によって配列で返されることあり|
-|itc|mne.time_frequency.read_tfrs()|条件によって配列で返されることあり|
-|power|mne.time_frequency.read_tfrs()|条件によって配列で返されることあり|
+| 形式   | 読み込み関数                   | 備考                                      |
+| --     | --                             | --                                        |
+| raw    | mne.io.Raw()                   | 脳磁図の場合。脳波とかは公式サイトAPI参照 |
+| epochs | mne.read_epochs()              |
+| evoked | mne.read_evoked()              | 条件によって配列で返されることあり        |
+| itc    | mne.time_frequency.read_tfrs() | 条件によって配列で返されることあり        |
+| power  | mne.time_frequency.read_tfrs() | 条件によって配列で返されることあり        |
 
 例えば
 ```{frame=single}
@@ -132,7 +132,6 @@ cat(result)
 ```
 
 だいたいこんな感じです。
-
 
 
 ## RでのANOVAについて

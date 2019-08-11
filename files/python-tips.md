@@ -47,9 +47,10 @@ from functools import partial
 こいつは関数を部分的に解いちゃう関数だ。
 
 今君は、複数のepochオブジェクトを作りたいとする。
-event_idは1､2､3､4､5､6だ。その都度入力するのはダルいし、
-変数が増えすぎると管理も大変だ。
+event_idは1､2､3､4､5､6だとする。
+その都度入力するのはダルいし、変数が増えすぎると管理も大変だ。
 そんなときはこのようにすればいい。
+
 ```{frame=single}
 from mne.io import Raw
 from mne.epochs import Epochs 
@@ -57,12 +58,12 @@ from mne import find_events
 
 raw = Raw('hoge.fif', preload=True)
 events = find_events(raw)
-make_epoch = partial(Epochs, raw, events)
+make_my_epochs = partial(Epochs, raw, events)
 ```
 
-これでmake_epochという関数が出来た。以降は例えば
+これでmake_my_epochsという割と決め打ち的な関数が出来た。以降は例えば
 ```{frame=single}
-make_epoch(4)
+make_my_epochs(4)
 ```
 とかでevent_idが4のepochオブジェクトが返る。
 これで君の怒りが少しでもおさまってくれたら嬉しい。
@@ -107,6 +108,26 @@ fnames = list(filter(lambda fname: exists(fname), file_list))
 ```
 これで存在するものだけを読み込めます！
 成功例のみ続けていけますね！
+でも、「どれが読み込めたか分からない」って思いましたか？
+
+大丈夫。
+epochsとかのオブジェクトにはたいていfilename的なメンバー変数が
+入っているからそれを参照して下さい。
 
 他にmap関数とか、reduce関数も時に有用です。
+MNE使う時は割と関数型パラダイムは有効です。
+ただ、気をつけて下さい。
+mapとかfilterとかは一度値を取り出すと空っぽになります。
+listとかに一々保存したほうが良いでしょうね。
 
+## file名じゃなくてフォルダ名が欲しいん
+
+概ねこんな感じでゲットできます。
+```{frame=single}
+from pathlib import Path
+path = Path(epochs.filename).parent
+dirname = str(path)
+``` 
+
+こういう小技、大事ですよね...
+いや、工学部の人は良いんだけどさ...

@@ -17,13 +17,25 @@ badchannelは、例えば明らかに一個だけ滅茶苦茶な波形…
 物凄い周波数になっているとか、毛虫っぽいとか、そういうやつを選んでください。
 
 ### やり方2(おすすめ)　
+
+```{frame=single}
 raw.plot()
+```
 をした上で、画面上でポチポチクリックしていけば、rawにbadが
 入っていくように出来ています。便利ですね！
 もちろん、あとで保存しないとちゃんと残りません。
 
 ```{frame=single}
 raw.save('hoge.fif')
+```
+
+pythonの対話モードを使って毎回一々やっていくのは超絶面倒なので
+スクリプトにしたいかと思います。
+しかし、その場合plotし終わったらすぐpythonが終了して図が即消えます。
+それを防ぐには以下の一行を入れましょう。
+
+```{frame=single}
+input()
 ```
 
 ### interpolation
@@ -156,6 +168,152 @@ filtered_raw=ica.apply(raw,exclude=[0,10])
 まぁ、random_stateを指定して作ったicaを保存したら
 中にrandom_stateも保存されるんですけどね。
 
+## ICAコンポーネントのより良い取り除き方
+実際に上記を手動でやるのは恣意的になったり、再現性が無かったり、
+面倒臭すぎたりして、なにより面倒くさいので僕は大嫌いです！
+(大事なことなので二回言いました)
+そこで、もっとクールなやり方が2つあります。
+
+### 自動判定
+眼球運動チャンネルや心電図をとっていたら、それに似てるやつを
+自動判定してくれる機能がMNE-pythonにはあります、やったね！
+やり方は以下のとおりです。
+
+まずは、眼球運動がある場所を眼球運動によってepochを作ります。
+
+```{frame=single}
+from mne.preprocessing import create_eog_epochs
+
+eog_epochs = create_eog_epochs(raw, reject=reject)
+eog_inds, scores = ica.find_bads_eog(eog_epochs)
+```
+簡単ですね！
+eog_indsは眼球運動に超似ているチャンネルの番号リストです。
+scoresはどれだけ似ているかの度合いです。
+とりあえず、plotしましょう。
+
+```{frame=single}
+ica.plot_scores(scores, exclude=eog_inds)
+```
+どれが悪いコンポーネントかがplotされたかと思います。
+では、どの程度浮き立っているか確認しましょう。
+
+```{frame=single}
+ica.plot_sources(eog_epochs.average(), exclude=eog_inds)
+```
+浮き立っている度合いがわかったかと思います。
+では、詳しく見てみましょう。
+
+```{frame=single}
+ica.plot_properties(eog_epochs, picks=eog_inds)
+```
+詳しいですね！
+いい感じであれば一網打尽にしてしまいましょう。
+
+```{frame=single}
+ica.exclude = eog_inds
+ica.apply()
+```
+
+心電図については殆どこいつがecgになっただけだから、
+もう解説はしません。
+
+### 半自動判定
+眼球運動チャンネルや心電図をそもそも取っていない時はどうするのでしょう？
+その時は一部のコンポーネントを「根本的なノイズだよ」と指定して、
+それに似ているコンポーネントを一網打尽にすることが出来ます。
+では、やっていきましょう。
+
+まずは、ICAのオブジェクトをいっぱい作ります。
+上記のICA.fit()で出来るやつですね！
+で、それらを沢山並べてリストにします。
+リストにしたものを作る時、きっと時間がかかるので、ICA.saveで保存してから
+読み込むほうが良いでしょうね。
+超絶面倒なのでmap関数を使います。(沢山の物に同じ関数を適用する関数)
+
+```{frame=single}
+from mne.preprocessing import read_ica
+ica_paths = ['hoge.fif', 'fuga.fif', 'piyo.fif']
+icas = list(map(read_ica, ica_paths))
+```
+
+で、このicaのリストの中から典型的なノイズを選んできます。
+例えば5番目のicaの3番目のコンポーネントがノイズっぽい場合はこうします。
+
+```{frame=single}
+template = (5, 3)
+```
+
+で、corrmapという関数にぶち込みます。
+
+```{frame=single}
+from mne.preprocessing import corrmap
+corrmap(icas, template, threshold='auto', label=None,
+	ch_type='eeg', plot=True, show=True,
+	verbose=None, outlines='head',
+	layout=None, sensors=True, contours=6, cmap=None)
+```
+
+- icas: 要するにさっきのリストです
+- template: さっきのテンプレートです
+- threshold: どのくらい似てるものまで引っ掛けるかです。
+    標準は'auto'なんですが、'auto'では中々何も引っかかりません。
+- label: 引っ掛けたやつにつけるラベルです。文字列入れて下さい。
+- ch_type: eegならeegですし、megならmagとかgradになります。
+
+だいたい、そんな感じです。
+corrmapをplot=Trueの条件でかけると、
+いっぱい似てるやつが引っかかってきます。
+labelに何か入れていれば、icaにラベルがつきます。
+ica.labels_に格納されており、labelの情報は辞書形式です。
+
+```{frame=single}
+{'eog': [1], 'ecg': [2]}
+```
+この例では、labelを'eog'と'ecg'の二回分corrmapをまわした
+ときの結果みたいなもんですな！
+
+どの程度の閾値にすれば適切か分かんないので試行錯誤しましょう。
+corrmapは違うラベルでやれば、違うラベルがどんどん追加されていきます。
+
+ところで、ラベルに情報が入っても、print(ica.labels_)みたいに
+しないと貴方はそれを見れません。plotしてくれないのです…
+これでは実際のsourcesがどんな感じか分かりませんね？
+
+```{frame=single}
+raw = Raw('hoge.fif')  # ダメな例
+icas[0].plot_sources(raw)
+```
+
+labelに情報が入るだけなのでこのままではダメです。
+
+こんな感じです。
+ica.excludeはList形式なのでこれをどうにかしたいですね。
+まぁ、せいぜい工夫して下さい。
+僕ならこうします。
+
+```{frame=single}
+from operator import add
+from functools reduce
+
+ica.exclude = list(set(reduce(add, ica.labels_.values())))
+```
+setは重複のない値を格納するオブジェクト、reduceは調べて下さい。
+
+python初学者は面食らうやり方ですね。
+こういう風にベタにかいてもいいですね。
+
+```{frame=single}
+for n in ica.labels_.values():
+    if n not in ica.exclude:
+        ica.exclude += n
+```
+
+こうしてやればplot_sourcesしたときに悪いコンポーネントは
+赤く表示できるようになります。
+
+いい感じであればicaを保存するといいでしょう。
+良くない感じなら閾値を変えたりチャンネル変えたりしてやり直しです。
 
 ## EpochとEvoked
 なんのことやら分かりにくい単語ですが、波形解析には重要なものです。
@@ -191,5 +349,5 @@ epochs = mne.Epochs(raw, event_id=[1], events=events)
 event_idは配列にしてください。ここは[1, 2]とかも出来るのでしょう。
 evokedを作るのはとても簡単で、下記のとおりです。
 ```{frame=single}
-evoked=epochs.average()
+evoked = epochs.average()
 ```

@@ -1,13 +1,15 @@
 
-## CUDA(おすすめ！)
+## CUDA
 CUDAをご存知でしょうか？
 GPUを科学計算に用いる方法の1つで、Nvidia社が開発しているものです。
-つまり、GPGPUです。
+GPGPUと呼ばれる技術の一種ですね。
 これはMNEpythonでも使うことが出来るので、やってみましょう。
+つっても、今の所フィルター関連だけなんですけどね…
+
 これのインストールも詰まるとそれなりに面倒です。
 まずは、Nvidiaのサイトからインストーラーをダウンロードします。
 
-https://developer.nvidia.com/cuda-downloads
+[Nvidia https://developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads)
 
 このサイトには色々なOSに対応したCUDAが置いてあります。
 僕はubuntuならdeb(network)をお勧めします。面倒臭さが低いです。
@@ -70,3 +72,4 @@ pytest test_filter.py
 的な場所にあると思うのですが、環境によって違うかもです。
 このテストがエラーを吐かなければ…おめでとうございます！
 貴方はMNEpythonをCUDAで回すことが出来ます！
+つっても、今の所フィルター関連だけなんですけどね…

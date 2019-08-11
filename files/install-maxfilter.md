@@ -9,9 +9,25 @@ maxfilterというフィルタがMEG研究ではほぼ必須です。
 僕は以前はelektaのを使っていましたが、最近MNEに移行しました。
 MNEのは後で解説します。
 
+それぞれの特徴としては
+Elekta版
+
+- 将来性どうなん？
+- Redhat系linuxでないと動かないのがクソ
+- 自動でbadチャンネル見つけてくれるのが超最高
+
+MNE版
+
+- 臨床には使っちゃいけないという縛りあり
+- 使用環境を選ばないのが超最高
+- まだ改良中？？？
+
 以前、コンテナを使って導入したことがあるので導入方法を説明しておきます。
 DANAというソフトとmaxfilterというソフトをELEKTA社から貰う必要があります。
 また、環境はRedhat5またはCentOs5の64bit版を使うことになっています。
+何故Dockerを使ったかと言うと、MNEはUbuntuで動かしていて、
+ELEKTA社のソフトはredhat linux系が前提だからです。
+
 僕はdocker[^docker]でcentos5のコンテナをダウンロードしてインストールを試みました。
 ```{frame=single}
 docker run -it --name centos5 -v ~:/home/hoge centos:5

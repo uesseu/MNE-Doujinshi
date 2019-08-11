@@ -11,17 +11,19 @@ MRIの形式の変換に大変有用です。
 
 さて、今はより新しいやつがあります。
 mricroglというやつです。
-これはmricronでは変換できないものを変換することが出来ます。
+これはたまにmricronでは変換できないものを変換することが出来ます。
 ここからダウンロード出来ます。
 [http://www.mccauslandcenter.sc.edu/mricrogl/](http://www.mccauslandcenter.sc.edu/mricrogl/)
 
 以上でfreesurfer/MNE/pythonのインストールは終了しました。
 これでjupyter経由でゴリゴリ計算していくことができます。
 
+
 ## mricronによるMRIのファイルの変換
 
-mricronはmriの画像の閲覧が出来るソフトですが、
-この中にdcm2niiguiというソフトがあるはずなので、そのソフトを起動します。
+mricronもmricroglもmriの画像の閲覧が出来るソフトですが、
+この中にdcm2niiというソフトがあるはずなので、そのソフトを起動します。
+mricronならdcm2niigui、mricroglならメニューからimport辺りを探して下さい。
 
 ![dcm2niiの画面](img/nifti.png){width=14cm}
 
@@ -34,6 +36,7 @@ mricronはmriの画像の閲覧が出来るソフトですが、
 ファイルが出力されるはずです。
 
 さて、出力されたファイルですが、3つあるはずです
+
 - hogehoge:単純にniftiに変換された画像
 - ohogehoge:水平断で切り直された画像
 - cohogehoge:脳以外の不要な場所を切り取った画像

@@ -5,8 +5,9 @@
 anacondaが嫌いな人(結構いらっしゃるかと思います)は既に十分な
 知識をお持ちのことと思います。
 公式サイトに設定用のyamlファイルがあります。
-http://martinos.org/mne/stable/install_mne_python.html
-これをダウンロードしてpipenv環境でも構築すれば良いんじゃないかな。
+[MNE http://martinos.org/mne/stable/install_mne_python.html](http://martinos.org/mne/stable/install_mne_python.html)
+これをダウンロードしてpipenv環境でもdockerfileでも
+構築すれば良いんじゃないかな。
 
 そうでない初心者の方は下記をお読みください。
 
@@ -17,7 +18,7 @@ mne 0.16からは少しインストールの仕方が変わりました。
 反面、毎回仮想環境に入らないといけないという小さなデメリットがあります。
 
 公式サイトをみながら頑張りましょう。
-http://martinos.org/mne/stable/install_mne_python.html
+[MNE http://martinos.org/mne/stable/install_mne_python.html](http://martinos.org/mne/stable/install_mne_python.html)
 
 anacondaのバージョンは新しくしておきましょう。
 新しくすればこのように確認できます。
@@ -28,8 +29,10 @@ Python 3.6.4 :: Continuum Analytics, Inc.
 ```
 
 要約すれば...
+
 - curl[^curl]でenvironment.ymlをダウンロードする
 - conda env create -f environment.yml
+
 
 これでmneの仮想環境が整いました。
 下記のコマンドでmneの環境に入れます。
@@ -45,11 +48,10 @@ conda activate mne
 
 [^conda]:昔はsource activateコマンドでしたが、このコマンドはanaconda以外の仮想環境ツールと衝突してクラッシュするという不具合がありました。今後はconda activateコマンドを使うのがいいでしょう。
 
-これで完結…と言いたいところなのですが、残念ながら
-mnepythonとfreesurferのコマンドラインツール群にはまだ
-python2依存の部分があります。
-なので、python2の環境も作りましょう。
-ここ、公式に書いてない落とし穴です。
+これで完結…と言いたいところなのですが、
+pythonも進化が速いですから、そのうちpython4とか出かねませんね？
+なので、一応いろんな環境を切り替えられるようにしましょう。
+ここではレガシィなpython2を入れてみます。
 
 ```{frame=single}
 conda create -n python2 python=2.7 anaconda
@@ -110,7 +112,7 @@ ipython kernelsupec uninstall hoge
 CUDA[^cuda](GPGPU)についてもそのサイトに記載があります。
 CUDAはnvidiaのGPUしか動きません。インストールについては
 nvidiaのサイトも参照して下さい。
-ソースベースの解析をする場合はスピードが6倍くらいになります。
+まぁ、各種波形フィルタでしか使えないんですが。
 
 僕の環境では下記二行のコマンドを予め入れていないと動かないです。
 .bash_profileや.bashrcに書き加えておけばいいでしょう。
@@ -127,11 +129,11 @@ export DISPLAY=:0
 
 ## MNE/Cのインストール
 
-これは不要かもしれません。
+これはmne-pythonのみ使うなら不要です。
 下記サイトにメールアドレスを登録し、ダウンロードさせていただきましょう。
-http://www.nmr.mgh.harvard.edu/martinos/userInfo/data/MNE_register/index.php
+[MNE-C http://www.nmr.mgh.harvard.edu/martinos/userInfo/data/MNE_register/index.php](http://www.nmr.mgh.harvard.edu/martinos/userInfo/data/MNE_register/index.php)
 ダウンロードしたものについてはこのサイトの通りにすればインストールできます。
-http://martinos.org/mne/stable/install_mne_c.html
+[MNE-C http://martinos.org/mne/stable/install_mne_c.html](http://martinos.org/mne/stable/install_mne_c.html)
 僕はホームディレクトリに入れました。
 ```{frame=single}
 tar zxvf MNE-hogehoge

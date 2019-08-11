@@ -3,13 +3,14 @@
 
 ターミナル使える人のためのTLDR;
 ```{frame=single}
-recon-all -i ./hoge.nii -subject (患者番号) -all -parallel
+recon-all -i ./hoge.nii -subject (患者番号) -all -parallel -openmp [CPU_CORE]
 ```
 以上です。
 
 さて、ターミナル使ったことのない人への解説を書きます。
 つまり、いわゆる黒い画面と言うやつですね。
 下記はターミナルを操るための必要最低限のbashのコマンドです。
+
 - cd :閲覧するフォルダへ移動する
 - ls :今開いているフォルダの内容を確認する
 
@@ -29,6 +30,8 @@ recon-all -i ./hoge.nii -subject (患者番号) -all
 recon-all -i ./hoge.nii -subject (患者番号) -all -parallel
 ```
 
+さらに、-openmpとつけてやるともっと並列化されますが、言うほど速くなるかなぁ？
+
 やっている事は、頭蓋骨を取り除き、皮質の厚さやボリュームの測定、標準脳への置き換え、
 皮質の機能別の色分け等、色々な事をしてます。詳しくはfreesurferのサイトを見て下さい。
 
@@ -43,8 +46,8 @@ MNEpythonを使う人はプログラミングの習得は必須なので良い�
 freesurferしか使わない人でもスクリプトは書けるようになる方が便利です。
 僕のおすすめはpython、shのいずれかです。[^usingfs]
 
-[^openMP]: 理由はopenMPというライブラリを使った並列化だからです。openMPはマルチスレッドを簡単に実装する優れたライブラリなのですが、メモリの位置が近い場合にスレッド同士がメモリ領域の取り合いをしてしまうため速度が頭落ちになるのです。
-[^usingfs]: ちなみに、僕はvimmerなのでvimを使っています。
+[^openMP]: 理由はopenMPというライブラリを使った並列化だからです。openMPはマルチスレッドを簡単に実装する優れたライブラリなのですが、メモリの位置が近い場合にスレッド同士がメモリ領域の取り合いをしてしまうため速度が頭落ちになるのです。このケースではマルチスレッドよりマルチプロセスの方が良いように思います。
+[^usingfs]: ちなみに、僕はvimmerなのでvimを使ってshを直書きしています。
 
 ## freesurferの解析結果の表示
 
@@ -96,7 +99,7 @@ python3を使っている人はたまーにエラーを吐くかもしれませ�
 
 個別な修正はfreeviewを用いてすることになります。
 下記を参照して下さい。
-http://freesurfer.net/fswiki/Tutorials
+[Tutorials http://freesurfer.net/fswiki/Tutorials](http://freesurfer.net/fswiki/Tutorials)
 
 このfreesurferのサイトには、説明用のスライドと動画があり、とてもいいです。
 以下、要約です。

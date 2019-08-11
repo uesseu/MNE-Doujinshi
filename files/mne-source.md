@@ -11,51 +11,82 @@
 式さえできればなんとか計算できるわけです。
 必要物品は以下の通り
 
-- 脳の中の見たい場所リスト
-- センサーの位置情報
+- 脳の中の見たい場所リスト(MRI)
+- センサーの位置情報(Montage)
 - 脳波か脳磁図
-- 皮膚や頭蓋骨の抵抗値や、その分布
+- 皮膚や頭蓋骨の抵抗値や、その分布(BEM)
 
-脳の中の活動と、センサーで鶴亀算を解いてあげるのです。
+このなかで、MRIについては標準脳を使うのでなければ
+freesurferでrecon-allをしたデータが必要です。
+前述しましたので、頑張って下さい。
+一晩かかります。
+
+これらを使って何をするかと言うと、
+脳の中の活動と、センサーで捉えた結果で鶴亀算を解いてあげるのです。
 さて、これは理工系の人は知っているのですが、実は鶴亀算は割り算です。
 (ここで文系や医学部の人はびっくりする)
 一応、鶴亀算が割り算であることの解説記事を書いたので、
 数学習ってなかった人やサボっていた人はご参照ください。
-https://qiita.com/uesseu/items/750c236bfa706c361b3b
+[https://qiita.com/uesseu/items/750c236bfa706c361b3b](https://qiita.com/uesseu/items/750c236bfa706c361b3b)
 
-さて、脳の中の活動量をX、センサーで捉える活動量をYとすると
+さて、脳の中の電気の活動量をX、
+センサーで捉える磁場とか電場とかをYとすると
 $AX = Y$という形式に落とし込めるはずです。
+これは高校物理をちゃんと勉強した人は直感的に分かるはず。
+
 ここのAを計算するために、抵抗とか距離とかが必要なんですね！
-このことをForwardSolutionという感じに言います。
+このAを求めることをForwardSolutionという感じに言います。
 ここから$X = A^{-1}Y$という風に変えればXを計算できます。
 これをInverseSolutionと言い、$A^{-1}$のことを
 InverseOperatorと言います。
+鶴亀算は割り算なのでこのInverseOperatorを
+求めることが当面の目標です。
 
 手順としては以下のとおりです。
 
-1. 「推定するべき脳の部位」とEEG/MEGのセンサーの位置をすり合わせる。
- この作業は手動で行われる。(やればわかる)
- この重ね合わせ情報はtransというファイル形式で保存される。
+
+## 掛け算を作る
+まずは、掛け算を作るために、脳の中の位置情報、
+センサーの位置情報、そして、その両者がどのように重なっているかの
+位置関係を求める必要があります。
+
 1. MRIから脳の形を取ってきて、骸骨の抵抗とかも加味して計算できる形にする。
  これをBEMという。これを使って掛け算の形にする。
-1. 脳の形から「推定するべき脳の位置」を特定する。
+1. 脳の形から「推定する脳部位の位置」を特定する。
  この脳内の位置情報をソーススペース(source space)という。
- (超簡単に言うと鶴亀算の鶴と亀のいる場所)
+ (鶴亀算の鶴と亀のいる場所を計算する)
+1. 「推定するべき脳の部位」とEEG/MEGのセンサーの位置をすり合せて
+ 両者の位置関係を求める。この作業は手動で行われる。(超絶めんどい)
+ この重ね合わせ情報はtransというファイル形式で保存される。
 1. 脳の部位情報と頭の形情報とセンサーの位置から、
  脳活動によってどのようにセンサーに信号が届くかを計算する。
  これを脳磁図における順問題(forward solution)という。
- (超簡単に言うと掛け算)
+ これにより、掛け算が求められる。
+
+## 割り算を作る
+次に割り算を作ります。
+MNEやsLORETAやdSPMといった何やら難しげな手法は、
+この割り算を作るときのやり方の違いなのです。
+
 1. 綺麗な割り算をするためのcovariance matrixを作る(理屈は後述)。
 1. 上記の脳部位とセンサーの関係性から、特定の脳部位での電源活動の波形を推定する。
- これを脳磁図における逆問題(inverse solution)という。
- (超かんたんに言うと割り算)
- 逆問題を解くために数式を作る。その数式をinverse operatorという。
-  (超簡単に言うと逆数。逆数を掛け算すると割り算。)
- 逆問題には決まった解答はない。「最も良い解を得る方法」が幾つか提案されている。
+ これを脳磁図における割りざ…逆問題(inverse solution)という。
+ 割り算は逆数の掛け算と同じであるから、掛け算に置き換える。
+ この時の逆数のことをInverseOperatorという。
+ この割り算に決まった解答はない。「最も良い解を得る方法」が幾つか提案されている。
 1. 脳全体で推定した波形のうち、欲しいものをとってくる。
 
-なんと、脳の計算とは割り算であった！
+本当にこれだけ。
+なんと、脳の計算とは割り算なのであった！
+ね？簡単でしょう？
+
+簡単に言いましたが、これが割り算である事を数学的にちゃんと理解するには
+ラグランジュの未定乗数法によって導かれる行列の微分方程式を
+解かねばなりません。あとでかるーく触れます。
+
 その後は色々なストーリーがあるでしょう。
+
+## その後のストーリー
 
 - 推定された波形をwavelet変換する。
 - PSDやERPをしてみる。
@@ -66,6 +97,7 @@ InverseOperatorと言います。
 でははじめましょう。
 
 ## 手順1、trans
+まず、脳とセンサーの位置をすり合わせておきましょう。
 
 GUIでの操作となります。ふた通りの動かし方があります。
 下記のコードを実行すると画面が立ち上がります。
@@ -104,7 +136,7 @@ instはmegデータ…rawでもepochでも良いらしいですが、どれか�
 1. 左側、setのところで耳と眉間の位置を入力
  (MEGならスタイラスでポチるところ)
 1. それの一寸上の所、lockをポチる。
-1. 右側、Fit LPA/RPAボタンを押す。
+1. 面倒なら右側、Fit LPA/RPAボタンとかを押す。
 1. 表示された黄土色の生首をマウスでグリグリしながら、
  右上の±ボタンを押して調整。
 1. ちゃんとfitしたら右下のsave as ボタンを押して保存。
@@ -115,15 +147,20 @@ from mne import read_trans
 trans = read_trans('/Users/hoge/fuga/trans.fif')
 ```
 みたいな感じで読み込んで使います。
-注意点として、脳波とかの場合は表示がprojectionモードになっているかもしれません。
+右上のボタンを押した場合は黄土色の生首の大きさが変わってしまうので、
+freesurferのsubjectに別名をつけて保存する必要があります。
+
+ほかに注意点として、脳波とかの場合は表示が
+projectionモードになっていたりして見にくかったりするかもです。
 色々調整してみてください。
 
 
 ## 手順2、BEM作成
+脳からセンサーまでの抵抗を計算せねばなりますまい。
 
 上記の通り、MRIから抽出してくる形データとして、BEMと言うものを使います。
 BEMは脳の全体を包み込むサランラップみたいなデータです。
-頭蓋骨とか皮とか、そういう絶縁体を考慮するために、BEMは三枚一組で
+頭蓋骨とか皮とか、そういう抵抗が強いものを考慮するために、BEMは三枚一組で
 出力されます。実装上は3枚あるということを意識しなくても大丈夫です。
 
 作るためにはfreesurferによる解析データが必要となります。
@@ -133,7 +170,7 @@ freesurferを既に使っているならSubject関連は既に馴染んだ言葉
 mne watershed_bem -s subject -d subjects_dir
 ```
 
-これにより、BEMが作成されました。
+これにより、freesurferのサブジェクトの中にBEMが作成されました。
 再びpythonに戻り、下記を入力してみてください。
 ```{frame=single}
 from mne.viz import plot_bem
@@ -156,10 +193,13 @@ freesurferの標準脳であるfsaverageが現れます。
 以降、subjectにはfsaverageを入れると標準脳を使うことになります。
 
 ## 手順3、ソーススペース作成
+脳内の位置情報を作りましょう。
 
 脳磁図で見れる空間のうち、どの部分の電源を推定するかを
 設定する必要があります。その設定がソーススペースです。
 subjects_dirは環境変数に設定していれば要らないです。
+環境変数ってのはbashrcとかbash_profileとかに書くやつです。
+一応前述しています。
 ```{frame=single}
 from mne import setup_source_space
 src = setup_source_space(subject=subject,
@@ -167,11 +207,12 @@ src = setup_source_space(subject=subject,
                          subjects_dir=subjects_dir)
 ```
 もちろん、標準脳が欲しい場合は黙ってfsaverage。
+暫く待ちます。
 これで、srcという変数にソーススペースが入りました。
 
-見慣れぬ単語が出てきました。oct6とは何でしょうか？
+さて、見慣れぬ単語が出てきました。oct6とは何でしょうか？
 それはここに書いてあります。
-http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space
+[http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space](http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space)
 
 ソーススペースを作るためには計算上正十二面体や正八面体で
 区画分けするので、その設定ですね。
@@ -184,6 +225,7 @@ http://martinos.org/mne/stable/manual/cookbook.html#setting-up-source-space
 ![ソーススペースの図示。小さい点々がソーススペース。](img/src.png){width=14cm}
 
 ## 手順4、順問題
+まずは掛け算を作ります。
 
 先程作ったBEMは3枚あります。
 EEGの場合は3枚必要です。何故なら、磁力と違って電力は
@@ -222,14 +264,13 @@ fwd = make_forward_solution(raw.info,
 ```
 ここまでやった方にとって、上記のパラメータはだいたい分かるでしょう。
 mindistは頭蓋骨から脳までの距離です。単位はmm。
-ここで使うのはraw.infoです。
-mindistは頭蓋骨からみて、一番浅い部分にあるソーススペースの距離です。
+ここで使うのはraw.infoです。epochs.infoでもいいかも。
 
 
 ## 手順5、コヴァリアンスマトリックス関連
 
 MNEによる推定にはcovariance matrixというものを使って
-ソースベースのデータのノイズ周囲の大きさを計算していかねばなりません。
+割り算を綺麗にやります。
 これにはMEGを空撮りした空データや、
 刺激提示されてないときのデータなどを使います。下記で計算します。
 ```{frame=single}
@@ -255,7 +296,7 @@ tmax=0にしているので、刺激が入る前までの波を取り除きま�
 
 ## 手順6、逆問題
 
-最終段階です。
+最終段階、割り算です。
 順問題とcovariance matrixを組み合わせて割り算の形にしましょう。
 下記のとおりです。
 
@@ -308,27 +349,54 @@ write_inverse_operator('/home/hoge/fuga',
 まずは、ソース推定をやってみましょう。
 ```{frame=single}
 from mne.minimum_norm import apply_inverse
-source = apply_inverse(evoked, inverse_operator)
+source = apply_inverse(evoked, inverse_operator, 1 / 9)
 ```
 
 ちなみに、ここではevokedを使っていますが、
 epochsならapply_inverse_epochs、
 rawならapply_inverse_rawです。
 
-これで出てきたsourceの中にdataという変数があります。
+```{frame=single}
+from mne.minimum_norm import apply_inverse_epochs
+source = apply_inverse_epochs(evoked, inverse_operator, 1 / 9)
+```
+
+```{frame=single}
+from mne.minimum_norm import apply_inverse_raw
+source = apply_inverse_raw(evoked, inverse_operator, 1 / 9)
+```
+
+ちなみに、epochsの場合はlistを返します。
+listの内容はSourceEstimate , VectorSourceEstimate , VolSourceEstimateです。
+SourceEstimateがBemベースの結果ですね。
+
+一旦、これを視覚化してみましょう。
+```{frame=single}
+source[0].plot(time_viewer=True)
+```
+
+やりました！これぞ、MNEの真髄、割り算であります！
+
+このtime_viewer=Trueは時間を追って見ていきたい時に
+つけると良いオプションです。
+
+
+さて、これで出てきたsourceの中にdataという変数があります。
 まさに膨大な数です。脳内の膨大な場所について電流源推定したのです。
 これは、一つ一つが脳内で起こった電流と考えて良さそうです。
 細かい所は公式サイト見てください。
 
-さて…こんな膨大な数列があっても困りますよね？
+こんな膨大な数列があっても困りますよね？
 脳のどこの部位なのかわかりませんし。
 そこで、freesurferのラベルデータを使います。
 それによって、脳のどの部分なのか印をつけてやるのです。
 
 ## 手順8、前半ラベル付け
 freesurferにはいくつかのアトラスがあります。
+アトラスとは、地図みたいなものですね。
+
 詳しくはここをみて下さい。
-https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation
+[https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation)
 desikan atlasとかDestrieux Atlasとか色々ありますよね。
 こういうのを読み込まねばなりません。
 ターミナルでこのように打ってみて下さい。
@@ -370,7 +438,6 @@ source_label = extract_label_time_course(stcs,
                                          mode='mean_flip')
 ```
 
-
 ここではstcがソースのデータ、srcが左右半球のソーススペースのリストです。
 modeはいくつかあります。
 mean: それぞれのラベルの平均です。これを使うのが普通でしょうか…
@@ -378,9 +445,50 @@ mean_flip: 特異値分解を使ってベクトルが違うやつも取り出す
 pca_flip: PCAを使って取り出してくるのです。
 max: ラベルの中で最大の信号が出てきます
 
-殆どわからなくてごめんなさい。
-ただ、これで脳内の波形が取り出せたわけです。
+これで脳内の波形が取り出せたわけです。
 これで、色々出来ます。なにしろ、今までwavelet等していたわけですから。
+
+でも、これだけじゃダメですね。きちんと視覚化しないと。
+ここで、mayaviとpysurferが登場します。
+mayaviは三次元を表示するパッケージ、
+pysurferはfreesurferをmayaviを使って表示するパッケージですね。
+
+```{frame=single}
+from mne.minimum_norm import apply_inverse_epochs
+
+hoge = 4
+source = apply_inverse_epochs(evoked, inverse_operator, 1 / 9)
+brain = source[0].plot(subjects_dir=subjects_dir, time_viewer=True)
+labels = read_labels_from_annot('fsaverage', subjects_dir=subjects_dir)
+brain.add_label(labels[hoge])
+```
+これにより、きちんと脳の部位にラベルをつけたまま脳活動を表示できます。
+でも、実はこの方法だけじゃラベルつけたまま時系列表示できません。
+時系列表示します。
+
+```{frame=single}
+from mayavi import mlab
+import surfer
+
+hoge = 4
+scene = mlab.figure()
+source = apply_inverse_epochs(evoked, inverse_operator, 1 / 9)
+source[0].plot(subjects_dir=subjects_dir,
+               time_viewer=True,
+               figure=scene)
+labels = read_labels_from_annot('fsaverage',
+                                subjects_dir=subjects_dir)
+b = surfer.Brain('fsaverage',
+                 'lh',
+                 'inflated',
+                 subjects_dir=subjects_dir,
+                 figure=scene)
+b.add_label(labels[hoge])
+```
+
+何やってるかと言うと、mayaviで一旦canvas的なものを作って、
+そこに一寸ずつ書き加えているイメージです。
+
 
 ### その後のお楽しみ1、ソースベースwavelet
 

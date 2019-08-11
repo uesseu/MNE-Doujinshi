@@ -6,7 +6,6 @@ files = files/introduction.md \
   files/install-git.md \
   files/experiment.md \
   files/photosensor.md \
-  files/cluster.md \
   files/install-maxfilter.md \
   files/install-freesurfer.md \
   files/install-mne.md \
@@ -51,10 +50,17 @@ writer = --toc \
     -T MNE同人誌 \
     --indented-code-classes=python,bas \
     --pdf-engine=lualatex
+oldwriter = --toc \
+    --toc-depth=3 \
+    -T MNE同人誌 \
+    --indented-code-classes=python,bas \
+    --latex-engine=lualatex
 
 all: $(files)
 	pandoc -o out.pdf $(writer) $(latex_packages) $(latex) $(markdown_extention) $(files)
 
+old: $(files)
+	pandoc -o out.pdf $(oldwriter) $(latex_packages) $(latex) $(markdown_extention) $(files)
 
 twoside:
 	pandoc -o twoside.pdf $(writer) $(latex_packages) $(latex_twoside) $(markdown_extention) $(files)

@@ -49,33 +49,28 @@
 この領域では機械学習を使うこともあるので、必要になればどうでしょう？
 
 # おすすめサイト
-高校数学の美しい物語
-http://mathtrain.jp
+[高校数学の美しい物語 http://mathtrain.jp](http://mathtrain.jp)
 高校数学についてのサイトです。高校数学を復習するにあたって、このサイトは素晴らしい。
 フーリエ変換とか行列計算とか複素数とか、そういったことを考える時に
 辞書みたいにつかってみては如何でしょうか？
 
-ウェーブレット変換の基礎と応用事例：連続ウェーブレット変換を中心に
-https://www.slideshare.net/ryosuketachibana12/ss-42388444
+[ウェーブレット変換の基礎と応用事例：連続ウェーブレット変換を中心に https://www.slideshare.net/ryosuketachibana12/ss-42388444](https://www.slideshare.net/ryosuketachibana12/ss-42388444)
 このウェーブレット変換スライドは素晴らしいです。作者が学生の頃に勉強して作ったのだそうですが、
 多くの「分かっている人向けの数学的入門書」と違い、直感的に分かるように書いてあるのです。
 
 # おすすめSNS
-qiita
-http://qiita.com
+[qiita http://qiita.com](http://qiita.com)
 日本のプログラマ用のSNS…というかブログサービスです。
 かなり分かりやすい記事が多く、大変重宝します。
 反面、コピペプログラマになるのを避ける心がけは大事ですね。
 カジュアルな雰囲気漂う気軽なサイトです。
 
-twitter
-http://twitter.com
+[twitter http://twitter.com](http://twitter.com)
 twitterかよ！と思われるかもですが、学者さんのアカウント、雑誌のアカウント
 開発者さんのアカウントは極めて有用かつ濃密です。
 カジュアルな感じですが炎上には気をつけましょう。
 
-github
-https://github.com
+[github https://github.com](https://github.com)
 プログラマ用SNSの中でも最も有名なものでしょう。
 qiitaはただの記事集ですが、githubは開発ツールです。ただし、学習コストが高いですね。
 下記のgitを中心に据えたwebサービスです。

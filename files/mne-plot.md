@@ -79,10 +79,11 @@ numpyの情報をdataとします。
 ```{frame=single}
 data_mean = data.mean(axis=0)
 ```
-mneではとりあえずaxis=0でうまくいくことが多いですね。
+mneでは三次元配列を多用しますが、
+とりあえずaxis=0でうまくいくことが多いですね。
 ここは適当ですが、いい感じに調整して下さい。
 
-さて、僕はゆるふわな方が好きなのでseabornを使います。
+さて、僕はゆるふわで図がオシャレな方が好きなのでseabornを使います。
 ```{frame=single}
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -108,6 +109,22 @@ matplotlibは突然pltとして出てきていますが、これは仕様です�
 axに吐き出したものはpltで色々するんですね。
 詳しくはググって下さい。
 
+matplotlib使うならimshowで読み替えましょう。
+```{frame=single}
+import matplotlib.pyplot as plt
+def make_and_save_fig(data, fname)-> None:
+    ax = sns.imshow(data, vmax=0.25, cmap='rainbow')
+    ax.set_yticks(np.arange(85, 0, -5))
+    ax.set_yticklabels(np.arange(15, 100, 5))
+    ax.set_xticks(np.arange(0, 1000, 100))
+    ax.set_xticklabels(np.arange(-300, 700, 100))
+    ax.invert_yaxis()
+    plt.savefig(fname)
+    plt.clf()
+```
+カラーバーが無いじゃないかって？
+それは解説が超絶だるいのでググって下さい。
+
 ## 多チャンネル抜き出し
 
 もし、多チャンネルのevokedを平均したものを割り出したいなら
@@ -129,6 +146,7 @@ evoked.data[evoked.info['ch_names'].index('Fz')]
 ```{frame=single}
 data = []
 for channel in channels:
-  wave = evoked.data[evoled.info['ch_names'].index(ch)
+  wave = evoked.data[evoked.info['ch_names'].index(ch)]
   data.append(wave)
 ```
+
