@@ -400,6 +400,7 @@ freesurferにはいくつかのアトラスがあります。
 desikan atlasとかDestrieux Atlasとか色々ありますよね。
 こういうのを読み込まねばなりません。
 ターミナルでこのように打ってみて下さい。
+
 ```{frame=single}
 ls $SUBJECT_DIR
 ```
@@ -412,6 +413,7 @@ ls $SUBJECT_DIR
 annot形式は新しく開発されたアトラスが入っていて、
 label形式はブロードマンと思います。
 annot形式の内容はこのように読みます。
+
 ```{frame=single}
 mne.read_labels_from_annot(subject,
                            annot_fname='hoge')
@@ -420,6 +422,7 @@ mne.read_labels_from_annot(subject,
 他にも読み方があります。
 こうして読んだら、labelのリストが出てきます。
 単体のlabelは下記で。
+
 ```{frame=single}
 mne.read_label(filename, subject = None)
 ```
@@ -473,9 +476,6 @@ import surfer
 hoge = 4
 scene = mlab.figure()
 source = apply_inverse_epochs(evoked, inverse_operator, 1 / 9)
-source[0].plot(subjects_dir=subjects_dir,
-               time_viewer=True,
-               figure=scene)
 labels = read_labels_from_annot('fsaverage',
                                 subjects_dir=subjects_dir)
 b = surfer.Brain('fsaverage',
@@ -484,10 +484,17 @@ b = surfer.Brain('fsaverage',
                  subjects_dir=subjects_dir,
                  figure=scene)
 b.add_label(labels[hoge])
+source[0].plot(subjects_dir=subjects_dir,
+               time_viewer=True,
+               figure=scene)
 ```
 
 何やってるかと言うと、mayaviで一旦canvas的なものを作って、
 そこに一寸ずつ書き加えているイメージです。
+まず、適当にソース推定します。そして、その推定をplot...の前に、
+先にsurfer.Brainで脳の画像を作って、
+add_labelsで脳の特定部位に色を塗ります。
+手順前後はいけません！最後にソース推定をplotして終わり。
 
 
 ### その後のお楽しみ1、ソースベースwavelet
@@ -497,6 +504,7 @@ b.add_label(labels[hoge])
 
 induced_powerとphaselocking_factorを算出する関数は下記です。
 ※labelを選ばなければ激重注意！[^gekiomo]
+
 ```{frame=single}
 induced_power, itc=source_induced_power(epochs,
                                         inverse_operator,
@@ -519,6 +527,7 @@ baseline補正の時間についてはデータの端っこすぎると値がブ
 ### その後のお楽しみ2、ソースベースconnectivity
 
 ソースベースでコネクティビティ出来ます。
+
 ```{frame=single}
 from mne.connectivity import spectral_connectivity
 con, freqs, times, n_epochs, n_tapers=spectral_connectivity(
