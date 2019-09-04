@@ -16,9 +16,11 @@ powerならpower.dataに、rawならraw.get_data()に入っています。
 
 ピックアップした情報は多次元配列ですから、内容は膨大です。直接見ても整理つきません。
 そこで便利な変数がnumpyにはあります。例えばevokedのデータを作ったならば
+
 ```{frame=single}
 evoked.data.shape
 ```
+
 とすればデータの構造が確認できます。
 
 データの構造としてはこんな感じのようです。括弧がついているのはオブジェクト内の関数です
@@ -47,9 +49,11 @@ object.save(filename)
 | power  | mne.time_frequency.read_tfrs() | 条件によって配列で返されることあり        |
 
 例えば
+
 ```{frame=single}
 itc=mne.time_frequency.read_tfrs('/home/hoge/piyo')[0]
 ```
+
 という感じで読み込みます。行の最後についている[0]は上記のごとく
 条件によって配列で返されることがある関数だからです。この場合は行列として返されます。
 そうじゃない関数の場合は[0]は不要です。実際に手を動かして練習すればわかると思います。
@@ -72,18 +76,22 @@ itc=mne.time_frequency.read_tfrs('/home/hoge/piyo')[0]
 例えばhogeチャンネルのfugaHzからpiyoHz、
 foo番目からbar番目(秒×サンプリング周波数)の反応までの
 実データを抽出したいなら、
+
 ```{frame=single}
 itc.data[hoge, huga:piyo, foo:bar]
 ```
+
 です。ちなみに、wavelet変換時にdecimの値を設定している場合は
 (秒×サンプリング周波数/wavelet変換のdecimの値)となります。
 APIページでtime_frequency.tfr_morlet()関数をご参照ください。
 
 2はnumpyのmean等で実現します。
 import numpy as npの後
+
 ```{frame=single}
 np.mean(itc.data[hoge, huga:piyo, foo:bar])
 ```
+
 などとすれば良いと思います。
 
 3はpythonの基本構文通りなので解説しません。
@@ -101,14 +109,18 @@ DataFrame(hoge).to_csv(filename)
 
 「Rをjupyterで動かすために」である程度書きましたが、再掲します。
 jupyter上で
+
 ```{frame=single}
 %load_ext rpy2.ipython
 ```
+
 とした後
+
 ```{frame=single}
 %%R -i input -o output
 hogehoge
 ```
+
 という風に記述すればhogehogeがRとして動きます。
 ここのデータの受け渡しにもpandasを使うのが良いです。
 項目には名前をつけることが出来ます。
@@ -120,6 +132,7 @@ data = Dataframe(data
                           'hemisphere',
                           'test', 'value'))
 ```
+
 これで、横軸にcolumsのラベルの付いたデータフレームが出来ます。
 こいつをto_csvを使ったりjupyterとかでRにぶちこみます。
 
@@ -149,6 +162,4 @@ ANOVA詳しい人は知っていると思いますが、これは相互作用を
 相互作用を計算しない場合は'+'演算子を使ってください。結果が算出されると思います。
 あとはANOVAの本でも読んで下さい。本書では割愛します。
 Rによるやさしい統計学という本が僕のおすすめです。
-
-[^naihou]:pythonistaはリスト内包表記とか使うんでしょうが、ここは簡単のためにappend使っています。というか、この程度の処理ならappendで困りません。
 
