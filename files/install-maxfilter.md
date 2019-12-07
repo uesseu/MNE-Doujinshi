@@ -12,8 +12,8 @@ MNEのは後で解説します。
 それぞれの特徴としては
 Elekta版
 
-- 将来性どうなん？
-- Redhat系linuxでないと動かないのがクソ
+- Elekta社のMEG部門が売却されたよ…将来性どうなん？
+- Redhat系linuxでないと動かないのがクソ(Docker使うところかな？)
 - 自動でbadチャンネル見つけてくれるのが超最高
 
 MNE版
@@ -29,6 +29,7 @@ DANAというソフトとmaxfilterというソフトをELEKTA社から貰う必�
 ELEKTA社のソフトはredhat linux系が前提だからです。
 
 僕はdocker[^docker]でcentos5のコンテナをダウンロードしてインストールを試みました。
+
 ```{frame=single}
 docker run -it --name centos5 -v ~:/home/hoge centos:5
 ```
@@ -36,6 +37,7 @@ docker run -it --name centos5 -v ~:/home/hoge centos:5
 ELEKTA社製のソフトは32bit,64bitのソフトが混在しています。
 依存しているものとしては32bitと64bitのfortran、whichコマンドです。
 また、neuromagというユーザーをneuroというグループに入れる必要があります。
+
 ```{frame=single}
 yum install compat-libf2c-34.i386
 yum install compat-libf2c-34.x86_64
@@ -46,11 +48,13 @@ usermod -a neuromag neuro
 ```
 
 その上で、DANAとmaxfilterのインストールスクリプトをそれぞれ動かします。
+
 ```{frame=single}
 sh install
 ```
 僕は難しいこと考えるのが嫌だったので、インストールファイルをHDDにコピーして
 スクリプトを動かしました。インストールできたら
+
 ```{frame=single}
 /neuro/bin/admin/license_info
 ```

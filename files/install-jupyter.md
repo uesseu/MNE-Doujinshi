@@ -9,7 +9,9 @@
 開発環境はMNE使うなら必要です。詳しい人からは「docker[^docker]じゃダメなん？」という質問が
 来そうですが、セットアップは自分でできなければ困ることもありましょう。
 普通はanaconda[^conda]を使います。何故ならインストールが楽だからです。
-僕はpipenvを使っていますが、初心者やwindowsユーザーにはおすすめしません。
+僕はpipenv[^pipenv]を使っていますが、初心者やwindowsユーザーにはおすすめしません。
+
+[^pipenv]: python公式オヌヌメの仮想環境作りツールです。重いのが欠点ですが、anacondaと違って余計なものが入らない、自分でソフトのバージョンを把握しやすい、python的には王道のやり方であるなどのメリットがあります。
 
 [^docker]:最近流行りの仮想化環境です。性能が高いのが特徴ですが、反面使いこなすのには力が必要です。
 
@@ -19,7 +21,7 @@
 
 このサイトからインストールプログラムをダウンロードします。
 anacondaは2と3があり、それぞれpython2と3に対応しています。
-anaconda3を入れるのがいいと思います。
+anaconda3を入れるのがいいと思います。python2はオワコンなので。
 anacondaにjupyterというrepl[^repl]とspyderというIDE[^ide]が付いてきます。
 これらを使うのもまたいいと思います。
 
@@ -65,23 +67,26 @@ python用ではありませんが、プラグインを入れてpythonのIDEと�
 
 弱み
 
-- テキストエディタ自体が割と重い
+- テキストエディタの動作が遅い
+- テキストエディタがクラッシュする
+- テキストエディタのサイズがでかい
+- テキストエディタがメモリを食う
 
 ## 僕の今のおすすめは?
 
 - jupyter
 - anaconda
-- visual studio code
+- vscode
 という組み合わせです。
 mneのインストールはanacondaに任せちゃいます。
 基本はvisual studio codeでスクリプトを書きますが、
 状況に応じてjupyterでチェックしたりします。
 
 え？僕ですか？僕はpipenvとvimでやっています。
-(とっつきにくいのでおすすめしない)
+(初心者はとっつきにくいのでおすすめしないけど、僕はいいと思うよ)
 
 では、上記の環境を整える為の準備をしていきましょう。
-visual studio codeはまぁ、導入するのは楽勝なのでググって下さい。
+vscodeはまぁ、導入するのは楽勝なのでググって下さい。
 
 
 ![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。まぁ、触ってみればわかります。git併用するのが良いかと思います。](img/jupyter.jpg){width=14cm}
@@ -118,12 +123,14 @@ jupyterはplotの方法を指定できます。
 表示したい場合は、予め下記コードをjupyter上に書いておいてください。
 
 jupyter上に直接出力したい時
+
 ```{frame=single}
 %matplotlib inline
 ```
 
 python2環境下で別ウィンドウで表示したい時
 これはスクロールが必要な時に便利です。
+
 ```{frame=single}
 %matplotlib qt
 ```
@@ -131,12 +138,14 @@ python2環境下で別ウィンドウで表示したい時
 python3環境下で別ウィンドウで表示したい時
 python3とpython2は使うqtのバージョンが違うので
 qt5が必要になります。
+
 ```{frame=single}
 %matplotlib qt5
 ```
 
 三次元画像をグリグリ動かしながら見たい時
 (mayavi使用)
+
 ```{frame=single}
 %gui qt
 ```
@@ -183,6 +192,7 @@ conda remove -n python3 --all
 ## Rをjupyterで動かすために
 
 anacondaを使っているなら下記でRがインストールできます。
+
 ```{frame=single}
 conda install libiconv
 conda install -c r r-essentials
@@ -193,11 +203,13 @@ conda install -c r rpy2
 何故なら、実験結果を同じ環境で動くRに吸い込ませられるので、
 「実験結果を入力するだけでワンクリックで統計解析結果まで出る」[^toukei]ような
 スクリプトが実現できるからです。具体的にはjupyter上で
+
 ```{frame=single}
 %load_ext rpy2.ipython
 ```
 
 とした後
+
 ```{frame=single}
 %%R -i input -o output
 hogehoge

@@ -342,6 +342,7 @@ for n in ica.labels_.values():
 HighpassFilterを掛けた上で作業を行うことです。
 
 ## EpochとEvoked
+
 初心者にはなんのことやら分かりにくい単語ですが、
 波形解析には重要な用語です。
 epochは元データをぶつ切りにしたものです。

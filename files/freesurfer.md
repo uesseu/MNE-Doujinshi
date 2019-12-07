@@ -2,12 +2,14 @@
 # freesurferを使う(MRI)
 
 ターミナル使える人のためのTLDR;
+
+インストールしたら以下で終わり。
 ```{frame=single}
 recon-all -i ./hoge.nii -subject (患者番号) -all -parallel -openmp [CPU_CORE]
 ```
 以上です。
 
-さて、ターミナル使ったことのない人への解説を書きます。
+さて、俺は優しいのでターミナル使ったことのない人への解説を書きます。
 つまり、いわゆる黒い画面と言うやつですね。
 下記はターミナルを操るための必要最低限のbashのコマンドです。
 
@@ -16,16 +18,19 @@ recon-all -i ./hoge.nii -subject (患者番号) -all -parallel -openmp [CPU_CORE
 
 まず、ターミナルを開きMRIの画像データがある場所まで移動します。
 例えばフォルダの名前がDATAなら下記のようにします。
+
 ```{frame=single}
 cd DATA
 ```
 辿っていって、目的のファイルを見つけたならば、freesurferで解析します。
 例えばファイルの名前がhoge.niiなら下記です。
+
 ```{frame=single}
 recon-all -i ./hoge.nii -subject (患者番号) -all
 ```
 このコマンドを走らせると、完遂するのにおよそ丸１日かかります。
 かかりすぎですね？下記で4コア並列できます。
+
 ```{frame=single}
 recon-all -i ./hoge.nii -subject (患者番号) -all -parallel
 ```
@@ -37,9 +42,10 @@ recon-all -i ./hoge.nii -subject (患者番号) -all -parallel
 
 ## recon-all同時掛け(freesurfer)
 
-recon-allはマルチスレッド処理をすることができます。しかし、効率はあまり良くないです。[^openMP]
-つまり、マルチコア機なら一例ずつマルチスレッドでかけるより、
-同時多数症例をシングルスレッドで掛かける方が速く済みます。
+recon-allはマルチプロセスで処理をすることができます。
+しかし、効率はあまり良くないです。[^openMP]
+つまり、マルチコア機なら一例ずつマルチプロセスでかけるより、
+同時多数症例をシングルプロセスで掛かける方が速く済みます。
 ターミナルを沢山開いて処理させたりすると速いですが煩雑です。
 なので、スクリプトを書いて自動化することをおすすめします。
 MNEpythonを使う人はプログラミングの習得は必須なので良いとして、
@@ -47,7 +53,7 @@ freesurferしか使わない人でもスクリプトは書けるようになる�
 僕のおすすめはpython、shのいずれかです。[^usingfs]
 
 [^openMP]: 理由はopenMPというライブラリを使った並列化だからです。openMPはマルチスレッドを簡単に実装する優れたライブラリなのですが、メモリの位置が近い場合にスレッド同士がメモリ領域の取り合いをしてしまうため速度が頭落ちになるのです。このケースではマルチスレッドよりマルチプロセスの方が良いように思います。
-[^usingfs]: ちなみに、僕はvimmerなのでvimを使ってshを直書きしています。
+[^usingfs]: ちなみに、僕はvimmerなのでvimを使ってshを直書きしています。vimでシェルを扱うときの必殺技があるのです。ですが、本書はvimの本ではないので書きませんｗｗｗｗｗｗ
 
 ## freesurferの解析結果の表示
 
@@ -60,7 +66,7 @@ freeviewというコマンドで解析済みの画像を表示できます。
 
 ```{frame=single}
 freeview -v <subj>/mri/orig.mgz \
-hoge/mri/aparc+aseg.mgz:colormap=lut:opacity=0.4 \
+hoge/mri/aparc+aseg.mgz:colormap=lut:opacity=0.4 
 ```
 
 orig.mgzというのはオリジナル画像。グレイスケールで読みこみましょう。
@@ -74,6 +80,7 @@ aparc+aseg.mgzは部位別データ。部位別データには色を付けて読
 ## 解析結果のまとめ
 
 recon-allが終わった時点で、下記コマンドを入力しましょう。
+
 ```{frame=single}
 asegstats2table --subjects hoge1 hoge2 hoge3 ...\
   --segno hoge1 hoge2 hoge3 ... --tablefile hoge.csv
@@ -89,7 +96,7 @@ $FREESURFER_HOME/FreeSurferColorLUT.txtに書かれていますので参照し�
 freesurferは時にエラーを起こしますので、クオリティチェックと修正が必要です。
 
 ちなみに、freesurfer6.0の時点でこのコマンドは
-内部的にpython2に依存しています。
+内部的にpython2に依存しているっぽいです。(ごめん、確認までしてない)
 python3を使っている人はたまーにエラーを吐くかもしれません。
 まぁ、大抵の場合はエラーにならないので、良いのですが
 変なエラーが出たときは一時的にpython2を使うのも手です。
@@ -131,6 +138,7 @@ Freesurferは脳だけを解析するためにSkull Stripという作業をし�
 脈絡叢を巻き込んでいる場合はbrainmask.mgzを編集します。
 Brush value を255、Eraser valueを1にしてRecon editing
 shiftキーを押しながらマウスをクリックして脈絡叢を消していきます。編集がおわったら
+
 ```{frame=single}
 recon-all  -s <subject>   -autorecon-pial
 ```
@@ -141,6 +149,7 @@ recon-all  -s <subject>   -autorecon-pial
 ### 眼球が白質と間違われた時
 
 上記と同様にして、編集がおわったら
+
 ```{frame=single}
 recon-all   -s <subject>  -autorecon2-wm   -autorecon3
 ```
@@ -148,6 +157,7 @@ recon-all   -s <subject>  -autorecon2-wm   -autorecon3
 ### 頭蓋骨と間違って脳をえぐっているとき
 
 頭蓋骨と間違って脳実質まで取られた画像が得られた場合は
+
 ```{frame=single}
 recon-all  -skullstrip  -wsthresh 35  -clean-bm  -no-wsgcaatlas  -s <subj>
 ```

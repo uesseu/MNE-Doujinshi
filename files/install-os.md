@@ -3,8 +3,8 @@
 OSはlinuxかMACが普通と思います、windowsではどうなのでしょう？
 MNEpythonは動きます。
 Unix系コマンドラインツールは動きません。freesurferは辛いです。
-そのうちWSL2というlinux互換機能も出てくるでしょうし出来るようになるのかも？？
-僕は新しめのdebian系linuxディストリビューションである
+WSL2というlinux互換機能の実力を僕は知らないのでなんとも…
+というわけで、僕は新しめのdebian系linuxディストリビューションである
 UBUNTU[^ubuntu]またはMACを使います。
 
 [^ubuntu]:UBUNTUはCanonical社によって開発されているオープンソースのlinuxディストリビューションであり、人気があります。debianというディストリビューションをベースに作られています。

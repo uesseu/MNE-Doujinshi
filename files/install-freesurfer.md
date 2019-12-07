@@ -1,16 +1,20 @@
 
 # freesurferのインストール
 freesurferをインストールしましょう。
-下記のurlからダウンロードできます。windows版？そんなものはない。
+下記のurlからダウンロードできます。windows版？そんなものはない。[^wsl]
+
+[^wsl]: もしどうしても君がMicrosoft帝国の一員として生きていたいならば、WSL(Windows Subsystem for Linux)を使えばいい。
 
 ```
 https://surfer.nmr.mgh.harvard.edu/fswiki/DownloadAndInstall
 ```
 
 で、ダウンロードしたファイルを
+
 ```{frame=single}
 tar -C /usr/local -xzvf hoge.tar.gz
 ```
+
 Macならインストーラーもあります！
 ね、簡単でしょう？でも、まだ終わっていません。このままでは動きません。
 設定をしないといけないのです。設定ファイルはホームディレクトリに
@@ -30,9 +34,11 @@ freesurferのダウンロードページに、Setup & Configurationという所�
 
 で、コピペし終わったら、保存して閉じるんですが、MRIの解析結果の
 保存先(subject_dir)を決めてあげたい場合は下記のようにします。
+
 ```{frame=single}
 export SUBJECTS_DIR=hoge
 ```
+
 これは決めてあげたほうが良いです。何故なら、標準のsubject_dirは
 読み書きに管理者権限が必要だったりするからです。
 

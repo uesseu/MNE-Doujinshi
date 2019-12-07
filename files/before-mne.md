@@ -17,7 +17,7 @@ Macのテキストエディットは最悪なので使ってはいけません�
 atomでもvisual studio codeでもいいと思います。
 vimmer[^vimmer]ならvimを使ってもいいと思います。
 
-[^vimmer]:vim使いの事。僕は毎日vimを起動しています。
+[^vimmer]:vim使いの事。僕は毎日vimを起動し、毎日vim上で解析しています。
 
 ## Jupyterの場合
 
@@ -36,6 +36,7 @@ jupyter notebook
 http://localhost:8888
 jupyterはブラウザで動かすものですが、別にネットに繋がるものじゃないです。
 ちなみに、下記の様にして起動すると、lan内で別のjupyterに接続できます。
+
 ```{frame=single}
 jupyter notebook --ip hoge
 ```
@@ -49,11 +50,11 @@ jupyterはターミナルでctr-cを二回叩けば終了できます。
 
 他に学んでおくべきパッケージは
 
-- matplotlib(作図用。seabornで代用可能なこともある。)
+- matplotlib(作図用。seabornで代用可能なこともあるが結局補助的にしか使えない。)
 - pandas(python版excel。必須ではないが、やりやすくなる。)
 の2つでしょう。
 
-pandasやscikit-learnもググってください。qiitaも結構良いです。
+pandasやscikit-learnもググってください。
 初心者は毎日何らかの課題に向けてpythonスクリプトを書きましょう。
 指が覚えます。適当にググって良いサイトを見つければいいでしょう。
 Python入門から応用までの学習サイト
@@ -103,12 +104,13 @@ print(a+b)
 ```
 
 結果
+
 ```{frame=single}
 [12, 14]
 ```
 
 このように計算できます。
-ちなみに、numpyの配列と素のpythonの配列は違うものであり、素のpythonならこうなります。
+ちなみに、numpyの配列と素のpythonのリストは違うものであり、素のpythonならこうなります。
 
 ```{frame=single}
 a = [5, 6]
@@ -116,6 +118,7 @@ b = [7, 8]
 print(a + b)
 ```
 結果
+
 ```{frame=single}
 [5, 6, 7, 8]
 ```
@@ -128,6 +131,7 @@ import numpy as np
 np.arange(5, 13, 2)
 ```
 結果
+
 ```{frame=single}
 array([5, 7, 9, 11])
 ```

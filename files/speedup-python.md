@@ -13,6 +13,7 @@ MNE使うときには大差ないし良いんじゃないかと個人的には�
 しかし、ここの所は今後の高速化を学ぶための布石になります。
 
 代わりと言ってはアレですが、このようなpython構文があります。
+
 ```{frame=single}
 n = [i + 4 for i in range(5)]
 ```
@@ -32,6 +33,7 @@ n = list(map(plus4, range(5))
 どっちが良いとかは特にありません...
 
 一々defで名前付きのを書きたくないならlambda式というので一行で出来ます。
+
 ```{frame=single}
 n = list(map(lambda x: x + 4, range(5))
 ```
@@ -59,7 +61,9 @@ from multiprocessing import Pool
 def test(i):
     return i * 8
 ```
+
 これをwith文を使ってPoolの中にぶちこみます。
+
 ```{frame=single}
 with Pool(4) as p:
   result = p.map(test, [1, 2, 3, 4])

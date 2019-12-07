@@ -26,13 +26,26 @@
 
 ### wavelet変換にまつわる臨床的な単語
 
-wavelet変換に登場する単語としては以下のものが挙げられます。
+脳活動に関する用語としては以下のようなものがあります。
+(ただし、コネクティビティ系は除く)
 
-| 単語                 | 内容                                      | 特徴                         |
-|----------------------|-------------------------------------------|------------------------------|
-| evoked power         | 波を加算平均した後にwavelet変換、波の強さ | ノイズにやや強い             |
-| induced power        | waveletした後に結果加算平均、波の強さ     | ノイズに弱いが後期成分に強い |
-| phase locking factor | 同一部位での位相同期性                    | ノイズにやや強い             |
+| 単語                 | 内容                                              |
+|----------------------|---------------------------------------------------|
+| total power          | 何らかの刺激を受けて出てくるpower                 |
+| evoked power         | 何らかの刺激を受けた直後にだけ出るpower           |
+| induced power        | 何らかの刺激を受けて暫く出続けるevoked以外のpower |
+| phase locking factor | 同一部位での位相同期性                            |
+
+どういうことでしょう？
+つまり、何か刺激を受けた時に「受け取った刺激に関する手続き」がevoked
+何か刺激を受けた後、それを「ゴチャゴチャ脳内で処理する手続き」がinduced
+上記の合算がtotalです。
+
+total powerは簡単に計算できます。単にwavelet変換してその振幅を二乗すれば
+それで終わりであります。
+evoked powerは二種類の出し方があります。まぁ、流派みたいなものでしょうか。
+induced powerもまた、二種類の出し方があります。
+これは後で書きます。
 
 このなかで、phase locking factorは別名 inter-trial coherence(itc)といいます。
 MNEpythonではitcという言い方しています。[^plv]
@@ -46,6 +59,16 @@ MNEpythonではinduced powerとitcの計算方法が実装されています。[
 
 [^plv]: ちなみにphase locking valueという全然別のものがあります。これはコネクティビティ用語ですので分野が違います。あとで書きます。
 [^evoked_power]: これは実質itcと似たようなもの…という考え方もあります。
+
+### 2つの流儀とMNE
+2つの流儀について話します。
+名前については適当につけました。
+
+#### 合算派
+合算派のやり方を書きます。
+
+
+
 
 ### wavelet変換の実際
 
@@ -75,7 +98,6 @@ evoked_power=mne.time_frequency.tfr_morlet(evoked,n_jobs=4,
  出力結果がちょっと荒くなります。
 - return_itc : これをTrueにするとphaselocking factorも
  算出してくれます。
-
 
 この関数はevokedもepochsも引数として取ることが出来ます。
 return_itcがTrueかFalseかでも大きく挙動が違います。

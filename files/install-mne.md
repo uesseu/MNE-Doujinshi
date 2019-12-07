@@ -22,6 +22,7 @@ mne 0.16からは少しインストールの仕方が変わりました。
 
 anacondaのバージョンは新しくしておきましょう。
 新しくすればこのように確認できます。
+
 ```{frame=single}
 $ conda --version && python --version
 conda 4.4.10
@@ -36,12 +37,14 @@ Python 3.6.4 :: Continuum Analytics, Inc.
 
 これでmneの仮想環境が整いました。
 下記のコマンドでmneの環境に入れます。
+
 ```{frame=single}
 conda activate mne
 ```
 今後はmneを使うときは必ず上記のコマンドを打って下さい。[^conda_activate]
 面倒くさい？どうしても打ちたくないです？
 それならば、.bashrcや.bash_profileに下記を追記してください。
+
 ```{frame=single}
 conda activate mne
 ```
@@ -57,19 +60,23 @@ pythonも進化が速いですから、そのうちpython4とか出かねませ�
 conda create -n python2 python=2.7 anaconda
 ```
 mneの環境に入るには
+
 ```{frame=single}
 conda activate mne
 ```
 です。
 さっきのpython2に入るのはもちろん
+
 ```{frame=single}
 conda activate python2
 ```
 ちなみに、出るのは
+
 ```{frame=single}
 conda deactivate
 ```
 macなら下記も必要です。
+
 ```{frame=single}
 pip install --upgrade pyqt5>=5.10
 ```
@@ -79,11 +86,12 @@ pip install --upgrade pyqt5>=5.10
 ## MNE環境を複数作りたい！
 MNEの環境が複数欲しくなることもあると思います。
 僕は欲しくなりましたし、今後MNEがバージョンアップしていくたびに
-古いのを残しながら音故知新する必要が出てくるはずです。
+古いのを残しながら温故知新する必要が出てくるはずです。
 さっき色々やったなかでcurlでenvironment.ymlをダウンロードしたはずです。
 このenviroment.ymlは普通にテキストエディタで開けます。
 内容はインストールすべきパッケージの列挙です。
 一番上の所に
+
 ```{frame=single}
 name: mne
 ```
@@ -93,6 +101,7 @@ name: mne
 ## jupyter kernel
 jupyterを使うのであれば、上記の環境をjupyterに登録する必要があります。
 まずは、仮想環境に入って下さい。
+
 ```{frame=single}
 conda activate mne
 ```
@@ -116,12 +125,14 @@ nvidiaのサイトも参照して下さい。
 
 僕の環境では下記二行のコマンドを予め入れていないと動かないです。
 .bash_profileや.bashrcに書き加えておけばいいでしょう。
+
 ```{frame=single}
 export LD_PRELOAD='/usr/$LIB/libstdc++.so.6'
 export DISPLAY=:0
 ```
 
 さらに、jupyter内で下記を実行しないといけません。
+
 ```{frame=single}
 %gui qt
 ```
@@ -135,6 +146,7 @@ export DISPLAY=:0
 ダウンロードしたものについてはこのサイトの通りにすればインストールできます。
 [MNE-C http://martinos.org/mne/stable/install_mne_c.html](http://martinos.org/mne/stable/install_mne_c.html)
 僕はホームディレクトリに入れました。
+
 ```{frame=single}
 tar zxvf MNE-hogehoge
 mv MNE-hogehoge MNE-C

@@ -21,27 +21,30 @@ files = files/introduction.md \
   files/mne-connectivity.md \
   files/mne-source.md \
   files/math-wavelet.md \
+  files/math-hilbert.md \
   files/math-connectivity.md \
   files/math-mne.md \
+  files/math-inverse.md \
   files/speedup-python.md \
   files/graph.md \
   files/books.md \
   files/python-tips.md
 
 outfile = out.pdf
+outhtml = out.html
 
 latex_twoside = -V documentclass=ltjarticle \
   -V geometry:left=3cm \
   -V geometry:right=1cm \
-  -V geometry:twoside \
-  -V CJKmainfont=IPAexGothic \
+  -V geometry:twoside
+#  -V CJKmainfont=IPAexGothic \
   -V lang=en-US
 
 latex = -V documentclass=ltjarticle \
   -V geometry:left=2cm \
   -V geometry:right=2cm \
-  -V CJKmainfont=IPAexGothic \
   -V lang=en-US
+#  -V CJKmainfont=IPAexGothic \
 
 markdown_extention = -f markdown+hard_line_breaks
 latex_packages = --listings --template eisvogel.tex
@@ -49,7 +52,7 @@ writer = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
     --indented-code-classes=python,bas \
-    --pdf-engine=lualatex
+    --latex-engine=lualatex
 oldwriter = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
@@ -64,3 +67,6 @@ old: $(files)
 
 twoside:
 	pandoc -o twoside.pdf $(writer) $(latex_packages) $(latex_twoside) $(markdown_extention) $(files)
+
+html: $(files)
+	pandoc -o out.html $(writer) $(markdown_extention) $(files) -c github.css

@@ -1,3 +1,4 @@
+
 # MNEpython実装時の小技
 一応、実装が苦手な人が読者と思っているので、
 ありふれた小技ですが紹介します。
@@ -9,6 +10,7 @@ object指向とか関数型とかは他の本を読んで下さい。得られ�
 メソッド・チェーンを使います。
 メソッド・チェーンとはドットで数珠つなぎに処理をしていく技法です。
 MNEpythonではrawオブジェクト辺りで割とできる感じです。実際見てみましょう。
+
 ```{frame=single}
 from mne.io import Raw
 Raw('hoge.fif').filter(1,100).notch_filter(60).save('fuga.fif')
@@ -25,12 +27,14 @@ rawを弄る時raw.filter関数などを使うとraw自体が
 rawはrawとしてどっしり構えてもらって、
 加工品だけ作って行きたいかも知れません。
 そんなときはraw.copy関数がいいです。
+
 ```{frame=single}
 raw2 = raw.copy()
 ```
 これでrawのcopyが出来ましたね。しかし、どうも変数が多くなります。
 raw2, raw3, raw4と作るうちにraw∞とかなって死にます。
 それの対策にはメソッドチェーンがいい味を出すと思っています。
+
 ```{frame=single}
 filtered = raw.copy().filter(1,100).notch_filter(60)
 ```
@@ -41,6 +45,7 @@ raw2など要らなかった。
 引数が多すぎて毎回引数入れるのがダルいし、ミスも多くなりそうだ。
 だが、落ち着いて聞いてほしい。
 pythonには良い道具があるのだ。
+
 ```{frame=single}
 from functools import partial
 ```
@@ -62,6 +67,7 @@ make_my_epochs = partial(Epochs, raw, events)
 ```
 
 これでmake_my_epochsという割と決め打ち的な関数が出来た。以降は例えば
+
 ```{frame=single}
 make_my_epochs(4)
 ```
@@ -70,6 +76,7 @@ make_my_epochs(4)
 
 ## ここまでのまとめ
 というわけで、凄く省略すれば、epochingまで下記のように書けるのです。
+
 ```{frame=single}
 from mne.io import Raw
 from mne import Epochs
@@ -123,6 +130,7 @@ listとかに一々保存したほうが良いでしょうね。
 ## file名じゃなくてフォルダ名が欲しいん
 
 概ねこんな感じでゲットできます。
+
 ```{frame=single}
 from pathlib import Path
 path = Path(epochs.filename).parent

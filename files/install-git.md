@@ -29,7 +29,8 @@ jupyterのファイルはgitしにくい上にすっごい散らかるので
 重いしね…
 
 
-### 方法1
+### 方法1(超面倒くさい)
+
 ```{frame=single}
 jupyter notebook --generate-config
 ```
@@ -40,7 +41,7 @@ http://jupyter-notebook.readthedocs.io/en/latest/extending/savehooks.html
 すると、jupyterで編集したファイルがpythonのスクリプトとしても保存されます。
 あとはgit[^git]などで管理すればいいです。
 ただし、この方法は計算結果がファイル内に残りません。
-しかも散らかります。
+しかも散らかりますし、面倒くさいです。
 
 [^toukei]:同様に、matlabやC等と連携をすることが簡単なのがjupyterの強みの一つと思います。
 [^git]:プログラミング用バージョン管理ソフト。敷居は高いが多機能で超速。GUIクライアントも豊富。
@@ -50,16 +51,19 @@ gitを使いますが、git側の設定だけでもどうにかなります。
 まず、jqをインストールします。
 .gitattibuteに書きを書き加えます。
 無ければ作ってください。
+
 ```{frame=single}
 *.ipynb diff=ipynb
 ```
 そして、下記を.git/configに
+
 ```{frame=single}
 [diff "ipynb"]
 textconv=jq -r .cells[] |{source,cell_type}
 prompt = false
 ```
 下記を.gitignoreに
+
 ```{frame=single}
 .ipynb_checkpoints/
 ```

@@ -5,6 +5,9 @@ GPUを科学計算に用いる方法の1つで、Nvidia社が開発している�
 GPGPUと呼ばれる技術の一種ですね。
 これはMNEpythonでも使うことが出来るので、やってみましょう。
 つっても、今の所フィルター関連だけなんですけどね…
+しかもあまり速くない上に、Ubuntuの新しいやつでドライバが動かないとか
+そういうツラミが出てきていてあまりおすすめではないです。
+あと、ついにMacでNvidiaがサポートされなくなったりしています。
 
 これのインストールも詰まるとそれなりに面倒です。
 まずは、Nvidiaのサイトからインストーラーをダウンロードします。
@@ -18,12 +21,14 @@ GPGPUと呼ばれる技術の一種ですね。
 こんな感じに書いてあります(バージョンによって違います)
 
 ```{frame=single}
-sudo dpkg -i cuda-repo-ubuntu1604_9.1.85-1_amd64.deb`
+sudo dpkg -i cuda-repo-ubuntu1604_9.1.85-1_amd64.deb
 sudo apt-key adv --fetch-keys http://hogehoge.pub
-sudo apt-get update`
-sudo apt-get install cuda`
+sudo apt-get update
+sudo apt-get install cuda
 ```
+
 こんな感じのがあるはずなので、実行して下さい。
+もちろん、バージョンとかは読み替えるべし。
 そして、これが大事なのですが、bashrcにパスを通す必要があります。
 これはCUDAのインストールガイドに書いてあります。
 インストールガイドへのリンクは先程の説明の下に小さく書いてあります。

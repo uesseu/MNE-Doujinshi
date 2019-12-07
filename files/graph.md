@@ -19,11 +19,13 @@ import bct
 例えばconmatというnumpy三角行列があったとして、こいつを放り込むなら
 まずは三角行列を普通の行列にしてやるべきでしょう。
 (方向ありの行列なら三角行列にはならないのでそのままでいいです)
+
 ```{frame=single}
 dcon = conmat + conmat.T
 ```
 
 global efficiencyを重み付けありで計算したいならこうと思います。
+
 ```{frame=single}
 bct.efficiency_wei(dcon)
 ```

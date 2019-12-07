@@ -26,8 +26,8 @@ freesurferでrecon-allをしたデータが必要です。
 さて、これは理工系の人は知っているのですが、実は鶴亀算は割り算です。
 (ここで文系や医学部の人はびっくりする)
 一応、鶴亀算が割り算であることの解説記事を書いたので、
-数学習ってなかった人やサボっていた人はご参照ください。
-[https://qiita.com/uesseu/items/750c236bfa706c361b3b](https://qiita.com/uesseu/items/750c236bfa706c361b3b)
+数学習ってなかった人やサボっていた人はあとの方に書きました。
+「鶴亀算とは割り算である」をご参照ください。
 
 さて、脳の中の電気の活動量をX、
 センサーで捉える磁場とか電場とかをYとすると
@@ -158,10 +158,12 @@ projectionモードになっていたりして見にくかったりするかも�
 ## 手順2、BEM作成
 脳からセンサーまでの抵抗を計算せねばなりますまい。
 
-上記の通り、MRIから抽出してくる形データとして、BEMと言うものを使います。
-BEMは脳の全体を包み込むサランラップみたいなデータです。
+上記の通り、MRIから抽出してくる形データからBEMモデルを作ります。
+BEMは脳の全体を包み込むサランラップみたいなデータになります。
 頭蓋骨とか皮とか、そういう抵抗が強いものを考慮するために、BEMは三枚一組で
 出力されます。実装上は3枚あるということを意識しなくても大丈夫です。
+(というか、本当はこんな言葉の使い方は間違ってる気がする。
+BEMは本当はMethodの名前です。)
 
 作るためにはfreesurferによる解析データが必要となります。
 freesurferを既に使っているならSubject関連は既に馴染んだ言葉でしょうか？
@@ -292,6 +294,7 @@ cov = compute_covariance(epochs,
 tmax=0にしているので、刺激が入る前までの波を取り除きます。
 つまりベースラインコレクションみたいな感じになるのです。
 ちなみに、epochsでcovariance…特にautoですると結構重いです。
+autoの場合、クロスバリデーションまでやってくれて凄いみたいですね。
 
 
 ## 手順6、逆問題
@@ -451,6 +454,7 @@ max: ラベルの中で最大の信号が出てきます
 これで脳内の波形が取り出せたわけです。
 これで、色々出来ます。なにしろ、今までwavelet等していたわけですから。
 
+### 三次元plot
 でも、これだけじゃダメですね。きちんと視覚化しないと。
 ここで、mayaviとpysurferが登場します。
 mayaviは三次元を表示するパッケージ、
@@ -475,7 +479,7 @@ import surfer
 
 hoge = 4
 scene = mlab.figure()
-source = apply_inverse_epochs(evoked, inverse_operator, 1 / 9)
+source = apply_inverse(evoked, inverse_operator, 1 / 9)
 labels = read_labels_from_annot('fsaverage',
                                 subjects_dir=subjects_dir)
 b = surfer.Brain('fsaverage',
@@ -484,10 +488,11 @@ b = surfer.Brain('fsaverage',
                  subjects_dir=subjects_dir,
                  figure=scene)
 b.add_label(labels[hoge])
-source[0].plot(subjects_dir=subjects_dir,
+source.plot(subjects_dir=subjects_dir,
                time_viewer=True,
                figure=scene)
 ```
+
 
 何やってるかと言うと、mayaviで一旦canvas的なものを作って、
 そこに一寸ずつ書き加えているイメージです。
@@ -496,13 +501,29 @@ source[0].plot(subjects_dir=subjects_dir,
 add_labelsで脳の特定部位に色を塗ります。
 手順前後はいけません！最後にソース推定をplotして終わり。
 
+### 三次元movie
+三次元で表示したものを動画として保存してドヤ顔しましょう。
+先程のスクリプトにsceneというのがありましたね？
+それを使います。
+それを該当の箇所に入力してsave_movieだけです。
+
+```{frame=single}
+surf = source_estimate.plot(subject['mri'],
+                            surface='inflated',
+                            hemi='both',
+                            figure=scene)
+surf.save_movie('hoge.gif')
+```
+
+ね、簡単でしょ？今回はgifにしてみました。
+すげーヌルヌル動くんですが、同人誌の前の君に見せられなくて残念です。
 
 ### その後のお楽しみ1、ソースベースwavelet
 
 ソースベースでwaveletやりたいなら、特別に楽ちんな関数が
 実装されています。
 
-induced_powerとphaselocking_factorを算出する関数は下記です。
+induced powerとinter trial coherenceを算出する関数は下記です。
 ※labelを選ばなければ激重注意！[^gekiomo]
 
 ```{frame=single}
