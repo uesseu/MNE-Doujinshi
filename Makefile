@@ -36,15 +36,15 @@ outhtml = out.html
 latex_twoside = -V documentclass=ltjarticle \
   -V geometry:left=3cm \
   -V geometry:right=1cm \
-  -V geometry:twoside
-#  -V CJKmainfont=IPAexGothic \
+  -V geometry:twoside \
+  -V CJKmainfont=IPAexGothic \
   -V lang=en-US
 
 latex = -V documentclass=ltjarticle \
   -V geometry:left=2cm \
   -V geometry:right=2cm \
-  -V lang=en-US
-#  -V CJKmainfont=IPAexGothic \
+  -V lang=en-US\
+  -V CJKmainfont=IPAexGothic
 
 markdown_extention = -f markdown+hard_line_breaks
 latex_packages = --listings --template eisvogel.tex
