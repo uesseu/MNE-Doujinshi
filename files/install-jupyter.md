@@ -9,9 +9,12 @@
 開発環境はMNE使うなら必要です。詳しい人からは「docker[^docker]じゃダメなん？」という質問が
 来そうですが、セットアップは自分でできなければ困ることもありましょう。
 普通はanaconda[^conda]を使います。何故ならインストールが楽だからです。
-僕はpipenv[^pipenv]を使っていますが、初心者やwindowsユーザーにはおすすめしません。
+僕はpipenv[^pipenv]やpoetry[^poetry]を使っていますが、
+初心者やwindowsユーザーにはおすすめしません。
 
 [^pipenv]: python公式オヌヌメの仮想環境作りツールです。重いのが欠点ですが、anacondaと違って余計なものが入らない、自分でソフトのバージョンを把握しやすい、python的には王道のやり方であるなどのメリットがあります。
+
+[^poetry]: pipenvの代替。pipenvがpython界でメジャーになったのですが、割と不安定なところもあったので、開発されたやつです。速くて安定していて、控えめに言って神なのですが、pyenvを併用しないといけないという意味で初心者にはおすすめしません。
 
 [^docker]:最近流行りの仮想化環境です。性能が高いのが特徴ですが、反面使いこなすのには力が必要です。
 
@@ -74,22 +77,22 @@ python用ではありませんが、プラグインを入れてpythonのIDEと�
 
 ## 僕の今のおすすめは?
 
-- jupyter
 - anaconda
 - vscode
+- jupyter
 という組み合わせです。
 mneのインストールはanacondaに任せちゃいます。
 基本はvisual studio codeでスクリプトを書きますが、
 状況に応じてjupyterでチェックしたりします。
 
-え？僕ですか？僕はpipenvとvimでやっています。
+え？僕ですか？僕はpyenv/poetryとvimでやっています。
 (初心者はとっつきにくいのでおすすめしないけど、僕はいいと思うよ)
 
 では、上記の環境を整える為の準備をしていきましょう。
 vscodeはまぁ、導入するのは楽勝なのでググって下さい。
 
 
-![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。まぁ、触ってみればわかります。git併用するのが良いかと思います。](img/jupyter.jpg){width=14cm}
+![jupyterの画面。webベースでインタラクティブにコーディング・共有できる。まぁ、触ってみればわかります。](img/jupyter.jpg){width=14cm}
 
 ![spyderの画面。ごく普通の素直な挙動のIDE。](img/spyder.jpg){width=14cm}
 
@@ -161,24 +164,24 @@ mneはpython3に移行したのですが、freesurferはまだpython2です。
 MNEはanacondaを推奨しています。
 anacondaはpythonの仮想環境[^kasou]を作ることが出来ますのでそれを利用するのが楽です。
 
-[^kasou]:仮想環境にも色々あります。例えば、pipenvなどです。anacondaも同じ様な感じで使えます。
+[^kasou]:仮想環境にも色々あります。例えば、pipenv、poetryなどです。anacondaも同じ様な感じで使えます。
 
 では、ipythonからやっていきましょう。
 ここでは、hogeという名前のpython3.6環境をjupyter上に作ってみましょう。
 
 ```{frame=single}
-ipython kernel install --user
+ipython kernel install --user --name py3
 conda create -n hoge python=3.6 anaconda
 conda activate hoge
-ipython kernel install --user
+ipython kernel install --user --name hoge
 conda info -e
 ```
 1行目から順に何をやっているか述べます。
 
-1. 今のpythonの環境をjupyterに載せておく
+1. 今のpythonの環境をjupyterに「py3」という名前で載せておく
 1. condaで別バージョンのpython環境を作る
 1. 切り替える
-1. jupyterに組み込む
+1. jupyterに「hoge」という名前で組み込む
 1. 確認
 
 conda activateコマンドでpythonの環境を切り替えられます。

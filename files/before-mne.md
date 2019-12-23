@@ -13,8 +13,11 @@
 
 何を使ってもいいと思いますがnotepad.exeはお勧めしません！
 Macのテキストエディットは最悪なので使ってはいけません。
-使うと良いものの中でとっつきの良いのはspyderとかでしょうか…
-atomでもvisual studio codeでもいいと思います。
+使うと良いものの中でとっつきの良いのはvscodeとかでしょうか…
+atomでもspyderでもいいと思います。
+jupyterでも出来ます。jupyter一本だと散らかる上にgit管理しにくいので、
+長期的にはオススメはしませんが、練習用には最適かもしれません。
+そうですね、jupyterから始めてvscodeがいいかもですね。
 vimmer[^vimmer]ならvimを使ってもいいと思います。
 
 [^vimmer]:vim使いの事。僕は毎日vimを起動し、毎日vim上で解析しています。
@@ -140,6 +143,14 @@ array([5, 7, 9, 11])
 そのほか、多くの機能がありMNEpythonのベースとなっています。
 出力結果がnumpy配列で出てくるので、MNEがあるとはいえ使い方は覚える必要があります。
 
+numpyは多次元配列を表現できますが、その次元は
+shapeというメンバー変数に入っています。
+
+```{frame=single}
+import numpy as np
+data = np.arange(5, 13, 2)
+print(data.shape)
+```
 
 ## 解析を始める前のwarning!
 

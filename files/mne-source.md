@@ -11,10 +11,10 @@
 式さえできればなんとか計算できるわけです。
 必要物品は以下の通り
 
-- 脳の中の見たい場所リスト(MRI)
+- 脳の中の見たい場所リスト(SourceSpace)
 - センサーの位置情報(Montage)
-- 脳波か脳磁図
-- 皮膚や頭蓋骨の抵抗値や、その分布(BEM)
+- 脳波か脳磁図の結果(Raw)
+- 皮膚や頭蓋骨の抵抗値や、その分布(BEMmodel)
 
 このなかで、MRIについては標準脳を使うのでなければ
 freesurferでrecon-allをしたデータが必要です。
@@ -22,25 +22,25 @@ freesurferでrecon-allをしたデータが必要です。
 一晩かかります。
 
 これらを使って何をするかと言うと、
-脳の中の活動と、センサーで捉えた結果で鶴亀算を解いてあげるのです。
-さて、これは理工系の人は知っているのですが、実は鶴亀算は割り算です。
+脳の中の活動と、センサーで捉えた結果で連立方程式を解いてあげるのです。
+さて、これは理工系の人は知っているのですが、
+実は連立方程式を解くという行為は割り算に他ならないのです。
 (ここで文系や医学部の人はびっくりする)
-一応、鶴亀算が割り算であることの解説記事を書いたので、
-数学習ってなかった人やサボっていた人はあとの方に書きました。
+大学数学を習ってなかった人やサボっていた人はあとの方に書きました。
 「鶴亀算とは割り算である」をご参照ください。
 
 さて、脳の中の電気の活動量をX、
 センサーで捉える磁場とか電場とかをYとすると
 $AX = Y$という形式に落とし込めるはずです。
+Aは適当な定数です。距離とか抵抗で計算できます。電磁気学です。
 これは高校物理をちゃんと勉強した人は直感的に分かるはず。
 
-ここのAを計算するために、抵抗とか距離とかが必要なんですね！
 このAを求めることをForwardSolutionという感じに言います。
+掛け算を求めるのですね！
 ここから$X = A^{-1}Y$という風に変えればXを計算できます。
 これをInverseSolutionと言い、$A^{-1}$のことを
-InverseOperatorと言います。
-鶴亀算は割り算なのでこのInverseOperatorを
-求めることが当面の目標です。
+InverseOperatorと言います。割り算ですね！
+このInverseOperatorを求めることが当面の目標です。
 
 手順としては以下のとおりです。
 
@@ -49,12 +49,24 @@ InverseOperatorと言います。
 まずは、掛け算を作るために、脳の中の位置情報、
 センサーの位置情報、そして、その両者がどのように重なっているかの
 位置関係を求める必要があります。
+必要なのは
+
+- 抵抗値
+- 脳みその形
+- センサーのセットの形
+- 脳みそとセンサーセットの相対的な位置
+- それぞれをまとめる方程式
+
+これだけあれば掛け算を作れます。
+具体的には、下記です。
 
 1. MRIから脳の形を取ってきて、骸骨の抵抗とかも加味して計算できる形にする。
- これをBEMという。これを使って掛け算の形にする。
+ これをBEMmodelと呼ぶ。これを使って掛け算の形にする。
 1. 脳の形から「推定する脳部位の位置」を特定する。
- この脳内の位置情報をソーススペース(source space)という。
+ この脳内の位置情報をソーススペース(Source space)と呼ぶ。
  (鶴亀算の鶴と亀のいる場所を計算する)
+1. センサーの位置情報。MNEではMontageクラスのオブジェクト。
+ ただし、脳波計によってはRawの中に組み込まれていて不要なこともある。
 1. 「推定するべき脳の部位」とEEG/MEGのセンサーの位置をすり合せて
  両者の位置関係を求める。この作業は手動で行われる。(超絶めんどい)
  この重ね合わせ情報はtransというファイル形式で保存される。
@@ -68,16 +80,16 @@ InverseOperatorと言います。
 MNEやsLORETAやdSPMといった何やら難しげな手法は、
 この割り算を作るときのやり方の違いなのです。
 
-1. 綺麗な割り算をするためのcovariance matrixを作る(理屈は後述)。
+1. 綺麗な割り算をするためのCovariance matrixを作る(理屈は後述)。
 1. 上記の脳部位とセンサーの関係性から、特定の脳部位での電源活動の波形を推定する。
- これを脳磁図における割りざ…逆問題(inverse solution)という。
- 割り算は逆数の掛け算と同じであるから、掛け算に置き換える。
+ これを脳磁図における割りざ…逆問題(Inverse solution)という。
+ 割り算は逆数の掛け算と同じであるから、掛け算に置き換えられる。
  この時の逆数のことをInverseOperatorという。
  この割り算に決まった解答はない。「最も良い解を得る方法」が幾つか提案されている。
 1. 脳全体で推定した波形のうち、欲しいものをとってくる。
 
 本当にこれだけ。
-なんと、脳の計算とは割り算なのであった！
+なんと、現時点での脳の電気活動のソース推定とは割り算なのであった！
 ね？簡単でしょう？
 
 簡単に言いましたが、これが割り算である事を数学的にちゃんと理解するには
@@ -99,7 +111,7 @@ MNEやsLORETAやdSPMといった何やら難しげな手法は、
 ## 手順1、trans
 まず、脳とセンサーの位置をすり合わせておきましょう。
 
-GUIでの操作となります。ふた通りの動かし方があります。
+GUIでの操作となります。2通りの動かし方があります。
 下記のコードを実行すると画面が立ち上がります。
 
 pythonで
@@ -113,10 +125,12 @@ bashで
 mne coreg
 ```
 mne coregコマンド簡単ですね！
+公式でもmne coregがオヌヌメと書いてありました。
 
 subjectやmegへのpathを指定しない場合は、GUI上で指定することになります。
 もし0から立ち上げた場合、山のようにあるMRIのsubjectから該当の
 subjectを探さねばならなくなります。
+重いので指定してあげたほうが楽です。
 
 pythonの関数に色々入れてから起動すれば、
 既にデータが読み込まれているので、楽です。
@@ -127,7 +141,10 @@ coregistration(subject = subject,
 ```
 instはmegデータ…rawでもepochでも良いらしいですが、どれかを指定して下さい。
 
-![mne coregistrationの画面。苦行。](img/trans.png){width=14cm}
+mne coregの場合は、mne coreg -hとでもやって
+helpを見てください。
+
+![mne coregistrationの画面。最悪の苦行。](img/trans.png){width=14cm}
 
 手順はこうです。
 
@@ -310,6 +327,7 @@ inverse_operator = make_inverse_operator(epochs.info,
                                          loose=0.2,
                                          depth=0.8)
 ```
+
 inverse_operatorと言うのは何かというと、逆問題を算出するための式です。
 このinverse_operatorを作るために頑張ってきたと言っても過言なしです。
 
@@ -334,6 +352,10 @@ MNEという計算手法は脳の表面の情報を拾いやすい偏った計�
 故に、深い部分に対して有利になるようにする計算方法があります。
 depthを設定すると、脳の深い所を探れるわけです。
 depthをNoneに設定すると、ほぼ脳の表面だけ見ることになります。
+
+もう一つの偏りを回避する方法は、dSPMやsLORETAといった
+MNEの変法を使うことです。これらはMNEの偏りを割り算によって補正します。
+割り算バンザイ！
 
 他にlimit_depth_chsというパラメータもあります。
 これをTrueにすると、完全に脳の表面だけ見ます。
@@ -373,12 +395,12 @@ source = apply_inverse_raw(evoked, inverse_operator, 1 / 9)
 listの内容はSourceEstimate , VectorSourceEstimate , VolSourceEstimateです。
 SourceEstimateがBemベースの結果ですね。
 
-一旦、これを視覚化してみましょう。
+一旦、これを図示してみましょう。
 ```{frame=single}
 source[0].plot(time_viewer=True)
 ```
 
-やりました！これぞ、MNEの真髄、割り算であります！
+やりました！これぞ、MNE-pythonの真髄、割り算であります！
 
 このtime_viewer=Trueは時間を追って見ていきたい時に
 つけると良いオプションです。
@@ -407,6 +429,7 @@ desikan atlasとかDestrieux Atlasとか色々ありますよね。
 ```{frame=single}
 ls $SUBJECT_DIR
 ```
+
 もしfreesurferを既に動かしているならば、
 解析済みのMRIが沢山あるはずです。
 サブジェクトの中身にはlabelというディレクトリがあります。
@@ -418,19 +441,35 @@ label形式はブロードマンと思います。
 annot形式の内容はこのように読みます。
 
 ```{frame=single}
-mne.read_labels_from_annot(subject,
-                           annot_fname='hoge')
+from mne import read_labels_from_annot
+labels = read_labels_from_annot(subject, parc='aparc')
 ```
+
 詳しくは公式サイト(ry
+この関数はラベルのリストを読んできます。
+parcは一応aparcとaparc.a2009sというに種類のものがあって、
+このうち後者のほうが新しい分け方らしいです。どっちがいいとかはない。
 他にも読み方があります。
 こうして読んだら、labelのリストが出てきます。
 単体のlabelは下記で。
 
 ```{frame=single}
-mne.read_label(filename, subject = None)
+from mne import read_label
+label = read_label(filename, subject = None)
 ```
 
 これでlabelを読み込めたら、次はそれを当てはめることになります。
+Labelオブジェクトにはnameというメンバー変数があるので、
+自分がどれを見ているのかは確認できます。
+が、nameだけでは実際はイマイチわかりません。
+freesurferの元論文を見てからどこかを見つけていきましょう。
+
+ここ、どのラベルがそれなのかサクッと調べたいですよね？
+filter関数でも使うのがいいかと思います。
+
+```{frame=single}
+print(list(filter(lambda x: 'transv' in x.name, labels)))
+```
 
 ### 手順8後半、label当てはめ
 
@@ -455,10 +494,11 @@ max: ラベルの中で最大の信号が出てきます
 これで、色々出来ます。なにしろ、今までwavelet等していたわけですから。
 
 ### 三次元plot
-でも、これだけじゃダメですね。きちんと視覚化しないと。
+でも、これだけじゃダメですね。きちんと見てみないと実感がない。
 ここで、mayaviとpysurferが登場します。
 mayaviは三次元を表示するパッケージ、
 pysurferはfreesurferをmayaviを使って表示するパッケージですね。
+下記はhoge番目のLabelを見ています。
 
 ```{frame=single}
 from mne.minimum_norm import apply_inverse_epochs
@@ -482,12 +522,12 @@ scene = mlab.figure()
 source = apply_inverse(evoked, inverse_operator, 1 / 9)
 labels = read_labels_from_annot('fsaverage',
                                 subjects_dir=subjects_dir)
-b = surfer.Brain('fsaverage',
-                 'lh',
-                 'inflated',
-                 subjects_dir=subjects_dir,
-                 figure=scene)
-b.add_label(labels[hoge])
+brain = surfer.Brain('fsaverage',
+                     'lh',
+                     'inflated',
+                     subjects_dir=subjects_dir,
+                     figure=scene)
+brain.add_label(labels[hoge])
 source.plot(subjects_dir=subjects_dir,
                time_viewer=True,
                figure=scene)
@@ -536,14 +576,16 @@ induced_power, itc=source_induced_power(epochs,
                                         n_cycles=n_cycles,
                                         n_jobs=4)
 ```
+
 基本は以前wavelet変換で行った事に、いくつか追記するだけです。
-まず、ベースラインコレクションはここではzscoreでしています。
 やり方は色々あります。labelはfreesurferのラベルデータです。
-baseline補正の時間についてはデータの端っこすぎると値がブレるので、
-そこのところはデータ開始時点〜刺激提示の瞬間の間で適切な値にしておいてください。
 これで算出されたwavelet変換の結果の取扱は、前に書いたwavelet変換の結果と同じです。
+この関数は、割り算のあとwavelet変換してるのではなくて、
+wavelet変換したあと割り算してるっぽいです。[^yonda]
 
 [^gekiomo]:labelを選ばない場合これは激重です。何故なら306チャンネルのMEGからソースに落とし込むと計算方法によっては10000チャンネルくらいになります。ROIを絞ったとしても「人数×タスク×ROIの数×EPOCHの数」回wavelet変換してpowerとitcに落とし込むのですから…途方もない計算量です。labelを選びましょう。
+
+[^yonda]: 僕がソースコードを読んで知ったので、読み損ないはあるかも？
 
 ### その後のお楽しみ2、ソースベースconnectivity
 

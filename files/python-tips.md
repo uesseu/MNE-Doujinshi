@@ -13,7 +13,7 @@ MNEpythonではrawオブジェクト辺りで割とできる感じです。実�
 
 ```{frame=single}
 from mne.io import Raw
-Raw('hoge.fif').filter(1,100).notch_filter(60).save('fuga.fif')
+Raw('hoge.fif').filter(1, 100).notch_filter(60).save('fuga.fif')
 ```
 
 どんだけ略してんだよ！というくらい略されてますね。
@@ -30,13 +30,15 @@ rawはrawとしてどっしり構えてもらって、
 
 ```{frame=single}
 raw2 = raw.copy()
+raw3 = raw2.filter(1, 100)
+raw4 = raw3.notch_filter(60)
 ```
 これでrawのcopyが出来ましたね。しかし、どうも変数が多くなります。
 raw2, raw3, raw4と作るうちにraw∞とかなって死にます。
 それの対策にはメソッドチェーンがいい味を出すと思っています。
 
 ```{frame=single}
-filtered = raw.copy().filter(1,100).notch_filter(60)
+filtered = raw.copy().filter(1, 100).notch_filter(60)
 ```
 raw2など要らなかった。
 
@@ -111,7 +113,7 @@ filter関数はlistやtupleの中で、条件に合うやつだけを抜き出�
 from os.path import exists
 
 file_list = ['hoge', 'fuga', 'piyo']
-fnames = list(filter(lambda fname: exists(fname), file_list))
+fnames = list(filter(exists, file_list))
 ```
 これで存在するものだけを読み込めます！
 成功例のみ続けていけますね！
@@ -125,7 +127,7 @@ epochsとかのオブジェクトにはたいていfilename的なメンバー変
 MNE使う時は割と関数型パラダイムは有効です。
 ただ、気をつけて下さい。
 mapとかfilterとかは一度値を取り出すと空っぽになります。
-listとかに一々保存したほうが良いでしょうね。
+使いまわす場合はlistとかに一々保存したほうが良いでしょうね。
 
 ## file名じゃなくてフォルダ名が欲しいん
 

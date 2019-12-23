@@ -3,7 +3,7 @@
 freesurferをインストールしましょう。
 下記のurlからダウンロードできます。windows版？そんなものはない。[^wsl]
 
-[^wsl]: もしどうしても君がMicrosoft帝国の一員として生きていたいならば、WSL(Windows Subsystem for Linux)を使えばいい。
+[^wsl]: もしどうしても君がWindowsを使わねばならぬならWSL(Windows Subsystem for Linux)を使えばいいかもしれない。
 
 ```
 https://surfer.nmr.mgh.harvard.edu/fswiki/DownloadAndInstall
@@ -45,6 +45,11 @@ export SUBJECTS_DIR=hoge
 最後にライセンスキーを入れましょう。
 freesurferの公式サイトに登録して、ライセンスキーをメールでもらい、
 freesurferのディレクトリに突っ込みます。
+
+あと、忌々しい事に、Ubuntu18.04以降ではfreesurferの一部である
+freeviewを起動するときに「libpng12がない」と怒られます。
+Ubuntu18のリポジトリにはないので、仕方ないので古いリポジトリからくすねます。
+https://packages.ubuntu.com/xenial/amd64/libpng12-0/download
 
 面倒いので、あとはfreesurferのサイトを読んで下さい。
 

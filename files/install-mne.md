@@ -95,6 +95,7 @@ MNEの環境が複数欲しくなることもあると思います。
 ```{frame=single}
 name: mne
 ```
+
 とあると思うので、単純にこいつを別の名前に変えてから
 続きのコマンドを叩いていけばいいだけです。
 
@@ -106,6 +107,8 @@ jupyterを使うのであれば、上記の環境をjupyterに登録する必要
 conda activate mne
 ```
 では、登録しましょう。下記は「今いる環境をjupyterに登録する」やつです。
+userというのは「コンピュータ全体向けじゃなくて、僕向けにやるよ」
+nameは仮想環境の名前ですね。
  
 ```{frame=single}
 ipython kernel install --user --name hoge
@@ -136,6 +139,7 @@ export DISPLAY=:0
 ```{frame=single}
 %gui qt
 ```
+
 [^cuda]:nVidiaのGPUを使った高速な計算ができる開発環境
 
 ## MNE/Cのインストール

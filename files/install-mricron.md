@@ -14,8 +14,14 @@ MRIの形式の変換に大変有用です。
 ここからダウンロード出来ます。
 [http://www.mccauslandcenter.sc.edu/mricrogl/](http://www.mccauslandcenter.sc.edu/mricrogl/)
 
+ちなみに、debian系linuxは神なので、Ubuntuなら下記で大丈夫です。
+
+```{frame=single}
+sudo apt install dcm2niix
+```
+
 以上でfreesurfer/MNE/pythonのインストールは終了しました。
-これでjupyter経由でゴリゴリ計算していくことができます。
+これでゴリゴリ計算していくことができます。
 
 
 ## mricronによるMRIのファイルの変換
