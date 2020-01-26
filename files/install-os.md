@@ -1,7 +1,7 @@
 
+\newpage
 ## OSの準備
-OSはlinuxかMACが普通と思います、windowsではどうなのでしょう？
-MNEpythonは動きます。
+OSはlinuxかMACが普通と思います、windowsではどうなのでしょう？MNEpythonは動きます。
 Unix系コマンドラインツールは動きません。freesurferは辛いです。
 WSL2というlinux互換機能の実力を僕は知らないのでなんとも…
 というわけで、僕は新しめのdebian系linuxディストリビューションである

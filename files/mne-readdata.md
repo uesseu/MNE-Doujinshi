@@ -1,8 +1,8 @@
+\newpage
 
 ## データの読み込みとフィルタリング・リサンプル(公式サイト版)
 
-ついに　MNEを使い始めます。
-まずは下記リンクを開けてください。
+ついに　MNEを使い始めます。まずは下記リンクを開けてください。
 [http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filtering.html](http://martinos.org/mne/stable/python_reference.html
 )
 ちょっと小難しい文法を使っているように見えます。
@@ -75,7 +75,7 @@ ERPをする時は遅い周波数成分を除去するときは注意が必要�
 ここでは100Hzまで下げていますが、最低見たい周波数の2〜3倍以上の周波数が必要です。
 また、周波数は元の周波数の約数である必要があります。
 
-以上…MNEの公式サイトは一寸詳しいです。僕にはちょっとつらかったですね…。
+以上…MNEの公式サイトは一寸詳しいです。ちょっとつらかったですね…。
 
 ## データの読み込みとfilter,resample(僕の解説)
 
@@ -93,8 +93,7 @@ raw.resample(sfreq=100)    #100Hzにリサンプルする
 raw.save('fuga')
 ```
 
-ちなみに、第0段階があります。
-それはbadchannnelの指定、interpolation、maxfilter等ですが、
+ちなみに、第0段階があります。それはbadchannnelの指定、interpolation、maxfilter等ですが、
 とりあえず読めなきゃ話にならないので。
 
 - 1行目で読み込みます。脳波と脳磁図では読み込み方が違うので、次セクションを参照。
@@ -194,12 +193,16 @@ macやlinuxの人はコンパイルしてください。
 まず、xcodeをapp_storeからインストールします。
 そして、homebrewをインストールします。ググってください。
 その上で、下記のようにしてgitとqtをインストールします。
+```{frame=single}
 brew install qt
 brew install git
+```
 そして、ソースコードをダウンロードします。
 ソースコードのフォルダの中で、
+```{frame=single}
 qmake
 make
+```
 とすると、バイナリが出来上がります。
 
 ### 脳波のセンサーの位置が変則的な場合

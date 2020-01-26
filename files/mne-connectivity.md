@@ -1,3 +1,4 @@
+\newpage
 
 ## Connectivity
 
@@ -92,8 +93,7 @@ cons = sc(epochs, method=’coh’, indices=None,
 - n_tapers: multitaperの時だけnullとして出力
  DPSSという値が格納されます。
 
-上記のコードではconsという変数にタプルを入れているので、
-cons[0]がcon、cons[2]がtimesです。
+上記のコードではconsという変数にタプルを入れているので、cons[0]がcon、cons[2]がtimesです。
 
 この中で大事なのはconです。何故なら、これが結果だからです。
 conの中で一番大事なのは中に入っている三角行列です。

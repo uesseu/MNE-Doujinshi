@@ -1,4 +1,5 @@
 
+\newpage
 # maxfilterのインストール(elektaのやつ)
 
 maxfilterというフィルタがMEG研究ではほぼ必須です。
@@ -6,8 +7,7 @@ maxfilterというフィルタがMEG研究ではほぼ必須です。
 
 これについてはMNEpythonにもあるのですが、elekta社のmaxfilterもあります。
 一長一短ですが、何も考えずに使うならelekta社でしょうか…。
-僕は以前はelektaのを使っていましたが、最近MNEに移行しました。
-MNEのは後で解説します。
+僕は以前はelektaのを使っていましたが、最近MNEに移行しました。MNEのは後で解説します。
 
 それぞれの特徴としては
 Elekta版

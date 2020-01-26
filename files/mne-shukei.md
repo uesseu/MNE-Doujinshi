@@ -1,3 +1,4 @@
+\newpage
 
 ## データの集計について
 
@@ -22,6 +23,7 @@ evoked.data.shape
 ```
 
 とすればデータの構造が確認できます。
+この場合は[チャンネル、時間]になろうかと思います。
 
 データの構造としてはこんな感じのようです。括弧がついているのはオブジェクト内の関数です
 
@@ -43,19 +45,20 @@ object.save(filename)
 | 形式   | 読み込み関数                   | 備考                                      |
 | --     | --                             | --                                        |
 | raw    | mne.io.Raw()                   | 脳磁図の場合。脳波とかは公式サイトAPI参照 |
+| raw    | mne.io.read_raw_hoge()         | 様々な形式のがある。hogeは読み替えてね。  |
 | epochs | mne.read_epochs()              |
-| evoked | mne.read_evoked()              | 条件によって配列で返されることあり        |
-| itc    | mne.time_frequency.read_tfrs() | 条件によって配列で返されることあり        |
-| power  | mne.time_frequency.read_tfrs() | 条件によって配列で返されることあり        |
+| evoked | mne.read_evoked()              | 条件によってlistで返されることあり            |
+| itc    | mne.time_frequency.read_tfrs() | 条件によってlistで返されることあり            |
+| power  | mne.time_frequency.read_tfrs() | 条件によってlistで返されることあり            |
 
 例えば
 
 ```{frame=single}
-itc=mne.time_frequency.read_tfrs('/home/hoge/piyo')[0]
+itc = mne.time_frequency.read_tfrs('/home/hoge/piyo')[0]
 ```
 
 という感じで読み込みます。行の最後についている[0]は上記のごとく
-条件によって配列で返されることがある関数だからです。この場合は行列として返されます。
+条件によってlistで返されることがある関数だからです。
 そうじゃない関数の場合は[0]は不要です。実際に手を動かして練習すればわかると思います。
 
 さて、実データのみではサンプリング周波数やチャンネルの名前が分からず
@@ -81,6 +84,14 @@ foo番目からbar番目(秒×サンプリング周波数)の反応までの
 itc.data[hoge, huga:piyo, foo:bar]
 ```
 
+何番目ってアレですね…なら、fooとbarを秒単位にして、こうしましょう。
+
+```{frame=single}
+sfreq = 1000
+itc.data[hoge, huga: piyo, foo / sfreq: bar / sfreq]
+```
+
+
 です。ちなみに、wavelet変換時にdecimの値を設定している場合は
 (秒×サンプリング周波数/wavelet変換のdecimの値)となります。
 APIページでtime_frequency.tfr_morlet()関数をご参照ください。
@@ -96,8 +107,7 @@ np.mean(itc.data[hoge, huga:piyo, foo:bar])
 
 3はpythonの基本構文通りなので解説しません。
 4はどのようにしたいかは人によって違うかと思います。
-最近は僕は単純にcsv形式に書き出しています。
-pandasなんかはとても素敵です。
+最近は僕は単純にcsv形式に書き出しています。pandasなんかはとても素敵です。
 numpyでも普通のlistでもcsvに変換してくれます。こうすればいいです。
 
 ```{frame=single}

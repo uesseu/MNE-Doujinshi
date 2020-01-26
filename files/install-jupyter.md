@@ -1,4 +1,5 @@
 
+\newpage
 # 開発環境の準備（脳波、脳磁図の場合。出来るだけリッチに。）
 
 - freesurferだけ使う人は開発環境は要りません。読み飛ばして下さい。
@@ -40,8 +41,7 @@ anacondaにjupyterというrepl[^repl]とspyderというIDE[^ide]が付いてき
 
 ### jupyter, ipython
 replというか、shellと言うかちょっと珍しい開発環境です。
-これだけで完結することも出来なくはないレベルの開発環境です。
-強みとしては
+これだけで完結することも出来なくはないレベルの開発環境です。強みとしては
 
 - webベースなので遠隔操作可能
 - cythonやRといった他言語との連携が容易
@@ -71,7 +71,6 @@ python用ではありませんが、プラグインを入れてpythonのIDEと�
 弱み
 
 - テキストエディタの動作が遅い
-- テキストエディタがクラッシュする
 - テキストエディタのサイズがでかい
 - テキストエディタがメモリを食う
 
@@ -80,10 +79,8 @@ python用ではありませんが、プラグインを入れてpythonのIDEと�
 - anaconda
 - vscode
 - jupyter
-という組み合わせです。
-mneのインストールはanacondaに任せちゃいます。
-基本はvisual studio codeでスクリプトを書きますが、
-状況に応じてjupyterでチェックしたりします。
+という組み合わせです。mneのインストールはanacondaに任せちゃいます。
+基本はvisual studio codeでスクリプトを書きますが、状況に応じてjupyterでチェックしたりします。
 
 え？僕ですか？僕はpyenv/poetryとvimでやっています。
 (初心者はとっつきにくいのでおすすめしないけど、僕はいいと思うよ)
@@ -109,8 +106,7 @@ bash Anaconda3-hoge-Linux-x86_64.sh
 気持ち悪くて死ぬ人はpipenvでも使って下さい。
 
 ## jupyterの設定
-jupyterを使うなら、折角なので拡張しておきましょう。
-ターミナルで下記を叩いてください。
+jupyterを使うなら、折角なので拡張しておきましょう。ターミナルで下記を叩いてください。
 
 ```{frame=single}
 conda install -c conda-forge jupyter_contrib_nbextensions
@@ -131,15 +127,13 @@ jupyter上に直接出力したい時
 %matplotlib inline
 ```
 
-python2環境下で別ウィンドウで表示したい時
-これはスクロールが必要な時に便利です。
+python2環境下で別ウィンドウで表示したい時これはスクロールが必要な時に便利です。
 
 ```{frame=single}
 %matplotlib qt
 ```
 
-python3環境下で別ウィンドウで表示したい時
-python3とpython2は使うqtのバージョンが違うので
+python3環境下で別ウィンドウで表示したい時python3とpython2は使うqtのバージョンが違うので
 qt5が必要になります。
 
 ```{frame=single}

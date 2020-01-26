@@ -1,4 +1,4 @@
-
+\newpage
 # おすすめの参考書
 ステルスマーケティングです。
 
@@ -68,7 +68,7 @@
 [twitter http://twitter.com](http://twitter.com)
 twitterかよ！と思われるかもですが、学者さんのアカウント、雑誌のアカウント
 開発者さんのアカウントは極めて有用かつ濃密です。
-カジュアルな感じですが炎上には気をつけましょう。
+カジュアルな感じですが、酔っ払って書き込んで炎上させるのには気をつけましょう。
 
 [github https://github.com](https://github.com)
 プログラマ用SNSの中でも最も有名なものでしょう。
@@ -103,7 +103,6 @@ word、LaTeX、PDF、HTML等、あらゆる形式に変換してくれるので�
 何故これを勧めるかって？JupyterやGithubはmarkdownを多用するからだよ。
 
 # 参考文献
-(まだ途中です…)
 - Gramfort, M. Luessi, E. Larson, D. Engemann, D. Strohmeier, C. Brodbeck, R. Goj, M. Jas, T. Brooks, L. Parkkonen, M. Hämäläinen, MEG and EEG data analysis with MNE-Python, Frontiers in Neuroscience, Volume 7, 2013, ISSN 1662-453X
 - Margherita Lai, Matteo Demuru, Arjan Hillebrand, Matteo Fraschini, A Comparison Between Scalp- And Source-Reconstructed EEG Networks
 - Gramfort, M. Luessi, E. Larson, D. Engemann, D. Strohmeier, C. Brodbeck, L. Parkkonen, M. Hämäläinen, MNE software for processing MEG and EEG data, NeuroImage, Volume 86, 1 February 2014, Pages 446-460, ISSN 1053-8119

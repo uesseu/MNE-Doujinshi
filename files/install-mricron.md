@@ -1,4 +1,5 @@
 
+\newpage
 # mricron/crogl(MRIを使う場合)
 
 mricronが必要になることもあるので、入れましょう。UBUNTUなら
@@ -10,8 +11,7 @@ MACならhttp://www.mccauslandcenter.sc.edu/crnl/mricron/から
 MRIの形式の変換に大変有用です。
 
 さて、今はより新しいやつがあります。mricroglというやつです。
-これはたまにmricronでは変換できないものを変換することが出来ます。
-ここからダウンロード出来ます。
+これはたまにmricronでは変換できないものを変換することが出来ます。ここからダウンロード出来ます。
 [http://www.mccauslandcenter.sc.edu/mricrogl/](http://www.mccauslandcenter.sc.edu/mricrogl/)
 
 ちなみに、debian系linuxは神なので、Ubuntuなら下記で大丈夫です。

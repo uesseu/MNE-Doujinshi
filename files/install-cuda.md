@@ -1,9 +1,9 @@
 
+\newpage
 ## CUDA
 CUDAをご存知でしょうか？
 GPUを科学計算に用いる方法の1つで、Nvidia社が開発しているものです。
-GPGPUと呼ばれる技術の一種ですね。
-これはMNEpythonでも使うことが出来るので、やってみましょう。
+GPGPUと呼ばれる技術の一種ですね。これはMNEpythonでも使うことが出来るので、やってみましょう。
 つっても、今の所フィルター関連だけなんですけどね…
 しかもあまり速くない上に、Ubuntuの新しいやつでドライバが動かないとか
 そういうツラミが出てきていてあまりおすすめではないです。
@@ -27,8 +27,7 @@ sudo apt-get update
 sudo apt-get install cuda
 ```
 
-こんな感じのがあるはずなので、実行して下さい。
-もちろん、バージョンとかは読み替えるべし。
+こんな感じのがあるはずなので、実行して下さい。もちろん、バージョンとかは読み替えるべし。
 そして、これが大事なのですが、bashrcにパスを通す必要があります。
 これはCUDAのインストールガイドに書いてあります。
 インストールガイドへのリンクは先程の説明の下に小さく書いてあります。
@@ -39,8 +38,7 @@ export PATH=/usr/local/cuda-9.1/bin${PATH:+:${PATH}}
 export LD_LIBRARY_PATH=/usr/local/cuda-9.1/lib64\
       ${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ```
-これでCUDAへのリンクが貼れたはずです。
-bashを再起動しましょう。
+これでCUDAへのリンクが貼れたはずです。bashを再起動しましょう。
 MNEpythonのCUDAインストールのページに従ってコマンドを叩きます。
 http://martinos.org/mne/stable/advanced_setup.html#advanced-setup
 
@@ -57,16 +55,14 @@ git clone https://github.com/lebedov/scikit-cuda.git
 cd scikit-cuda
 python setup.py install
 ```
-これでインストールできてたら成功です。
-pythonで
+これでインストールできてたら成功です。pythonで
 
 ```{frame=single}
 import mne
 mne.cuda.init_cuda()
 ```
 としたらEnabling CUDA with 1.55 GB available memory...
-的なメッセージが出たりします。
-そして、一番確実なのはMNEpythonに付属した
+的なメッセージが出たりします。そして、一番確実なのはMNEpythonに付属した
 テストツールを回してみることです。
 
 ```{frame=single}
@@ -76,5 +72,4 @@ pytest test_filter.py
 場所的にはanacondaの中のlib/python3/site-package/mne/tests
 的な場所にあると思うのですが、環境によって違うかもです。
 このテストがエラーを吐かなければ…おめでとうございます！
-貴方はMNEpythonをCUDAで回すことが出来ます！
-つっても、今の所フィルター関連だけなんですけどね…
+貴方はMNEpythonをCUDAで回すことが出来ます！つっても、今の所フィルター関連だけなんですけどね…

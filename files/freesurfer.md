@@ -1,4 +1,4 @@
-
+\newpage
 # freesurferを使う(MRI)
 
 ターミナル使える人のためのTLDR;
@@ -32,25 +32,40 @@ recon-all -i ./hoge.nii -subject (患者番号) -all
 かかりすぎですね？下記で4コア並列できます。
 
 ```{frame=single}
-recon-all -i ./hoge.nii -subject (患者番号) -all -parallel
+recon-all -i ./hoge.nii -subject (患者番号) -all -parallel -openmp 4
 ```
 
-さらに、-openmpとつけてやるともっと並列化されますが、言うほど速くなるかなぁ？
+…言うほど速くなるかなぁ？
 
-やっている事は、頭蓋骨を取り除き、皮質の厚さやボリュームの測定、標準脳への置き換え、
+で、やっている事は、頭蓋骨を取り除き、皮質の厚さやボリュームの測定、標準脳への置き換え、
 皮質の機能別の色分け等、色々な事をしてます。詳しくはfreesurferのサイトを見て下さい。
 
 ## recon-all同時掛け(freesurfer)
 
-recon-allはマルチスレッドで処理をすることができます。
-しかし、効率はあまり良くないです。[^openMP]
-つまり、マルチコア機なら一例ずつマルチプロセスでかけるより、
+recon-allはマルチスレッドで処理をすることができます。しかし、効率はあまり良くないです。[^openMP]
+つまり、マルチコア機なら一例ずつマルチスレッドでかけるより、
 同時多数症例をシングルプロセスで掛かける方が速く済みます。
 ターミナルを沢山開いて処理させたりすると速いですが煩雑です。
 なので、スクリプトを書いて自動化することをおすすめします。
+
 MNEpythonを使う人はプログラミングの習得は必須なので良いとして、
 freesurferしか使わない人でもスクリプトは書けるようになる方が便利です。
 僕のおすすめはpython、shのいずれかです。[^usingfs]
+下記はshの一例です。
+
+```{frame=single}
+recon-all -i ./hoge1.nii -subject (患者番号1) -all &
+recon-all -i ./hoge2.nii -subject (患者番号2) -all &
+recon-all -i ./hoge3.nii -subject (患者番号3) -all &
+recon-all -i ./hoge4.nii -subject (患者番号4) -all 
+```
+こんな感じでテキストファイルにして、'hoge.sh'とでも名付けます。
+で、以下のとおりです。
+
+```{frame=single}
+sh hoge.sh
+```
+
 
 [^openMP]: 理由はopenMPというライブラリを使った並列化だからです。openMPはマルチスレッドを簡単に実装する優れたライブラリなのですが、メモリの位置が近い場合にスレッド同士がメモリ領域の取り合いをしてしまうため速度が頭落ちになるのです。このケースではマルチスレッドよりシングルプロセスをいっぱい並べる方が良いように思います。
 [^usingfs]: ちなみに、僕はvimmerなのでvimを使ってshを直書きしています。vimでシェルを扱うときの必殺技があるのです。ですが、本書はvimの本ではないので書きませんｗｗｗｗｗｗ
@@ -104,8 +119,7 @@ python3を使っている人はたまーにエラーを吐くかもしれませ�
 
 ## 画像解析の修正
 
-個別な修正はfreeviewを用いてすることになります。
-下記を参照して下さい。
+個別な修正はfreeviewを用いてすることになります。下記を参照して下さい。
 [Tutorials http://freesurfer.net/fswiki/Tutorials](http://freesurfer.net/fswiki/Tutorials)
 
 このfreesurferのサイトには、説明用のスライドと動画があり、とてもいいです。
@@ -124,6 +138,7 @@ python3を使っている人はたまーにエラーを吐くかもしれませ�
 
 これは、問題にぶつかった時に上記サイトのスライドでも見ながら頑張るのが良いと思います。
 皮髄境界などはfreesurferは苦手としているそうです。
+![freeviewによる編集](img/freeview2.png){width=14cm}
 
 ### SkullStripのエラー
 
@@ -140,18 +155,16 @@ Brush value を255、Eraser valueを1にしてRecon editing
 shiftキーを押しながらマウスをクリックして脈絡叢を消していきます。編集がおわったら
 
 ```{frame=single}
-recon-all  -s <subject>   -autorecon-pial
+recon-all -s <subject> -autorecon-pial
 ```
 とします。
-
-![freeviewによる編集](img/freeview2.png){width=14cm}
 
 ### 眼球が白質と間違われた時
 
 上記と同様にして、編集がおわったら
 
 ```{frame=single}
-recon-all   -s <subject>  -autorecon2-wm   -autorecon3
+recon-all -s <subject> -autorecon2-wm -autorecon3
 ```
 
 ### 頭蓋骨と間違って脳をえぐっているとき
@@ -159,7 +172,7 @@ recon-all   -s <subject>  -autorecon2-wm   -autorecon3
 頭蓋骨と間違って脳実質まで取られた画像が得られた場合は
 
 ```{frame=single}
-recon-all  -skullstrip  -wsthresh 35  -clean-bm  -no-wsgcaatlas  -s <subj>
+recon-all -skullstrip -wsthresh 35 -clean-bm -no-wsgcaatlas -s <subj>
 ```
 で調整します。この-wsthreshがwatershedmethodの閾値です。
 標準は25なのですが、ここではあまり削り過ぎないように35にしてます。
@@ -186,5 +199,32 @@ Control pointsを選んでOKして、選ばれるべきだった白質を
 クリックしていきます。そして下記でいいそうです。
 
 ```{frame=single}
-recon-all   -s <subject>   -autorecon2-cp   -autorecon3
+recon-all -s <subject> -autorecon2-cp -autorecon3
 ```
+
+### なんか、コマンド難しくて死にたくなるな？
+ああ！もう！シェルスクリプト作っちまえ！
+
+```{frame=single}
+recon-me () {
+  recon-all -s $1 -autorecon2-wm -autorecon3
+}
+
+recon-myaku () {
+  recon-all -s $1 -autorecon-pial
+}
+
+recon-hone () {
+  recon-all -skullstrip -wsthresh $2 -clean-bm -no-wsgcaatlas -s $1
+}
+
+recon-gray () {
+  recon-all -autorecon2-wm -autorecon3 -subjid $1
+}
+
+recon-gray () {
+  recon-all -s $1 -autorecon2-cp -autorecon3
+}
+```
+
+これらをbashrcにでもぶち込んでおけば良いんじゃないかな？

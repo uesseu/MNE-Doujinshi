@@ -1,4 +1,5 @@
 files = files/introduction.md \
+  files/review.md \
   files/install-hardware.md \
   files/install-os.md \
   files/install-jupyter.md \
@@ -28,7 +29,8 @@ files = files/introduction.md \
   files/speedup-python.md \
   files/graph.md \
   files/books.md \
-  files/python-tips.md
+  files/python-tips.md \
+  files/atogaki.md
 
 outfile = out.pdf
 outhtml = out.html
@@ -37,17 +39,18 @@ latex_twoside = -V documentclass=ltjarticle \
   -V geometry:left=3cm \
   -V geometry:right=1cm \
   -V geometry:twoside \
-  -V CJKmainfont=IPAexGothic \
+  -V CJKmainfont=IPAexGothic# \
   -V lang=en-US
 
 latex = -V documentclass=ltjarticle \
   -V geometry:left=2cm \
   -V geometry:right=2cm \
-  -V lang=en-US\
-  -V CJKmainfont=IPAexGothic
+  -V luatexjapresetoptions=hiragino-pron
+  # -V CJKmainfont=IPAexGothic \
+  #-V lang=en-US \
 
 markdown_extention = -f markdown+hard_line_breaks
-latex_packages = --listings --template eisvogel.tex
+latex_packages = --listings# --template eisvogel.tex
 writer = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
@@ -61,6 +64,7 @@ oldwriter = --toc \
 
 all: $(files)
 	pandoc -o out.pdf $(writer) $(latex_packages) $(latex) $(markdown_extention) $(files)
+	xdg-open out.pdf
 
 old: $(files)
 	pandoc -o out.pdf $(oldwriter) $(latex_packages) $(latex) $(markdown_extention) $(files)

@@ -1,3 +1,4 @@
+\newpage
 
 ## bad channelの設定
 
@@ -29,8 +30,7 @@ raw.plot()
 raw.save('hoge.fif')
 ```
 
-pythonの対話モードを使って毎回一々やっていくのは超絶面倒なので
-スクリプトにしたいかと思います。
+pythonの対話モードを使って毎回一々やっていくのは超絶面倒なのでスクリプトにしたいかと思います。
 しかし、その場合plotし終わったらすぐpythonが終了して図が即消えます。
 それを防ぐには以下の一行を入れましょう。
 
@@ -48,8 +48,7 @@ raw.interpolate_bads()
 後でbadchannelを無視したICAを掛けるとか、色々出来るわけです。
 
 ### maxfilter
-MNEpythonにmaxfilterがあります。
-MEG使いの人はこれを使うのも一つの手です。
+MNEpythonにmaxfilterがあります。MEG使いの人はこれを使うのも一つの手です。
 [https://mne-tools.github.io/stable/generated/mne.preprocessing.maxwell_filter.html](https://mne-tools.github.io/stable/generated/mne.preprocessing.maxwell_filter.html)
 
 さて、maxfilterには2つファイルが必要です。
@@ -58,8 +57,7 @@ MEG使いの人はこれを使うのも一つの手です。
 これについてはelektaの機械ならあるはずなので、そこから抜き出すといいでしょう。
 ここについては僕は詳しくないので、周囲の賢者に聞いて下さい。
 
-もう一つ、MNEのmaxfilterには特徴があって、
-badchannelを設定してあげないとうまく動きません。
+もう一つ、MNEのmaxfilterには特徴があって、badchannelを設定してあげないとうまく動きません。
 因みに、elektaのは自動でbadchannelを設定しちゃうそうです。
 
 ```python
@@ -70,8 +68,7 @@ raw = maxwell_filter(raw,calibration=cal,
                      cross_talk=cross, st_duration=10)
 ```
 このmaxwell_filter関数で行います。
-calibrationとcross_talkは見てのとおりと思いますが、
-st_durationも大事なやつです。
+calibrationとcross_talkは見てのとおりと思いますが、st_durationも大事なやつです。
 MNEpythonの標準の設定ではst_durationはNoneなのですが、
 実際は数値を設定しないと酷いことになります。
 公式サイトには「俺たちのMEGはキレイだからNoneで良いんだ」と
@@ -79,10 +76,8 @@ MNEpythonの標準の設定ではst_durationはNoneなのですが、
 大草原の小さなラボとかでないなら設定してあげましょう。
 元祖elekta maxfilterではここが10になっています。
 
-このst_durationの数字は実はhighpass filterの役割も果たします。
-だから、注意が必要です。
-1/st_duration以下の周波数がカットされるので、
-遅い周波数を見たい人は気をつけて下さい。
+このst_durationの数字は実はhighpass filterの役割も果たします。だから、注意が必要です。
+1/st_duration以下の周波数がカットされるので、遅い周波数を見たい人は気をつけて下さい。
 その他、いろいろな理由でst_durationは出来れば大きな値が良いそうですが、
 計算コストが上がるという欠点がありますので、程々に。
 
@@ -123,12 +118,10 @@ decim = 4
 random_state = 9
 ```
 
-n_componentsはICAが作る波の数です。
-ICAで作る波の数は何個が良いのか僕にはよく分かりません。
+n_componentsはICAが作る波の数です。ICAで作る波の数は何個が良いのか僕にはよく分かりません。
 多分現時点で決まりはないと思うので、ここではひとまず適当に25個にしています。
 
-methodはicaの方法です。
-方法は三種類選べます。API解説ページをご参照ください。
+methodはicaの方法です。方法は三種類選べます。API解説ページをご参照ください。
 
 decimはどの程度詳しくICAをかけるかの値です。
 数字が大きくなるほど沢山かけますが、数字を入力しなければ最大限にかけます。
@@ -186,10 +179,8 @@ random_stateを保存しておくことでICAに再現性が生まれます。
 
 ## ICAコンポーネントのより良い取り除き方
 実際に上記を手動でやるのは恣意的になったり、再現性が無かったり、
-面倒臭すぎたりして、なにより面倒くさいので僕は大嫌いです！
-(大事なことなので二回言いました)
-しかし、もっと酷い問題があります。
-それは、抜く波が恣意的になる可能性があることです。
+面倒臭すぎたりして、なにより面倒くさいので僕は大嫌いです！(大事なことなので二回言いました)
+それはともかく、抜く波が恣意的になるのはいただけません。
 例えば病人だけに出る波が欲しい時に健常者から波を抜きまくってしまう
 姑息な事をする輩が居るかも知れません。それはいただけません。
 
@@ -197,8 +188,7 @@ random_stateを保存しておくことでICAに再現性が生まれます。
 
 ### 自動判定
 眼球運動チャンネルや心電図をとっていたら、それに似てるやつを
-自動判定してくれる機能がMNE-pythonにはあります、やったね！
-やり方は以下のとおりです。
+自動判定してくれる機能がMNE-pythonにはあります、やったね！やり方は以下のとおりです。
 
 まずは、眼球運動がある場所を眼球運動によってepochを作ります。
 
@@ -208,10 +198,8 @@ from mne.preprocessing import create_eog_epochs
 eog_epochs = create_eog_epochs(raw, reject=reject)
 eog_inds, scores = ica.find_bads_eog(eog_epochs)
 ```
-簡単ですね！
-eog_indsは眼球運動に超似ているチャンネルの番号リストです。
-scoresはどれだけ似ているかの度合いです。
-とりあえず、plotしましょう。
+簡単ですね！eog_indsは眼球運動に超似ているチャンネルの番号リストです。
+scoresはどれだけ似ているかの度合いです。とりあえず、plotしましょう。
 
 ```{frame=single}
 ica.plot_scores(scores, exclude=eog_inds)
@@ -222,31 +210,26 @@ ica.plot_scores(scores, exclude=eog_inds)
 ```{frame=single}
 ica.plot_sources(eog_epochs.average(), exclude=eog_inds)
 ```
-浮き立っている度合いがわかったかと思います。
-では、詳しく見てみましょう。
+浮き立っている度合いがわかったかと思います。では、詳しく見てみましょう。
 
 ```{frame=single}
 ica.plot_properties(eog_epochs, picks=eog_inds)
 ```
-詳しいですね！
-いい感じであれば一網打尽にしてしまいましょう。
+詳しいですね！いい感じであれば一網打尽にしてしまいましょう。
 
 ```{frame=single}
 ica.exclude = eog_inds
 ica.apply()
 ```
 
-心電図については殆どこいつがecgになっただけだから、
-もう解説はしません。
+心電図については殆どこいつがecgになっただけだから、もう解説はしません。
 
 ### 半自動判定
 眼球運動チャンネルや心電図をそもそも取っていない時はどうするのでしょう？
 その時は一部のコンポーネントを「根本的なノイズだよ」と指定して、
-それに似ているコンポーネントを一網打尽にすることが出来ます。
-では、やっていきましょう。
+それに似ているコンポーネントを一網打尽にすることが出来ます。では、やっていきましょう。
 
-まずは、ICAのオブジェクトをいっぱい作ります。
-上記のICA.fit()で出来るやつですね！
+まずは、ICAのオブジェクトをいっぱい作ります。上記のICA.fit()で出来るやつですね！
 で、それらを沢山並べてリストにします。
 リストにしたものを作る時、きっと時間がかかるので、ICA.saveで保存してから
 読み込むほうが良いでしょうね。
@@ -282,8 +265,7 @@ corrmap(icas, template, threshold='auto', label=None,
 - label: 引っ掛けたやつにつけるラベルです。文字列入れて下さい。
 - ch_type: eegならeegですし、megならmagとかgradになります。
 
-だいたい、そんな感じです。
-corrmapをplot=Trueの条件でかけると、
+だいたい、そんな感じです。corrmapをplot=Trueの条件でかけると、
 いっぱい似てるやつが引っかかってきます。
 labelに何か入れていれば、icaにラベルがつきます。
 ica.labels_に格納されており、labelの情報は辞書形式です。
@@ -292,15 +274,14 @@ ica.labels_に格納されており、labelの情報は辞書形式です。
 {'eog': [1], 'ecg': [2]}
 ```
 
-この例では、labelを'eog'と'ecg'の二回分corrmapをまわした
-ときの結果みたいなもんですな！
+この例では、labelを'eog'と'ecg'の二回分corrmapをまわしたときの結果みたいなもんですな！
 
 どの程度の閾値にすれば適切か分かんないので試行錯誤しましょう。
 corrmapは違うラベルでやれば、違うラベルがどんどん追加されていきます。
 
 ところで、ラベルに情報が入っても、print(ica.labels_)みたいに
-しないと貴方はそれを見れません。plotしてくれないのです…
-これでは実際のsourcesがどんな感じか分かりませんね？
+しないと貴方はそれを見れません。
+plotしてくれないのです…これでは実際のsourcesがどんな感じか分かりませんね？
 
 ```{frame=single}
 raw = Raw('hoge.fif')  # ダメな例
@@ -309,10 +290,8 @@ icas[0].plot_sources(raw)
 
 labelに情報が入るだけなのでこのままではダメです。
 
-こんな感じです。
 ica.excludeはList形式なのでこれをどうにかしたいですね。
-まぁ、せいぜい工夫して下さい。
-僕ならこうします。
+まぁ、せいぜい工夫して下さい。僕ならこうします。
 
 ```{frame=single}
 from operator import add
@@ -323,8 +302,7 @@ ica.exclude = list(set(reduce(add, ica.labels_.values())))
 
 setは重複のない値を格納するオブジェクト、reduceは調べて下さい。
 
-python初学者は面食らうやり方ですね。
-こういう風にベタにかいてもいいですね。
+python初学者は面食らうやり方ですね。こういう風にベタにかいてもいいですね。
 
 ```{frame=single}
 for n in ica.labels_.values():
@@ -332,19 +310,16 @@ for n in ica.labels_.values():
         ica.exclude += n
 ```
 
-こうしてやればplot_sourcesしたときに悪いコンポーネントは
-赤く表示できるようになります。
+こうしてやればplot_sourcesしたときに悪いコンポーネントは赤く表示できるようになります。
 
 いい感じであればicaを保存するといいでしょう。
 良くない感じなら閾値を変えたりチャンネル変えたりしてやり直しです。
-このやり方をする時のコツとしては、
-「こいつこそが典型的な眼球運動だ！」という奴を選ぶことと、
+このやり方をする時のコツとしては、「こいつこそが典型的な眼球運動だ！」という奴を選ぶことと、
 HighpassFilterを掛けた上で作業を行うことです。
 
 ## EpochとEvoked
 
-初心者にはなんのことやら分かりにくい単語ですが、
-波形解析には重要な用語です。
+初心者にはなんのことやら分かりにくい単語ですが、波形解析には重要な用語です。
 epochは元データをぶつ切りにしたものです。
 元データ(raw)に「ここで刺激したよ！」という印を付けておいて、
 後からその印が入っているところだけ切り出してきます。
@@ -357,8 +332,7 @@ evokedは切り出したものを加算平均したものです。
 events=mne.find_events(raw)
 ```
 
-このevents情報からほしいものを抜き出してきて、
-epochやevokedを作ります。
+このevents情報からほしいものを抜き出してきて、epochやevokedを作ります。
 上記eventsの内容は例えばこうなります。
 
 ```{frame=single}
