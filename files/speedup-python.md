@@ -98,5 +98,28 @@ with Pool(4) as p:
 print(result)
 ```
 
-良いですね！これで君のpythonはコア数に比例するスピードを得たのであります。
+良いですね！これで君のpythonはコア数に比例するスピードを得たのであります。[^pymulti]
+
+[^pymulti]: 実際はオーバーヘッドがあるので比例まではしない。
+
+## OPENMPのオーバーヘッド対策
+並列化にも色々あります。numpy内部でも並列化がされているのですが、
+並列化自体のオーバーヘッドもあります。
+mne-pythonを使う時、numpyで並列化出来ない部分は多いです。
+上記のやり方で手動で並列化する場合、
+numpy内部で並列化しないほうが速い状況もあるでしょう。
+だから、マルチスレッドを切っておく方法を書きます。
+
+bashrcに以下のように書くか
+
+```{frame=single}
+export OMP_NUM_THREADS=1
+```
+
+pythonで以下のように書くかです。
+
+```{frame=single}
+from os import environ
+environ['OMP_NUM_THREADS'] = str(1)
+```
 

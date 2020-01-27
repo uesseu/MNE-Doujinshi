@@ -150,7 +150,7 @@ Freesurferは脳だけを解析するためにSkull Stripという作業をし�
 
 ### 脈絡叢の巻き込み
 
-脈絡叢を巻き込んでいる場合はbrainmask.mgzを編集します。
+脈絡叢(血管の束とか)を巻き込んでいる場合はbrainmask.mgzを編集します。
 Brush value を255、Eraser valueを1にしてRecon editing
 shiftキーを押しながらマウスをクリックして脈絡叢を消していきます。編集がおわったら
 
@@ -203,7 +203,7 @@ recon-all -s <subject> -autorecon2-cp -autorecon3
 ```
 
 ### なんか、コマンド難しくて死にたくなるな？
-ああ！もう！シェルスクリプト作っちまえ！
+「ああ！もう！シェルスクリプト作っちまえ！」と思いましたので、一筆。
 
 ```{frame=single}
 recon-me () {

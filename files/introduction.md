@@ -10,10 +10,14 @@
 さぁ、MNE/python、freesurferの世界で良い生活を送りましょう！
 
 ## 本書の目的・限界・対象者・使い方
-MNE/pythonやfreesurferを用いて脳内の電源推定…特にソースベース解析を行うための
+MNE/python[^about-mne][^about-mne2]やfreesurfer[^about-freesurfer]を用いて脳内の電源推定…特にソースベース解析を行うための
 解析環境の構築と解析の基礎を概説します。可能な限り効率的な解析環境を構築し、楽をします。
 僕が個人的に考えている事もちょくちょく書きます。
 僕はelekta社のMEGを使っているのでelekta前提で書きます。
+
+[^about-mne]:Gramfort, M. Luessi, E. Larson, D. Engemann, D. Strohmeier, C. Brodbeck, R. Goj, M. Jas, T. Brooks, L. Parkkonen, M. Hämäläinen, MEG and EEG data analysis with MNE-Python, Frontiers in Neuroscience, Volume 7, 2013, ISSN 1662-453X
+[^about-mne2]:Gramfort, M. Luessi, E. Larson, D. Engemann, D. Strohmeier, C. Brodbeck, L. Parkkonen, M. Hämäläinen, MNE software for processing MEG and EEG data, NeuroImage, Volume 86, 1 February 2014, Pages 446-460, ISSN 1053-8119
+[^about-freesurfer]:https://surfer.nmr.mgh.harvard.edu/fswiki/FreeSurferWiki
 
 本書の限界は僕のスキル不足と、これが同人誌であること、
 MNE自体の進化のスピードが光の速さであることです。
