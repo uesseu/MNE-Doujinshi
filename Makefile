@@ -45,16 +45,16 @@ latex_twoside = -V documentclass=ltjarticle \
 latex = -V documentclass=ltjarticle \
   -V geometry:left=2cm \
   -V geometry:right=2cm \
-  -V luatexjapresetoptions=hiragino-pron
-  # -V CJKmainfont=IPAexGothic \
+  -V CJKmainfont=IPAexGothic 
+  #-V luatexjapresetoptions=hiragino-pron \
   #-V lang=en-US \
 
 markdown_extention = -f markdown+hard_line_breaks
-latex_packages = --listings# --template eisvogel.tex
+latex_packages = --listings --template eisvogel.tex
 writer = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
-    --indented-code-classes=python,bas \
+    --indented-code-classes=python,bash \
     --latex-engine=lualatex
 oldwriter = --toc \
     --toc-depth=3 \

@@ -1,5 +1,4 @@
 \newpage
-ここは正確じゃなかったので一旦削除
 
 # ソースベース解析の理屈
 かなり面倒いので丁寧にはかけません。ここからは線形代数の範囲になります。
@@ -125,8 +124,7 @@ Wが、例えばXの振幅の予測値ならば
 $$ \hat L= tr((Y^T - X^TA^T)(Y - AX)) + \lambda tr(X^TW^TWX)$$
 $$=tr(Y^TY - X^TA^TY - Y^TAX + X^TA^TAX) + \lambda tr(X^TW^TWX)$$
 ここで、微分します。
-$$\frac{\partial \hat L}{\partial X} =
- - 2A^TY + 2 A^TAX + 2 \lambda W^TWX= 0$$
+$$\frac{\partial \hat L}{\partial X} = - 2A^TY + 2 A^TAX + 2 \lambda W^TWX= 0$$
 
 $$-A^TY + A^TAX + \lambda W^TWX = 0$$
 $$X = (A^TA + \lambda W^TW)^{-1}A^TY$$
@@ -243,7 +241,7 @@ $A^\dagger$は縦がチャンネル数、横がソース数の行列になるは
 $||A^\dagger Y (YA^\dagger)^T||$ と言う感じの形になるはずです。
 
 つまり
-$$ = \sqrt{||A^\dagger x||^2} = \sqrt{}$$
+$$\sqrt{||A^\dagger C(A^\dagger)^T||^2} $$
 となります。これで割るわけです。だから、こうなります。
 
 $$X =||A^\dagger C(A^\dagger)^T||^{-1/2} A^\dagger Y $$
@@ -279,10 +277,10 @@ $\Sigma$はソースの分散みたいなものですね。(こんな風にな�
 つまり、こうなって欲しいんやって。
 
 $$ A^T(A\Sigma^{-1}A^T + \lambda ^2 C)^{-1}A = \Sigma^2$$
-$$ \sqrt{A^T(A\Sigma^{-1}A^T + \lambda ^2 C)^{-1}A} = \Sigma$$
+$$\sqrt{A^T(A\Sigma^{-1}A^T + \lambda ^2 C)^{-1}A} = \Sigma$$
 
 1. まず、$\Sigma$を計算します。一寸ズレてます。
-1. 次に、 $ \sqrt{A^T(A\Sigma^{-1}A^T + \lambda ^2 C)^{-1}A}$を計算します。
+1. 次に、 $\sqrt{A^T(A\Sigma^{-1}A^T + \lambda ^2 C)^{-1}A}$を計算します。
 1. 2を新しい$\Sigma$として、以下無限ループ。
 
 はい、eLORETAです。一応、eLORETAって探索的に場所を特定していくのに向いているらしいっす。
