@@ -55,12 +55,12 @@ writer = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
     --indented-code-classes=python,bash \
-    --latex-engine=lualatex
+    --pdf-engine=lualatex
 oldwriter = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
     --indented-code-classes=python,bas \
-    --latex-engine=lualatex
+    --pdf-engine=lualatex
 
 all: $(files)
 	pandoc -o out.pdf $(writer) $(latex_packages) $(latex) $(markdown_extention) $(files)
