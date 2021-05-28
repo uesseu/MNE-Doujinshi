@@ -6,7 +6,7 @@
 anacondaが嫌いな人(結構いらっしゃるかと思います)は既に十分な
 知識をお持ちのことと思います。
 公式サイトに設定用のyamlファイルがあります。
-[MNE http://martinos.org/mne/stable/install_mne_python.html](http://martinos.org/mne/stable/install_mne_python.html)
+[https://raw.githubusercontent.com/mne-tools/mne-python/main/environment.yml](https://raw.githubusercontent.com/mne-tools/mne-python/main/environment.yml)
 これをダウンロードしてpipenv環境でもdockerfileでも
 構築すれば良いんじゃないかな。
 
@@ -19,8 +19,7 @@ mne 0.16からは少しインストールの仕方が変わりました。
 反面、毎回仮想環境に入らないといけないという小さなデメリットがあります。
 
 公式サイトをみながら頑張りましょう。
-[MNE http://martinos.org/mne/stable/install_mne_python.html](http://martinos.org/mne/stable/install_mne_python.html)
-
+[MNE https://mne.tools/stable/install/mne_python.html](https://mne.tools/stable/install/mne_python.html)
 anacondaのバージョンは新しくしておきましょう。
 新しくすればこのように確認できます。
 
@@ -50,7 +49,7 @@ conda activate mne
 conda activate mne
 ```
 
-[^conda_activate]:昔はsource activateコマンドでしたが、このコマンドはanaconda以外の仮想環境ツールと衝突してクラッシュするという不具合がありました。今後はconda activateコマンドを使うのがいいでしょう。
+[^conda_activate]:昔はsource activateコマンドでしたが、このコマンドはanaconda以外の仮想環境ツールと衝突してクラッシュするという不具合がありました。控えめに言って糞仕様ですね。今後はconda activateコマンドを使うのがいいでしょう。
 
 これで完結…と言いたいところなのですが、
 pythonも進化が速いですから、そのうちpython4とか出かねませんね？
@@ -111,12 +110,12 @@ userというのは「コンピュータ全体向けじゃなくて、僕向け�
 nameは仮想環境の名前ですね。
  
 ```{frame=single}
-ipython kernel install --user --name hoge
+jupyter kernel install --user --name hoge
 ```
 もし、要らなくなったら
 
 ```{frame=single}
-ipython kernelsupec uninstall hoge
+jupyter kernelspec uninstall hoge
 ```
 ですね。
 
@@ -144,6 +143,8 @@ export DISPLAY=:0
 ## MNE/Cのインストール
 
 これはmne-pythonのみ使うなら不要です。
+つまり、レガシィな物を使いたい人が使うやつです。
+残念ながらMNE/Cを使ったことがないので僕には何もわからないのです…。
 下記サイトにメールアドレスを登録し、ダウンロードさせていただきましょう。
 [MNE-C http://www.nmr.mgh.harvard.edu/martinos/userInfo/data/MNE_register/index.php](http://www.nmr.mgh.harvard.edu/martinos/userInfo/data/MNE_register/index.php)
 ダウンロードしたものについてはこのサイトの通りにすればインストールできます。

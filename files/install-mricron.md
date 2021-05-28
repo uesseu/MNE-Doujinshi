@@ -2,7 +2,13 @@
 \newpage
 # mricron/crogl(MRIを使う場合)
 
-mricronが必要になることもあるので、入れましょう。UBUNTUなら
+MRIの形式って色々あります。例えば誰かの脳の画像を手に入れて、
+それを解析できなければ悲しいですね？
+そこで、変換ソフトが必要になります。
+ここではmricronとmricroglを紹介しますが、
+僕は後者のほうが新しいしトラブルも少ないのでいいと思います。
+
+mricronはUBUNTUなら
 ```{frame=single}
 sudo apt install mricron
 ```
@@ -10,9 +16,9 @@ MACならhttp://www.mccauslandcenter.sc.edu/crnl/mricron/から
 インストーラーをダウンロードします。このmricronファミリーの中にあるdcm2niiというソフトが
 MRIの形式の変換に大変有用です。
 
-さて、今はより新しいやつがあります。mricroglというやつです。
-これはたまにmricronでは変換できないものを変換することが出来ます。ここからダウンロード出来ます。
+さて、新しいmricroglですが、ここからダウンロード出来ます。
 [http://www.mccauslandcenter.sc.edu/mricrogl/](http://www.mccauslandcenter.sc.edu/mricrogl/)
+これはたまにmricronでは変換できないものを変換することが出来ます。
 
 ちなみに、debian系linuxは神なので、Ubuntuなら下記で大丈夫です。
 
@@ -24,7 +30,7 @@ sudo apt install dcm2niix
 これでゴリゴリ計算していくことができます。
 
 
-## mricronによるMRIのファイルの変換
+## MRIのファイルの変換
 
 mricronもmricroglもmriの画像の閲覧が出来るソフトですが、
 この中にdcm2niiというソフトがあるはずなので、そのソフトを起動します。
@@ -32,7 +38,6 @@ mricronならdcm2niigui、mricroglならメニューからimport辺りを探し�
 
 ![dcm2niiの画面](img/nifti.png){width=14cm}
 
-ちなみに、mricron自体はmri閲覧ソフトで、これもこれで有用です。
 
 ![mricronによる3DMRI画像の閲覧](img/mricron.png){width=14cm}
 
@@ -47,4 +52,5 @@ mricronならdcm2niigui、mricroglならメニューからimport辺りを探し�
 - cohogehoge:脳以外の不要な場所を切り取った画像
 
 となります。どれを使っても構わないと思います。
-
+でも、大事なことがあります。**使うソフトや変換の方法は合わせて下さい**
+なにやら、それぞれが微妙に違うのだそうです。MRIに詳しい人が言ってた。

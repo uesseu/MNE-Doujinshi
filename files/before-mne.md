@@ -2,12 +2,10 @@
 
 # MNEを使う
 
-いよいよ解析の準備に入ります。以下、MNEの公式サイトのチュートリアルのスクリプトなのですが…
-かなり流暢なpythonistaが書いていると思われます。そのため、初心者が見るには敷居が高目です。
+いよいよ解析の準備に入ります。以下、MNEの公式サイトのチュートリアルなのですが…
+初心者が見るには敷居が高目です。
 一回はそれをなぞろうと思いますが、その後は噛み砕いてシンプルに紹介します。
-[http://martinos.org/mne/stable/tutorials.html](http://martinos.org/mne/stable/tutorials.html)
-[http://martinos.org/mne/stable/auto_examples/index.html](http://martinos.org/mne/stable/auto_examples/index.html)
-[http://martinos.org/mne/stable/python_reference.html](http://martinos.org/mne/stable/python_reference.html)
+[https://mne.tools/stable/auto_tutorials/index.html](https://mne.tools/stable/auto_tutorials/index.html)
 
 ## テキストエディタ
 
@@ -19,7 +17,7 @@ jupyterでも出来ます。jupyter一本だと散らかる上にgit管理しに
 そうですね、jupyterから始めてvscodeがいいかもですね。
 vimmer[^vimmer]ならvimを使ってもいいと思います。
 
-[^vimmer]:vim使いの事。僕は毎日vimを起動し、毎日vim上で解析しています。
+[^vimmer]:vim使いの事。僕は毎日vimを起動し、毎日vim上で解析しています。この同人誌もvimで執筆しています。
 
 ## Jupyterの場合
 
@@ -73,6 +71,7 @@ pythonに限らずプログラミングは中々奥が深いので、
 僕のおすすめを書きます。
 
 - mypy(pythonに静的型付けを導入するもの)
+- flake8(pythonの補完をしてくれるもの)
 - pep8(pythonを書くときのコーディング規約。即ちお作法)
 
 この辺りはエディタによって導入方法が違うので書きません。
@@ -86,9 +85,16 @@ pythonに限らずプログラミングは中々奥が深いので、
 詳しくはググって下さい。numpyは本書では語りつくせるわけがありません。以上です。
 
 …ではあんまりなので、ほんのさわりだけ紹介しておきます。
+numpyとは行列計算のためのpython用パッケージです。
 
 Pythonの数値計算ライブラリ NumPy入門
 [http://rest-term.com/archives/2999/](http://rest-term.com/archives/2999/)
+
+初心者の君は今思ったでしょう。「pythonならlistがあるから良くね？」
+ダメです！numpyはCやFORTRANで実装されており、超高速です。
+多分、100倍くらい。さらに、様々な数学的手法が実装されており、お得です。
+それ以前に、MNE-python自体がnumpyで実装されているので必須です。
+
 
 ```{frame=single}
 import numpy as np
@@ -98,6 +104,7 @@ b = np.array([7, 8])
 
 解説します。
 1行目はnumpyを使うけれども長いからnpと略して使うよ、という意味です。
+ここはほぼほぼ慣習です。
 二行目と三行目で、aとbに5, 6と7, 8を代入しました。ここから下記を入力します。
 
 ```{frame=single}
@@ -150,12 +157,15 @@ data = np.arange(5, 13, 2)
 print(data.shape)
 ```
 
+結果は敢えて書きません。手を動かさなければ
+君は決してnumpyを使いこなせるようになりません。
+
 ## 解析を始める前のwarning!
 
 ここまでは単なるunix系の知識だけで済んでいましたが、この辺りからは数学の知識、
 pythonを流暢に書く技術、脳波脳磁図のデータ解析の常識等、色々必要です。
 pythonを書くのは本気でやればすぐ出来ますが、
-微分方程式だとか行列計算を全部理解して応用するのはかなり面倒くさいです。
+微分だとか行列計算を全部理解して応用するのはかなり面倒くさいです。
 時に、mne-pythonのソースコードを読む必要にかられます。[^yomi]
 同人誌で完璧に説明するのは無理なので、一寸だけしかしません。
 また、データ解析の常識は進化が速いうえにその手の論文を

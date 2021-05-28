@@ -23,7 +23,7 @@ Macならインストーラーもあります！
 Ubuntuなら
 
 ```{frame=single}
-sudo apt install tcsh csh libjpeg62
+sudo apt install tcsh csh
 ```
 
 Macなら

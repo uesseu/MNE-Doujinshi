@@ -4,8 +4,15 @@
 
 ついにソースレベルの解析を行います。これがMNE/pythonの真髄です。
 すこし難しいのです。頑張りましょう。
+数学分かる人向けにいいますと、こいつはMAP推定です。
 
-ソースレベル解析については冒頭の記述を見ていただくとして、
+1. 脳の構造画像からセンサーへの伝わり方を計算する
+2. 事後分布として分散共分散行列を用いる
+3. MAP推定する
+
+という手順です。
+
+ソースレベル解析の性質や仕組みは他の所を見ていただくとして、
 早速MRIとMEGをくっつけていきます。
 (MRIがない場合は標準脳を使えるけど、あまり感心しない)
 目標は「脳内の信号を算出するための式を作る」事です。
@@ -121,9 +128,11 @@ bashで
 ```{frame=single}
 mne coreg
 ```
-mne coregコマンド簡単ですね！公式でもmne coregがオヌヌメと書いてありました。
 
-subjectやmegへのpathを指定しない場合は、GUI上で指定することになります。
+mne coregコマンド簡単ですね！公式でもmne coregがオヌヌメと書いてありました。
+あんま変わらないとは思いますが。
+
+subjectとかのpathを指定しない場合は、GUI上で指定することになります。
 もし0から立ち上げた場合、山のようにあるMRIのsubjectから該当の
 subjectを探さねばならなくなります。重いので指定してあげたほうが楽です。
 
@@ -276,6 +285,9 @@ mindistは頭蓋骨から脳までの距離です。単位はmm。
 ## 手順5、コヴァリアンスマトリックス関連
 
 MNEによる推定にはcovariance matrixというものを使って割り算を綺麗にやります。
+数学分かる人向けに書きますと、
+「MNEはベイズのMAP推定の一種で、事後分布に脳波の分散共分散行列を使う」
+ってことです。
 これにはMEGを空撮りした空データや、刺激提示されてないときのデータなどを使います。
 下記で計算します。
 ```{frame=single}
@@ -345,8 +357,7 @@ MNEの変法を使うことです。これらはMNEの偏りを割り算によ�
 
 ここまで長かったので保存しておきましょう！
 ```{frame=single}
-write_inverse_operator('/home/hoge/fuga',
-                       inverse_operator)
+write_inverse_operator('/home/hoge/fuga', inverse_operator)
 ```
 このinverse_operatorが作れたら、あとは色々出来ます。
 
@@ -435,10 +446,13 @@ Labelオブジェクトにはnameというメンバー変数があるので、�
 freesurferの元論文を見てからどこかを見つけていきましょう。
 
 ここ、どのラベルがそれなのかサクッと調べたいですよね？
-filter関数でも使うのがいいかと思います。
+filter関数やリスト内包表記でも使うのがいいかと思います。
 
 ```{frame=single}
-print(list(filter(lambda x: 'transv' in x.name, labels)))
+# filter関数
+print(list(filter(lambda label: 'transv' in label.name, labels)))
+# List内包表記
+print([label.name for label in labels if 'transv' in label.name])
 ```
 
 ### 手順8後半、label当てはめ
@@ -447,13 +461,13 @@ print(list(filter(lambda x: 'transv' in x.name, labels)))
 
 ```{frame=single}
 from mne import extract_label_time_course
-source_label = extract_label_time_course(stcs,
+source_label = extract_label_time_course(source,
                                          labels,
                                          src,
                                          mode='mean_flip')
 ```
 
-ここではstcがソースのデータ、srcが左右半球のソーススペースのリストです。
+ここではsourceがソースのデータ、srcが左右半球のソーススペースのリストです。
 modeはいくつかあります。
 mean: それぞれのラベルの平均です。これを使うのが普通でしょうか…
 mean_flip: 特異値分解を使ってベクトルが違うやつも取り出すのです。

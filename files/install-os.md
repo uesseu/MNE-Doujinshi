@@ -3,18 +3,18 @@
 ## OSの準備
 OSはlinuxかMACが普通と思います、windowsではどうなのでしょう？MNEpythonは動きます。
 Unix系コマンドラインツールは動きません。freesurferは辛いです。
-WSL2というlinux互換機能の実力を僕は知らないのでなんとも…
+WSL2というlinux互換機能はあるっちゃあるのですが、現状GUIに関しては辛いです。
 というわけで、僕は新しめのdebian系linuxディストリビューションである
 UBUNTU[^ubuntu]またはMACを使います。
 
-[^ubuntu]:UBUNTUはCanonical社によって開発されているオープンソースのlinuxディストリビューションであり、人気があります。debianというディストリビューションをベースに作られています。
+[^ubuntu]:UBUNTUはCanonical社によって開発されているオープンソースのlinuxディストリビューションであり、人気があります。debianというディストリビューションをベースに作られています。ちなみに、名前は南アフリカの言葉で友愛という意味だそうです。
 
 linuxでも新しめのメジャーなlinuxディストリビューションを勧める理由は
 CUDA等の技術に対応していたり、ユーザーが難しいことを考えなくて良いことが多いからです。
 debian系を使う理由はパッケージ管理ソフトのaptが優秀でユーザーが多いことです。
 MACの場合はaptの代わりに [homebrew https://brew.sh/index_ja.html](https://brew.sh/index_ja.html) を用いることになります。
 以下、UBUNTU16.04LTS以上かmacos10.12を想定して書いていきます。
-UBUNTU16.04LTSは下記サイトから無料でダウンロードできます。
+UBUNTUは下記サイトから無料でダウンロードできます。
 
 [Ubuntu https://www.ubuntulinux.jp/ubuntu](https://www.ubuntulinux.jp/ubuntu)
 
