@@ -83,6 +83,62 @@ pip install --upgrade pyqt5>=5.10
 
 [^curl]:unix界隈では大人気のダウンローダー
 
+## MAYAVIがインストール出来ない
+mayaviはmne-pythonのインストールの鬼門です。
+僕はしばしばmayaviをインストールすることに失敗します。
+mayaviのドキュメントに「mayavi」のインストールなんて簡単とか書いてありますが
+pipでインストールできないときのとっておきをお伝えします。
+ようこそ、UNIXの世界へ。
+
+まずは、gitをインストールします。
+gitのインストールはmacなら
+
+```bash
+brew install git
+```
+
+
+ubuntuなら
+
+```
+sudo apt install git
+```
+
+で簡単です。そのうえで、mayaviのソースコードを貰ってきます。
+
+```bash
+git clone https://github.com/enthought/mayavi.git
+```
+
+で、この中のsetup.pyを走らせましょう。
+
+```bash
+cd mayavi
+python setup.py install
+```
+
+ご注意ください。問答無用で今使っているpythonの中に入ってしまいます。
+もし、これでうまく行かないならば、なにかコンパイラとかが欠けているはずです。
+例えばubuntuなら
+
+```bash
+sudo apt install build-essentioal
+```
+
+とかやれば入るかも？(検証してません)
+
+## HF5をインストールしたい
+HF5をインストールする必要が出ることがあります。
+
+UBUNTUの場合、
+
+```bash
+sudo apt install python3-h5py
+pip install h5io
+```
+
+でおｋです。
+
 ## MNE環境を複数作りたい！
 MNEの環境が複数欲しくなることもあると思います。
 僕は欲しくなりましたし、今後MNEがバージョンアップしていくたびに
