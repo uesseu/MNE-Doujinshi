@@ -1,6 +1,6 @@
 
 \newpage
-# maxfilter(elektaのやつ)
+## maxfilter(elektaのやつ)
 
 maxfilterというフィルタがMEG研究ではほぼ必須です。
 これは外から飛んでくるノイズを数学的に除去するフィルタです。

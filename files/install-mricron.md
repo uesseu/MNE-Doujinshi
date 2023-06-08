@@ -1,12 +1,14 @@
 
 \newpage
-# mricron/crogl(MRIを使う場合)
+## mricron/crogl(MRIを使う場合)
 
 MRIの形式って色々あります。例えば誰かの脳の画像を手に入れて、
 それを解析できなければ悲しいですね？
 そこで、変換ソフトが必要になります。
 ここではmricronとmricroglを紹介しますが、
 僕は後者のほうが新しいしトラブルも少ないのでいいと思います。
+実は他にMRIconverterとか言うのもあるらしいですが、
+僕はMRIの専門ではないのでよく分かりません…。
 
 mricronはUBUNTUなら
 ```{frame=single}
@@ -20,7 +22,7 @@ MRIの形式の変換に大変有用です。
 [http://www.mccauslandcenter.sc.edu/mricrogl/](http://www.mccauslandcenter.sc.edu/mricrogl/)
 これはたまにmricronでは変換できないものを変換することが出来ます。
 
-ちなみに、debian系linuxは神なので、Ubuntuなら下記で大丈夫です。
+ちなみに、Debian系Linuxは神なので、Ubuntuなら下記で大丈夫です。
 
 ```{frame=single}
 sudo apt install dcm2niix
@@ -30,9 +32,11 @@ sudo apt install dcm2niix
 これでゴリゴリ計算していくことができます。
 
 
-## MRIのファイルの変換
+### MRIのファイルの変換
 
-mricronもmricroglもmriの画像の閲覧が出来るソフトですが、
+mricronもmricroglもmriの画像の閲覧が出来るソフトです。
+ちゃんと変換の前に内容を見ましょう。
+MRIって結構撮り損ないがあるものです。
 この中にdcm2niiというソフトがあるはずなので、そのソフトを起動します。
 mricronならdcm2niigui、mricroglならメニューからimport辺りを探して下さい。
 

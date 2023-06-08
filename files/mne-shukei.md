@@ -37,6 +37,7 @@ evoked.data.shape
 | power  | power.data        | チャンネル | 周波数  | 波形    |
 揃っていませんね…。
 (どうせ使うのはevoked以下くらいなので大して困りません。)
+まぁ、itcやpowerは波形データじゃないので揃ってなくてもいいですが。
 
 それぞれのオブジェクトは
 object.save(filename)

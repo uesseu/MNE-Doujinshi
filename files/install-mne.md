@@ -1,41 +1,71 @@
 
 \newpage
-# MNE/pythonのインストール(脳波、脳磁図をする場合)
+## MNE/pythonのインストール(脳波、脳磁図をする場合)
 
 こちらはMNEの公式ではanacondaの存在下でやるようになっています。
 anacondaが嫌いな人(結構いらっしゃるかと思います)は既に十分な
 知識をお持ちのことと思います。
-公式サイトに設定用のyamlファイルがあります。
-[https://raw.githubusercontent.com/mne-tools/mne-python/main/environment.yml](https://raw.githubusercontent.com/mne-tools/mne-python/main/environment.yml)
-これをダウンロードしてpipenv環境でもdockerfileでも
-構築すれば良いんじゃないかな。
 
-そうでない初心者の方は下記をお読みください。
+例えば、下記の意味が分かる人にはこのセクションは不要です。
+あとはその都度必要になったものを適当に入れます。
 
-mne 0.16からは少しインストールの仕方が変わりました。
-仮想環境で構築することになります。
+```bash
+python -m venv env
+source env/bin/activate
+pip install mne h5io matplotlib numpy mne-connectivity
+```
+
+ちなみに、意味的には
+「envって名前の仮想環境を作って、その仮想環境に行って、
+色々インストールするよー」という意味です。
+実は僕はいつもこの方法をとっています。
+ま、pythonは何通りも導入方法あるので。
+
+あと、最近mneからコネクティビティ解析関連が
+mne-connectivityとして独立したので、
+使いたいならば入れて下さい。　
+
+### 公式のインストール方法
+長くmne-pythonをヲチしているけれど、
+mne-pythonのインストール方法、変わりすぎて草。
+バージョン変わる毎にインストール方法変わるので注意です。
+現行バージョンは1.4。
+
+現時点で公式サイトではanacondaを使うことになっています。
+理由は…よく分かりませんが、多分「どこでも動くから説明が楽」なんだと思います。
+インストール方法はここにあります。
+[https://mne.tools/stable/install/manual_install.html](https://mne.tools/stable/install/manual_install.html)
+
+ちなみにこういうゆるふわ簡易版なのもあります。
+[https://mne.tools/stable/install/installers.html#installers](https://mne.tools/stable/install/installers.html#installers)
+
+さて、上記の簡単版を使わないなら、下記のようにします。
+```{frame=single}
+conda install --channel=conda-forge --name=base mamba
+mamba create --override-channels --channel=conda-forge --name=mne mne
+```
+
+これで新しい'mne'という仮想環境が出来るようです。
+
+そう、仮想環境で構築することになります。
 このやり方のメリットは、いつでも同じ環境を整える事ができるので、
 ソフトのバージョンが変わっても対応しやすいということです。
 反面、毎回仮想環境に入らないといけないという小さなデメリットがあります。
+だけど、バージョン揃えるのは貴方の責任です。
+つまり、使いましょう。(圧力)
 
 公式サイトをみながら頑張りましょう。
-[MNE https://mne.tools/stable/install/mne_python.html](https://mne.tools/stable/install/mne_python.html)
-anacondaのバージョンは新しくしておきましょう。
-新しくすればこのように確認できます。
 
 ```{frame=single}
-$ conda --version && python --version
-conda 4.4.10
-Python 3.6.4 :: Continuum Analytics, Inc.
+conda create\
+    --strict-channel-priority\
+    --channel=conda-forge\
+    --name=mne\
+    mne-base h5io h5py pymatreader
 ```
 
-要約すれば...
-
-- curl[^curl]でenvironment.ymlをダウンロードする
-- conda env create -f environment.yml
-
-
-これでmneの仮想環境が整いました。
+--name=mneってありますよね？
+これでmneという名前の仮想環境が整います。
 下記のコマンドでmneの環境に入れます。
 
 ```{frame=single}
@@ -51,42 +81,37 @@ conda activate mne
 
 [^conda_activate]:昔はsource activateコマンドでしたが、このコマンドはanaconda以外の仮想環境ツールと衝突してクラッシュするという不具合がありました。控えめに言って糞仕様ですね。今後はconda activateコマンドを使うのがいいでしょう。
 
-これで完結…と言いたいところなのですが、
-pythonも進化が速いですから、そのうちpython4とか出かねませんね？
-なので、一応いろんな環境を切り替えられるようにしましょう。
-ここではレガシィなpython2を入れてみます。
+大まかにはこれで完結です。
+仮想環境は複数作っておくほうが良いと思います。
+hogeって環境作りますね。
 
 ```{frame=single}
-conda create -n python2 python=2.7 anaconda
+conda create\
+    --strict-channel-priority\
+    --channel=conda-forge\
+    --name=hoge\
+    mne-base h5io h5py pymatreader
 ```
-mneの環境に入るには
+hogeの環境に入るには
 
 ```{frame=single}
-conda activate mne
+conda activate hoge
 ```
-です。
-さっきのpython2に入るのはもちろん
 
-```{frame=single}
-conda activate python2
-```
-ちなみに、出るのは
+です。ちなみに、出るのは
 
 ```{frame=single}
 conda deactivate
 ```
 macなら下記も必要です。
 
-```{frame=single}
-pip install --upgrade pyqt5>=5.10
-```
-
 [^curl]:unix界隈では大人気のダウンローダー
 
-## MAYAVIがインストール出来ない
+### MAYAVIがインストール出来ない
 mayaviはmne-pythonのインストールの鬼門です。
 僕はしばしばmayaviをインストールすることに失敗します。
 mayaviのドキュメントに「mayavi」のインストールなんて簡単とか書いてありますが
+騙して悪いがあれは嘘である。
 pipでインストールできないときのとっておきをお伝えします。
 ようこそ、UNIXの世界へ。
 
@@ -127,34 +152,20 @@ sudo apt install build-essentioal
 
 とかやれば入るかも？(検証してません)
 
-## HF5をインストールしたい
+### HF5をインストールしたい
+時間周波数解析をする場合は、
 HF5をインストールする必要が出ることがあります。
-
-UBUNTUの場合、
+上記のanacondaの方法なら全部入りますが、pipとかでやると
+入らないので一応言います。
 
 ```bash
-sudo apt install python3-h5py
 pip install h5io
 ```
 
 でおｋです。
 
-## MNE環境を複数作りたい！
-MNEの環境が複数欲しくなることもあると思います。
-僕は欲しくなりましたし、今後MNEがバージョンアップしていくたびに
-古いのを残しながら温故知新する必要が出てくるはずです。
-さっき色々やったなかでcurlでenvironment.ymlをダウンロードしたはずです。
-このenviroment.ymlは普通にテキストエディタで開けます。
-内容はインストールすべきパッケージの列挙です。一番上の所に
 
-```{frame=single}
-name: mne
-```
-
-とあると思うので、単純にこいつを別の名前に変えてから
-続きのコマンドを叩いていけばいいだけです。
-
-## jupyter kernel
+### jupyter kernel
 jupyterを使うのであれば、上記の環境をjupyterに登録する必要があります。
 まずは、仮想環境に入って下さい。
 
@@ -175,10 +186,13 @@ jupyter kernelspec uninstall hoge
 ```
 ですね。
 
-## CUDA
+### CUDA
 CUDA[^cuda](GPGPU)についてもそのサイトに記載があります。
 CUDAはnvidiaのGPUしか動きません。インストールについてはnvidiaのサイトも参照して下さい。
-まぁ、各種波形フィルタでしか使えないんですが。
+まぁ、各種波形フィルタでしか使えない上にさほど性能よくないです。
+正直、**CPUだけで十分です。**[^no_need_gpu]
+
+[^no_need_gpu]: MNE pythonはGPUの使い方が下手くそです。
 
 僕の環境では下記二行のコマンドを予め入れていないと動かないです。
 .bash_profileや.bashrcに書き加えておけばいいでしょう。
@@ -194,12 +208,13 @@ export DISPLAY=:0
 %gui qt
 ```
 
-[^cuda]:nVidiaのGPUを使った高速な計算ができる開発環境
+[^cuda]: nVidiaのGPUを使った高速な計算ができる開発環境。うまく使いこなせればCPUの10から100倍速いです。
 
-## MNE/Cのインストール
+### MNE/Cのインストール
 
-これはmne-pythonのみ使うなら不要です。
+これはmne-pythonを普通に使うなら不要です。
 つまり、レガシィな物を使いたい人が使うやつです。
+**要するに不要です。**
 残念ながらMNE/Cを使ったことがないので僕には何もわからないのです…。
 下記サイトにメールアドレスを登録し、ダウンロードさせていただきましょう。
 [MNE-C http://www.nmr.mgh.harvard.edu/martinos/userInfo/data/MNE_register/index.php](http://www.nmr.mgh.harvard.edu/martinos/userInfo/data/MNE_register/index.php)
@@ -217,7 +232,7 @@ export MNE_ROOT=/home/fuga/MNE-C
 これでMNE-Cも動くようになるはずです。
 
 
-## *コラム1-SNSの活用*
+### *コラム1-SNSの活用*
 
 ```{basicstyle=\normalfont frame=shadowbox}
 皆さんはSNSはしていますか？SNSには様々な効能と副作用があります。
@@ -227,6 +242,6 @@ twitterでMEGやMRIの研究者をフォローしてみてください。
 いい情報、最新の情報がピックアップされ、エキサイティングです。
 僕は新着情報はtwitterで研究者、開発者、有名科学雑誌のアカウントを
 フォローしてアンテナはってたこともありました。
-(脳の疾患が増悪して今はしてない)
+(筆者の脳の疾患が増悪して今はしてない)
 ちなみに、若いエンジニアはよくするらしいです。
 ```

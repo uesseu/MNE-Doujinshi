@@ -5,7 +5,7 @@
 Connectivityを脳波でやってみましょう。Connectivityは要するに、
 脳のあちこちの繋がり具合を調べる指標です。MRIとかでよくされている手法ですね。
 
-MNEpythonでは脳波と脳磁図でこれを計算することが出来ます。
+mne-connectivityでは脳波と脳磁図でこれを計算することが出来ます。
 実装されている計算方法を列挙してみます。
 まずは、何はなくても計算しやすくする変換をせねば始まりません。
 変換方法は下記の3つが提供されています。
@@ -13,9 +13,6 @@ MNEpythonでは脳波と脳磁図でこれを計算することが出来ます�
 - multitaper
 - fourier
 - morlet wavelet
-
-このうち、multitaperとfourierは離散の計算方法、
-morlet waveletは連続wavelet変換です。(今までやってたのと同じ)
 
 フーリエ変換やwavelet変換をした上で、それぞれの値を比較するのです。
 比較の方法は下記のとおりです。
@@ -28,10 +25,10 @@ morlet waveletは連続wavelet変換です。(今までやってたのと同じ)
 - Weighted Phase Lag Index: PhaseLagIndexに重みを付けたもの
 
 …多すぎですね(´・ω・｀)
-どれが良いとかは…よくわかりません。色々やってみたり先行研究を見るのが良いかも？
+このうち、CoherenceとPhaseLockingValueは<span style='color: red'>敢えて言おう、カスであると。<span style='color: red'>
+それ以外のどれが良いとかは…よくわかりません。
+色々やってみたり先行研究を見るのが良いかも？
 これらの詳細については波形解析の理屈編に一応書きました。
-一応ImaginaryCoherenceとPhaseLagIndex系は同一ソースの影響が少ないので
-性能がちょっといいかもしれません？
 とりあえず、計算方法を書いておきます。まずは、epochを作ります。作り方は前述のとおりです。
 眼球運動や心電図のデータは要らない[^heart]ので、
 pick_channelやdrop_channelで要らないのを外していきます。
@@ -47,13 +44,14 @@ epochs.drop_channels(['fuga'])
 
 
 ```{frame=single}
-from mne.connectivity import spectral_connectivity
-cons = sc(epochs, method=’coh’, indices=None,
-          sfreq=500, mode=’multitaper’, fmin=35, fmax=45, fskip=0,
-          faverage=False, tmin=0, tmax=0.5, mt_bandwidth=None,
-          mt_adaptive=False, mt_low_bias=True,
-          cwt_frequencies=None, cwt_n_cycles=7,
-          block_size=1000, n_jobs=1)
+from mne_connectivity import spectral_connectivity_epochs
+cons = spectral_connectivity_epochs(
+    epochs, method=’coh’, indices=None,
+    sfreq=500, mode=’multitaper’, fmin=35, fmax=45, fskip=0,
+    faverage=False, tmin=0, tmax=0.5, mt_bandwidth=None,
+    mt_adaptive=False, mt_low_bias=True,
+    cwt_frequencies=None, cwt_n_cycles=7,
+    block_size=1000, n_jobs=1)
 
 ```
 
@@ -64,6 +62,7 @@ cons = sc(epochs, method=’coh’, indices=None,
 - method: そのままmethodですね。上記の通り。
 - indices: どことどこのconnectivityを見たいかです。
 - sfreq: サンプリング周波数です。
+- mode: multitaper, fourier, cwt_morletの3つを選べます。
 - fmin,fmax: 見たい周波数帯域です
 - fskip: どのくらい飛び飛びで解析するかです。
 - faverage: 最終的に幾つかの周波数を平均した値を出すかどうかです。
@@ -74,29 +73,8 @@ cons = sc(epochs, method=’coh’, indices=None,
 
 この関数は、中々~~詰め込み~~多機能な関数です。
 なんと、上記の沢山のmethodを全部できます。出来るがゆえの大変さもあります。
-この関数には5つの返り値と、実質4つのモードがあると考えるとやりやすいと思います。
-それぞれについて解説します。
 
-### 5つの返り値
-
-さっきの関数には5つの返り値があります。順に
-
-- con: connectivity numpy形式
- 幾つかパターンあるのであとで書きます
-- freqs: 周波数
- 何故ここで周波数が出てきたか一瞬怪訝に思いそうですが、
- これはfourierとmultitaperモードの時に使う周波数を、
- **周波数は関数が勝手に設定する**から必要なのです。
- morlet waveletの場合はcwt_frewuenciesで設定した物が出てきます。
-- times: 解析に使った時刻のリスト
-- n_epochs: 解析に使ったepochの数
-- n_tapers: multitaperの時だけnullとして出力
- DPSSという値が格納されます。
-
-上記のコードではconsという変数にタプルを入れているので、cons[0]がcon、cons[2]がtimesです。
-
-この中で大事なのはconです。何故なら、これが結果だからです。
-conの中で一番大事なのは中に入っている三角行列です。
+conは三角行列です。
 三角行列というのは、行列の対角より上か下が全部0で出来ている行列です。
 
 ![三角行列の例](img/sankaku.png)

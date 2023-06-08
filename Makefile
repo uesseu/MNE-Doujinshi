@@ -1,19 +1,19 @@
 files = files/introduction.md \
   files/review.md \
+  files/experiment.md \
+  files/photosensor.md \
   files/install-hardware.md \
   files/install-os.md \
   files/install-jupyter.md \
   files/install-cuda.md \
   files/install-git.md \
-  files/experiment.md \
-  files/photosensor.md \
   files/install-maxfilter.md \
   files/install-freesurfer.md \
   files/install-mne.md \
   files/freesurfer.md \
   files/install-mricron.md \
   files/before-mne.md \
-  files/mne-omajinai.md \
+  files/install-jupyter-omajinai.md \
   files/mne-readdata.md \
   files/mne-preprocessing.md \
   files/mne-plot.md \
@@ -49,17 +49,18 @@ latex = -V documentclass=ltjarticle \
   #-V luatexjapresetoptions=hiragino-pron \
   #-V lang=en-US \
 
-markdown_extention = -f markdown+hard_line_breaks
+markdown_extention = -f markdown+hard_line_breaks+emoji
 latex_packages = --listings --template eisvogel.tex
 writer = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
     --indented-code-classes=python,bash \
-    --pdf-engine=lualatex
+    --pdf-engine=lualatex\
+    -V mainfont="Cica"
 oldwriter = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
-    --indented-code-classes=python,bas \
+    --indented-code-classes=python,bash \
     --pdf-engine=lualatex
 
 all: $(files)

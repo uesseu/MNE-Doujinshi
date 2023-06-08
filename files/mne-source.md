@@ -1,6 +1,6 @@
 
 \newpage
-# ソースレベルMEG解析
+## ソースレベルMEG解析
 
 ついにソースレベルの解析を行います。これがMNE/pythonの真髄です。
 すこし難しいのです。頑張りましょう。
@@ -11,6 +11,15 @@
 3. MAP推定する
 
 という手順です。
+
+数学わからない人に適当に言うと
+
+1. MRIとセンサーの位置情報から方程式を作る
+2. どの程度の波の大きさを想定するか設定する
+3. 上記から大まかな当たりをつけて推定する
+
+という感じ。
+
 
 ソースレベル解析の性質や仕組みは他の所を見ていただくとして、
 早速MRIとMEGをくっつけていきます。
@@ -33,7 +42,7 @@ freesurferでrecon-allをしたデータが必要です。
 さて、これは理工系の人は知っているのですが、
 実は連立方程式を解くという行為は割り算に他ならないのです。
 (ここで文系や医学部の人はびっくりする)
-大学数学を習ってなかった人やサボっていた人はあとの方に書きました。
+大学数学を習ってなかった人やサボっていた人はあとの方に書いた
 「鶴亀算とは割り算である」をご参照ください。
 
 さて、脳の中の電気の活動量をX、センサーで捉える磁場とか電場とかをYとすると
@@ -49,7 +58,7 @@ InverseOperatorと言います。割り算ですね！このInverseOperatorを�
 手順としては以下のとおりです。
 
 
-## 掛け算を作る
+### 掛け算を作る
 まずは、掛け算を作るために、脳の中の位置情報、センサーの位置情報、そして、
 その両者がどのように重なっているかの位置関係を求める必要があります。
 必要なのは
@@ -77,7 +86,7 @@ InverseOperatorと言います。割り算ですね！このInverseOperatorを�
  これを脳磁図における順問題(forward solution)という。
  これにより、掛け算が求められる。
 
-## 割り算を作る
+### 割り算を作る
 次に割り算を作ります。MNEやsLORETAやdSPMといった何やら難しげな手法は、
 この割り算を作るときのやり方の違いなのです。
 
@@ -98,7 +107,7 @@ InverseOperatorと言います。割り算ですね！このInverseOperatorを�
 
 その後は色々なストーリーがあるでしょう。
 
-## その後のストーリー
+### その後のストーリー
 
 - 推定された波形をwavelet変換する。
 - PSDやERPをしてみる。
@@ -107,12 +116,14 @@ InverseOperatorと言います。割り算ですね！このInverseOperatorを�
 
 などなど。でははじめましょう。
 
-## 手順0、freesurfer
+### 手順0、freesurfer
 脳画像を解析したと思いますが、その脳画像のチェックはしてください。
 ダメダメなやつになっていることもありますので。
 ダメダメだったらトラブルシュートしなければなりません。
 
-## 手順1、trans
+無いなら標準脳でも出来なくはないです。
+
+### 手順1、trans
 まず、脳とセンサーの位置をすり合わせておきましょう。
 
 GUIでの操作となります。2通りの動かし方があります。
@@ -142,7 +153,7 @@ coregistration(subject = subject,
                subjects_dir = subjects_dir,
                inst = file_path)
 ```
-instはmegデータ…rawでもepochでも良いらしいですが、どれかを指定して下さい。
+instはeegやmegデータ…rawでもepochでも良いらしいですが、どれかを指定して下さい。
 
 mne coregの場合は、mne coreg -hとでもやってhelpを見てください。
 
@@ -174,13 +185,16 @@ projectionモードになっていたりして見にくかったりするかも�
 色々調整してみてください。
 
 
-## 手順2、BEM作成
+### 手順2、BEM作成
 脳からセンサーまでの抵抗を計算せねばなりますまい。
 
 上記の通り、MRIから抽出してくる形データからBEMモデルを作ります。
 BEMは脳の全体を包み込むサランラップみたいなデータになります。[^bemmethod]
 頭蓋骨とか皮とか、そういう抵抗が強いものを考慮するために、BEMは三枚一組で
 出力されます。実装上は3枚あるということを意識しなくても大丈夫です。
+
+ちなみに、サランラップみたいなものを使わない方法もあります。
+球形を想定してやる方法ですね。今回は書きません。
 
 [^bemmethod]: というか、本当はこんな言葉の使い方は間違ってる気がする。BEMは本当はMethodの名前です。
 
@@ -213,7 +227,8 @@ guiの画面が現れると思います。
 freesurferの標準脳であるfsaverageが現れます。
 以降、subjectにはfsaverageを入れると標準脳を使うことになります。
 
-## 手順3、ソーススペース作成
+
+### 手順3、ソーススペース作成
 脳内の位置情報を作りましょう。
 
 脳磁図で見れる空間のうち、どの部分の電源を推定するかを設定する必要があります。
@@ -241,7 +256,7 @@ src = setup_source_space(subject=subject,
 
 ![ソーススペースの図示。小さい点々がソーススペース。](img/src.png){width=14cm}
 
-## 手順4、順問題
+### 手順4、順問題
 まずは掛け算を作ります。
 
 先程作ったBEMは3枚あります。EEGの場合は3枚必要です。何故なら、磁力と違って電力は
@@ -282,7 +297,7 @@ mindistは頭蓋骨から脳までの距離です。単位はmm。
 ここで使うのはraw.infoです。epochs.infoでもいいかも。
 
 
-## 手順5、コヴァリアンスマトリックス関連
+### 手順5、コヴァリアンスマトリックス関連
 
 MNEによる推定にはcovariance matrixというものを使って割り算を綺麗にやります。
 数学分かる人向けに書きますと、
@@ -310,14 +325,16 @@ tmax=0にしているので、刺激が入る前までの波を取り除きま�
 つまりベースラインコレクションみたいな感じになるのです。
 ちなみに、epochsでcovariance…特にautoですると結構重いです。
 autoの場合、クロスバリデーションまでやってくれて凄いみたいですね。
+その代わり、計算の重さが酷いです。
 
 
-## 手順6、逆問題
+### 手順6、逆問題
 
 最終段階、割り算です。順問題とcovariance matrixを組み合わせて割り算の形にしましょう。
 下記のとおりです。
 
 ```{frame=single}
+from mne.inverse import make_inverse_operator
 inverse_operator = make_inverse_operator(epochs.info,
                                          fwd,
                                          cov,
@@ -347,21 +364,17 @@ MNEという計算手法は脳の表面の情報を拾いやすい偏った計�
 depthを設定すると、脳の深い所を探れるわけです。
 depthをNoneに設定すると、ほぼ脳の表面だけ見ることになります。
 
-もう一つの偏りを回避する方法は、dSPMやsLORETAといった
-MNEの変法を使うことです。これらはMNEの偏りを割り算によって補正します。
-割り算バンザイ！
-
 他にlimit_depth_chsというパラメータもあります。これをTrueにすると、完全に脳の表面だけ見ます。
 即ち、マグネトメータをやめて、グラディオメータだけで見るのです。
 
-
 ここまで長かったので保存しておきましょう！
 ```{frame=single}
+from mne.inverse import write_inverse_operator
 write_inverse_operator('/home/hoge/fuga', inverse_operator)
 ```
 このinverse_operatorが作れたら、あとは色々出来ます。
 
-## 手順7 ソース推定
+### 手順7 ソース推定
 
 まずは、ソース推定をやってみましょう。
 ```{frame=single}
@@ -404,7 +417,7 @@ source[0].plot(time_viewer=True)
 そこで、freesurferのラベルデータを使います。
 それによって、脳のどの部分なのか印をつけてやるのです。
 
-## 手順8、前半ラベル付け
+### 手順8、前半ラベル付け
 freesurferにはいくつかのアトラスがあります。アトラスとは、地図みたいなものですね。
 
 詳しくはここをみて下さい。
@@ -547,6 +560,7 @@ induced powerとinter trial coherenceを算出する関数は下記です。
 ※labelを選ばなければ激重注意！[^gekiomo]
 
 ```{frame=single}
+from mne.minimum_norm import source_induced_power
 induced_power, itc=source_induced_power(epochs,
                                         inverse_operator,
                                         frequencies,
@@ -579,13 +593,15 @@ epochs.subtract_evoked()
 ### その後のお楽しみ2、ソースベースconnectivity
 
 ソースベースでコネクティビティ出来ます。
+mne_connectivityというパッケージを使います。
+これ、元々mneと同じパッケージだったのが別になったやつです。
 
 ```{frame=single}
-from mne.connectivity import spectral_connectivity
-con, freqs, times, n_epochs, n_tapers=spectral_connectivity(
-             source_label, method='coh', mode='multitaper',
-             sfreq=500, fmin=30,
-             fmax=50, faverage=True, mt_adaptive=True)
+from mne_connectivity import spectral_connectivity_epochs
+con = spectral_connectivity(
+    source_label, method='coh', mode='multitaper',
+    sfreq=500, fmin=30,
+    fmax=50, faverage=True, mt_adaptive=True)
 ```
 使い方はセンサーベースコネクティビティと同じです。
 この場合、さっき計算して出したラベルごとのデータと、
@@ -610,7 +626,7 @@ sudo apt install texlive-xetex
 sudo apt install pandoc
 
 これでpandocでmarkdownからpdfに変換できるようになります。
-例えばDoujinshi.mdというマークダウンファイルを作って
+例えばDoujinshi.mdというmarkdownファイルを作って
 
 pandoc Doujinshi.md -o out.pdf \
 -V documentclass = ltjarticle --toc --latex-engine = lualatex\
@@ -620,5 +636,8 @@ pandoc Doujinshi.md -o out.pdf \
 コードの上の```の末尾に{frame=single}と書き加えてください。
 
 これで同人誌に出来るPDFになります。詳しくはググってください。
-良い同人ライフを！
+
+何故僕が同人誌を書くかって？
+君達が同人誌を書いてくれなかったからだ！
+今度はぜひ君の素晴らしい同人誌を僕に見せてくれよな！
 ```

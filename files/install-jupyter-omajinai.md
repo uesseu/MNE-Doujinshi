@@ -1,6 +1,6 @@
 
 \newpage
-## jupyter用作図用おまじないセット
+### jupyter用作図用おまじないセット
 
 このへんのおまじないは素のpython使っているならいりませんが、
 jupyterやipythonのときは必要でしょう。
