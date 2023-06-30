@@ -89,7 +89,7 @@ conの内容は[チャンネル数 X チャンネル数 X 周波数]という三
 ここで、幾つかの周波数について個別にやりたいなら話は違うのですが、
 加算平均したいなら下記のコードで十分です。
 ```{frame=single}
-conmat=np.mean(con,axis=(2))
+conmat = con.get_data(output='dense').mean(2)
 ```
 これで、conmatに三角行列が入りました。
 
@@ -98,16 +98,28 @@ morlet waveletは乱暴に言うとfourierに時間軸を与える拡張版で�
 [チャンネル数 X チャンネル数 X 周波数 X 時間]という4次元になります。
 この場合は下記のコードで三角行列を作りましょう。
 ```{frame=single}
-conmat=np.mean(con,axis=(2,3))
+conmat = con.get_data(output='dense').mean((2,3))
 ```
 三角行列が出来ました。
 
 ### plot
 さっきの2つは三角行列を作るモードでした。
-三角行列がある場合は綺麗なplotが出来ます。下記のとおりです。
+三角行列を正方行列にしましょうか。
+
 ```{frame=single}
-mne.viz.plot_connectivity_circle(conmat, epochs.ch_names)
+conmat = conmat + conmat.T
 ```
+
+ここは使う手法にもよりますね。
+方向が大事な場合にはこのようなことはしないかも知れません。
+では、plotしましょう。
+```{frame=single}
+from mne_connectivity.viz import plot_connectivity_circle
+plot_connectivity_circle(conmat, epochs.ch_names)
+```
+
+plot_connectivity_circleは内容的に単にplotするだけなので、解説見ればいいですが、
+n_linesで大きいコネクティビティだけをplotしてくれたりするので嬉しいです。
 
 ![僕の脳波のコネクティビティの図。花火みたいで綺麗なので好きです。](img/con.png)
 
