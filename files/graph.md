@@ -34,8 +34,12 @@ dcon = conmat + conmat.T
 global efficiencyを重み付けありで計算したいならこうと思います。
 
 ```{frame=single}
-bct.efficiency_wei(bct.distance_wei(dcon))
+distance = bct.distance_wei(dcon)
+bct.efficiency_wei(distance)
 ```
+
+この場合はそれぞれの距離を求めてからglobal efficiencyを計算します。
+重み付きかどうかは選べるみたいです。
 コネクティビティの行列から「距離」を求めてから計算を行います。
 
 すると、Global efficiencyの場合にはスカラー値が算出されます。
