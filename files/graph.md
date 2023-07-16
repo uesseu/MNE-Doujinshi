@@ -8,15 +8,30 @@
 それを数値化してくれる便利なやつです。
 (僕の中ではその程度の認識。ただし、多分あってる。)
 
-pythonでgraph理論でなにかやりたい場合はこうです。
+pythonでgraph理論でなにかやりたい場合は有力な選択肢として
+- bctpy
+- NetworkX
+
+の二つがあります。
+このうち、bctpyはmatlabのbctからの移植で、脳特化型です。
+NetworkXはエンジニアさんたちの道具です。
 
 ```{frame=single}
 pip install bctpy
+pip install networkx
 ```
-これでbctpyがインストールされました。
+これでbctpyとNetworkXがインストールされました。
 公式サイトはこれです。
-https://github.com/aestrivex/bctpy
-コネクティビティの結果である三角行列を突っ込みたいですね。
+[https://github.com/aestrivex/bctpy](https://github.com/aestrivex/bctpy)
+[https://networkx.org/](https://networkx.org/)
+
+bctpyのドキュメントは隠れています。
+[https://github.com/aestrivex/bctpy/tree/master/docs/_build/html](https://github.com/aestrivex/bctpy/tree/master/docs/_build/html)
+
+うーん…これは、なにか生成させたかったのかな。
+他の見方もあったのかも知れない。
+
+さて、コネクティビティの結果である三角行列を突っ込みたいですね。
 突っ込みます。
 
 ```{frame=single}
@@ -34,13 +49,13 @@ dcon = conmat + conmat.T
 global efficiencyを重み付けありで計算したいならこうと思います。
 
 ```{frame=single}
-distance = bct.distance_wei(dcon)
-bct.efficiency_wei(distance)
+global_efficiency = bct.efficiency_wei(con)
 ```
 
+ね、簡単でしょ？
 この場合はそれぞれの距離を求めてからglobal efficiencyを計算します。
 重み付きかどうかは選べるみたいです。
-コネクティビティの行列から「距離」を求めてから計算を行います。
+重みがついていない場合は$bct.efficiency_bin$です。
 
 すると、Global efficiencyの場合にはスカラー値が算出されます。
 「このネットワークを表すスカラー値を出す」とか
@@ -49,4 +64,4 @@ bct.efficiency_wei(distance)
 中には、閾値を設けて「これ以上の繋がり具合なら繋がってる」とみなして
 計算するやつとかもあります。
 この記事見て色々遊んでもいいかもですね。
-https://qiita.com/maskot1977/items/e1819b7a1053eb9f7d61
+[https://qiita.com/maskot1977/items/e1819b7a1053eb9f7d61](https://qiita.com/maskot1977/items/e1819b7a1053eb9f7d61)

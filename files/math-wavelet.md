@@ -328,7 +328,7 @@ $$\hat{\Psi}(w) = sign(\omega) \alpha_{\beta\gamma}\omega^\beta e^{-\omega^\gamm
 という式…ではなく、**これのフーリエ逆変換が一般モールスWavelet**です。
 計算上はFFTやるならフーリエ変換の手間が省けてお得ですね！
 
-![morse.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/139153/1f01fc38-d49a-c47f-0546-3072f2cac768.png)
+![morse.png](img/morse.png)
 MorletWaveletとそっくりです。(パラメータいじって似せました)
 
 ちなみに、このwaveletは$\beta$と$\gamma$で調整するんですが、
