@@ -274,11 +274,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#よく見るヒルベルト変換の式の導出">よく見るヒルベルト変換の式の導出</a></li>
 </ul></li>
 <li><a href="#コネクティビティ各論">コネクティビティ各論</a><ul>
-<li><a href="#plvとcoherenceの問題点">PLVとCoherenceの問題点</a></li>
-</ul></li>
-<li><a href="#plvやcoherenceの欠点の克服">PLVやCoherenceの欠点の克服</a><ul>
-<li><a href="#拡散する前の電流">拡散する前の電流</a></li>
-<li><a href="#plvの発展系">PLVの発展系</a></li>
+<li><a href="#ラプラシアン問題">ラプラシアン問題</a></li>
+<li><a href="#ラグ問題">ラグ問題</a></li>
+<li><a href="#plvやcoherenceの欠点の克服">PLVやCoherenceの欠点の克服</a></li>
 <li><a href="#coherenceの発展系">Coherenceの発展系</a></li>
 <li><a href="#でこういうのってロバストなの">で、こういうのってロバストなの？</a></li>
 <li><a href="#グラフ理論">グラフ理論</a></li>
@@ -893,6 +891,9 @@ freesurferはOSやCPUが変わったら結果が変わるという仕様があ�
 「このコンピュータを使う」と固定する必要があります。</p>
 
 <h1 id="導入編">導入編</h1>
+<p>本書は脳波解析の本です。解析のためにはコンピュータを使います。<br />
+貴方のコンピュータを脳波を解析できるようにしなければなりません。<br />
+ここからはコンピュータと解析ソフトの導入をします。</p>
 <h2 id="osの準備">OSの準備</h2>
 <p>OSというか、コンピュータ自体ですけれども。<br />
 OSはLinux, MAC OS, Windowsどれでもいけます。<br />
@@ -922,7 +923,10 @@ Linux単体だと、マジで黒い画面が表示されるだけで何も出来
 この中でも王手としてDebian系とRedhat系があります。<br />
 Redhat系は最近CentOS事件もあって、今はDebian系が無難と思います。</p>
 <p>というわけで、僕は新しめのdebian系linuxディストリビューションである<br />
-UBUNTU<a href="#fn26" class="footnote-ref" id="fnref26"><sup>26</sup></a>を使います。</p>
+UBUNTU<a href="#fn26" class="footnote-ref" id="fnref26"><sup>26</sup></a>を使います。<br />
+…今、玄人は「何故Arch linuxじゃだめなん？」と思ったよね？<br />
+あれはローリングリリースだから、ソフトのバージョンに敏感な<br />
+Freesurferの結果がぶれます。僕としては非推奨です。</p>
 <p>Linuxでも新しめのメジャーなLinuxディストリビューションがいいです。<br />
 CUDA等の技術に対応していたり、ユーザーが難しいことを考えなくて良いことが多いからです。<br />
 debian系を使う理由はパッケージ管理ソフトのaptが優秀でユーザーが多いことです。<br />
@@ -2726,8 +2730,16 @@ cat(result)</code></pre>
 Rによるやさしい統計学という本が僕のおすすめです。</p>
 
 <h2 id="connectivity">Connectivity</h2>
+<p>出落ちですが、この論文を読めば、だいたい何をすれば良いのか分かります。<br />
+<a href="https://www.sciencedirect.com/science/article/pii/S2451902221002925">https://www.sciencedirect.com/science/article/pii/S2451902221002925</a></p>
 <p>Connectivityを脳波でやってみましょう。Connectivityは要するに、<br />
 脳のあちこちの繋がり具合を調べる指標です。MRIとかでよくされている手法ですね。</p>
+<p>と、その前に、センサースペースで計算する場合には<br />
+Current source densityを計算する必要があります。<br />
+詳しくは理論編を読んでね。</p>
+<pre data-frame="single"><code>from mne.preprocessing import compute_current_source_density
+epochs = compute_current_source_density(epochs)</code></pre>
+<p>ソースベースの場合にはこれは要らないはずだよ。</p>
 <p>mne-connectivityでは脳波と脳磁図でこれを計算することが出来ます。<br />
 実装されている計算方法を列挙してみます。<br />
 まずは、何はなくても計算しやすくする変換をせねば始まりません。<br />
@@ -2798,18 +2810,25 @@ conの内容は[チャンネル数 X チャンネル数 X 周波数]という三
 離散的な周波数になります。</p>
 <p>ここで、幾つかの周波数について個別にやりたいなら話は違うのですが、<br />
 加算平均したいなら下記のコードで十分です。</p>
-<pre data-frame="single"><code>conmat=np.mean(con,axis=(2))</code></pre>
+<pre data-frame="single"><code>conmat = con.get_data(output=&#39;dense&#39;).mean(2)</code></pre>
 <p>これで、conmatに三角行列が入りました。</p>
 <h3 id="waveletモード">waveletモード</h3>
 <p>morlet waveletは乱暴に言うとfourierに時間軸を与える拡張版です。<br />
 [チャンネル数 X チャンネル数 X 周波数 X 時間]という4次元になります。<br />
 この場合は下記のコードで三角行列を作りましょう。</p>
-<pre data-frame="single"><code>conmat=np.mean(con,axis=(2,3))</code></pre>
+<pre data-frame="single"><code>conmat = con.get_data(output=&#39;dense&#39;).mean((2,3))</code></pre>
 <p>三角行列が出来ました。</p>
 <h3 id="plot">plot</h3>
 <p>さっきの2つは三角行列を作るモードでした。<br />
-三角行列がある場合は綺麗なplotが出来ます。下記のとおりです。</p>
-<pre data-frame="single"><code>mne.viz.plot_connectivity_circle(conmat, epochs.ch_names)</code></pre>
+三角行列を正方行列にしましょうか。</p>
+<pre data-frame="single"><code>conmat = conmat + conmat.T</code></pre>
+<p>ここは使う手法にもよりますね。<br />
+方向が大事な場合にはこのようなことはしないかも知れません。<br />
+では、plotしましょう。</p>
+<pre data-frame="single"><code>from mne_connectivity.viz import plot_connectivity_circle
+plot_connectivity_circle(conmat, epochs.ch_names)</code></pre>
+<p>plot_connectivity_circleは内容的に単にplotするだけなので、解説見ればいいですが、<br />
+n_linesで大きいコネクティビティだけをplotしてくれたりするので嬉しいです。</p>
 <figure>
 <img src="img/con.png" alt="僕の脳波のコネクティビティの図。花火みたいで綺麗なので好きです。" /><figcaption>僕の脳波のコネクティビティの図。花火みたいで綺麗なので好きです。</figcaption>
 </figure>
@@ -3000,7 +3019,7 @@ plot_bem(subject=subject,
 <img src="img/bem.png" alt="BEMの図示。" style="width:14cm" /><figcaption>BEMの図示。</figcaption>
 </figure>
 <p>もし、標準脳を使うなら、以下のコマンドをターミナルから叩いて下さい。</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb165-1" title="1"><span class="ex">mne</span> coreg</a></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb167-1" title="1"><span class="ex">mne</span> coreg</a></code></pre></div>
 <p>guiの画面が現れると思います。<br />
 ’fsaverage→SUBJECTS_DIR’というボタンを押して下さい。<br />
 freesurferの標準脳であるfsaverageが現れます。<br />
@@ -3553,7 +3572,7 @@ Morletと比べて真ん中が凹まないやつが発見されていますか�
 <p><br /><span class="math display"><em>Ψ̂</em>(<em>w</em>) = <em>s</em><em>i</em><em>g</em><em>n</em>(<em>ω</em>)<em>α</em><sub><em>β</em><em>γ</em></sub><em>ω</em><sup><em>β</em></sup><em>e</em><sup> − <em>ω</em><sup><em>γ</em></sup></sup></span><br /></p>
 <p>という式…ではなく、<strong>これのフーリエ逆変換が一般モールスWavelet</strong>です。<br />
 計算上はFFTやるならフーリエ変換の手間が省けてお得ですね！</p>
-<p><img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/139153/1f01fc38-d49a-c47f-0546-3072f2cac768.png" alt="morse.png" /><br />
+<p><img src="img/morse.png" alt="morse.png" /><br />
 MorletWaveletとそっくりです。(パラメータいじって似せました)</p>
 <p>ちなみに、このwaveletは<span class="math inline"><em>β</em></span>と<span class="math inline"><em>γ</em></span>で調整するんですが、<br />
 <span class="math inline"><em>β</em></span>が低かったらちびまる子ちゃんの永沢君みたいに<br />
@@ -3674,13 +3693,36 @@ Fをフーリエ変換やラプラス変換とすると以下が成立します�
 
 <h2 id="コネクティビティ各論">コネクティビティ各論</h2>
 <p>コネクティビティについては色んなmethodがあります。なので、スペクトルとは章を分けてみました。<br />
-ここではコネクティビティそれぞれのmethodについて僕の考えを述べます。間違ってたらごめんね。<br />
-ちなみに、以下の方法は基本、低周波じゃないと無理です。<br />
-γ波なんかを処理しようとするのは無謀なのであります。</p>
-<h3 id="plvとcoherenceの問題点">PLVとCoherenceの問題点</h3>
-<p>一つの個体の中でコネクティビティを語る場合、<br />
+ここではコネクティビティそれぞれのmethodについて僕の考えを述べます。間違ってたらごめんね。</p>
+<h3 id="ラプラシアン問題">ラプラシアン問題</h3>
+<p>コネクティビティをやりたいとして…気をつけるべきことがあります。<br />
+センサー同士について考える時に顕著です。<br />
+結論から言うと、センサー同士のコネクティビティを直で計算してはいけません。<br />
+下記のいずれかをして下さい。</p>
+<ul>
+<li>ラプラシアンを計算する</li>
+<li>ソースベース解析をする</li>
+</ul>
+<p>何故か？<br />
+センサーというのは脳から伝わってきたものを捉えるものです。<br />
+二つのセンサーを見る時、ある脳部位Aから飛んできた成分を両方見ています。<br />
+つまり、センサー同士を見ても変なことになるのです。</p>
+<p>ソースベース解析をした場合にそれが無くなるのは当然のことでしょう。<br />
+もう一つのラプラシアンとはなんぞや？<br />
+これはセンサーの周囲に関して微分とかしちゃって、<br />
+センサー周囲とセンサーそれ自身の差みたいなものを計算したものです。</p>
+<p>つまり？どういうことかって？<br />
+センサー自身をソース推定しちゃって、センサーの場所の活動という<br />
+仮の数値を作り、それによって両方の成分が含まれる的な事を<br />
+防いでいるのですね。これは脳の界隈ではCurrent source densityといいます。</p>
+<p>そんで、それをやった上でラグを見るコネクティビティ指標をやるのが良いです。</p>
+<h3 id="ラグ問題">ラグ問題</h3>
+<p>残念ながら、僕の知識は偏っています。<br />
+本来、Connectivityには角度ベースのものと、振幅ベースのものがあります。<br />
+一つの個体の中でコネクティビティを語る場合、<br />
 PLVとCoherenceという指標は最早形骸である。<br />
-<strong><span style="color: red">敢えて言おうカスであると！</span></strong></p>
+<strong><span style="color: red">敢えて言おうカスであると！</span></strong><br />
+理由はラグが考慮されていないからです。</p>
 <p>さて、フーリエ変換のところでコネクティビティについてちらりと書きました。<br />
 位相の差をとっていけばPLVという「どのくらい波が関連しているか」という<br />
 指標になると書きました。式で表すと</p>
@@ -3703,18 +3745,7 @@ PLVと同様に拡散やノイズの影響が大きいです。</p>
 <p>ちなみに、Coherenceに位相情報を残したものがCoherencyです。<br />
 <br /><span class="math display">$$Coherence = \frac{\overline{Sxy}}{\sqrt{\overline{|Sxx|} * \overline{|Syy|}}}$$</span><br /><br />
 こいつの使いみちは僕はあまり知らないです…</p>
-<h2 id="plvやcoherenceの欠点の克服">PLVやCoherenceの欠点の克服</h2>
-<p>いくつか方法があります。大きく分けて2つ、またはその組み合わせです。</p>
-<ul>
-<li>拡散する前の電流を推定する</li>
-<li>拡散しても大丈夫な計算方法を採る</li>
-</ul>
-<h3 id="拡散する前の電流">拡散する前の電流</h3>
-<p>CurrentSourceDensityという方法があるらしいです。<br />
-こっちはソースベース解析ほどバリバリに推定するわけではない感じですが、<br />
-PLVの弱点を補う方法ですね。残念ながらMNEpythonには未実装です。<br />
-ていうか、僕はこの方法を知らないのです。</p>
-<h3 id="plvの発展系">PLVの発展系</h3>
+<h3 id="plvやcoherenceの欠点の克服">PLVやCoherenceの欠点の克服</h3>
 <p>mne-connectivityに実装されている有名所として、PLIとWPLIを紹介します。</p>
 <h4 id="pli">PLI</h4>
 <p>PhaseLagIndexという指標があります。こいつは上記の拡散をキャンセルしてしまう方法で、<br />
@@ -3754,7 +3785,9 @@ Imは虚軸だけを返す関数です。<br />
 これは「互いにどんな風に繋がっているかな？」というのを<br />
 考えていく理論です。色々なやり方があります。<br />
 例えば、一筆書きでどんな風に繋ぐか、ループを作らずにどんな風に繋ぐかとか、<br />
-そういうノリのやつです。後述します。</p>
+そういうノリのやつです。</p>
+<p>グラフ理論に慣れ親しみたいならこの記事見て色々遊んでもいいかもですね。<br />
+<a href="https://qiita.com/maskot1977/items/e1819b7a1053eb9f7d61">https://qiita.com/maskot1977/items/e1819b7a1053eb9f7d61</a></p>
 
 <h2 id="ソースベース解析の理屈">ソースベース解析の理屈</h2>
 <p>かなり面倒いので丁寧にはかけません。ここからは線形代数の範囲になります。<br />
@@ -4077,13 +4110,13 @@ looseというパラメータがソース推定であります。<br />
 <h3 id="実装python">実装(python🐍)</h3>
 <p>では逆行列を作りましょう!今回はプログラミング言語python🐍のnumpyパッケージを使います。<br />
 まずは、pythonで割り算のパッケージに、上の行列を入れ込みます。(足と体の数は適当)</p>
-<div class="sourceCode" id="cb191"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb191-1" title="1"><span class="im">from</span> numpy <span class="im">import</span> linalg, array</a>
-<a class="sourceLine" id="cb191-2" title="2">A <span class="op">=</span> [[<span class="dv">2</span>, <span class="dv">4</span>], [<span class="dv">1</span>, <span class="dv">1</span>]]  <span class="co"># それぞれ足と首の数</span></a>
-<a class="sourceLine" id="cb191-3" title="3">At <span class="op">=</span> linalg.inv(A)  <span class="co"># 逆行列</span></a>
-<a class="sourceLine" id="cb191-4" title="4">Y <span class="op">=</span> array([<span class="dv">10</span>, <span class="dv">3</span>])  <span class="co"># 足が10本、首が3本</span></a></code></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb193-1" title="1"><span class="im">from</span> numpy <span class="im">import</span> linalg, array</a>
+<a class="sourceLine" id="cb193-2" title="2">A <span class="op">=</span> [[<span class="dv">2</span>, <span class="dv">4</span>], [<span class="dv">1</span>, <span class="dv">1</span>]]  <span class="co"># それぞれ足と首の数</span></a>
+<a class="sourceLine" id="cb193-3" title="3">At <span class="op">=</span> linalg.inv(A)  <span class="co"># 逆行列</span></a>
+<a class="sourceLine" id="cb193-4" title="4">Y <span class="op">=</span> array([<span class="dv">10</span>, <span class="dv">3</span>])  <span class="co"># 足が10本、首が3本</span></a></code></pre></div>
 <p>逆行列(<span class="math inline"><em>A</em><sup> − 1</sup></span>)が出来たので、あとは「逆元を掛ける」と解が出ます。</p>
-<div class="sourceCode" id="cb192"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb192-1" title="1">At <span class="op">@</span> Y  <span class="co"># 逆行列の掛け算</span></a>
-<a class="sourceLine" id="cb192-2" title="2"><span class="op">&gt;&gt;&gt;</span> array([<span class="fl">1.</span>, <span class="fl">2.</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb194"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb194-1" title="1">At <span class="op">@</span> Y  <span class="co"># 逆行列の掛け算</span></a>
+<a class="sourceLine" id="cb194-2" title="2"><span class="op">&gt;&gt;&gt;</span> array([<span class="fl">1.</span>, <span class="fl">2.</span>])</a></code></pre></div>
 <p>答えは鶴1匹と亀2匹ですね。(ここまでが高校数学の範囲)</p>
 <h3 id="鶴亀てんとう虫算">鶴亀てんとう虫算🐤🐢🐞</h3>
 <p>鶴亀算が出来たので、次は鶴亀てんとう虫算をやってみましょう。<br />
@@ -4115,20 +4148,20 @@ looseというパラメータがソース推定であります。<br />
 \left(\begin{array}{r} a \\\
  b \\\
  c \end{array}\right)$$</span><br /></p>
-<div class="sourceCode" id="cb193"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb193-1" title="1"><span class="im">from</span> numpy <span class="im">import</span> linalg, array</a>
-<a class="sourceLine" id="cb193-2" title="2">A <span class="op">=</span> array([[<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">4</span>]])</a>
-<a class="sourceLine" id="cb193-3" title="3">At <span class="op">=</span> linalg.inv(A)</a>
-<a class="sourceLine" id="cb193-4" title="4">Y <span class="op">=</span> array([<span class="dv">10</span>, <span class="dv">4</span>, <span class="dv">6</span>])</a>
-<a class="sourceLine" id="cb193-5" title="5">At <span class="op">@</span> Y</a>
-<a class="sourceLine" id="cb193-6" title="6"></a>
-<a class="sourceLine" id="cb193-7" title="7"><span class="op">&gt;&gt;&gt;</span> array([ <span class="fl">3.</span>, <span class="fl">1.</span>,  <span class="fl">0.</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb195"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb195-1" title="1"><span class="im">from</span> numpy <span class="im">import</span> linalg, array</a>
+<a class="sourceLine" id="cb195-2" title="2">A <span class="op">=</span> array([[<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">4</span>]])</a>
+<a class="sourceLine" id="cb195-3" title="3">At <span class="op">=</span> linalg.inv(A)</a>
+<a class="sourceLine" id="cb195-4" title="4">Y <span class="op">=</span> array([<span class="dv">10</span>, <span class="dv">4</span>, <span class="dv">6</span>])</a>
+<a class="sourceLine" id="cb195-5" title="5">At <span class="op">@</span> Y</a>
+<a class="sourceLine" id="cb195-6" title="6"></a>
+<a class="sourceLine" id="cb195-7" title="7"><span class="op">&gt;&gt;&gt;</span> array([ <span class="fl">3.</span>, <span class="fl">1.</span>,  <span class="fl">0.</span>])</a></code></pre></div>
 <p>計算できました。</p>
 <h3 id="逆行列は作れないこともある">逆行列は作れないこともある🐍</h3>
 <p>適当にさっきの行列を弄ってみましょう。</p>
-<div class="sourceCode" id="cb194"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb194-1" title="1"><span class="im">from</span> numpy <span class="im">import</span> linalg, array</a>
-<a class="sourceLine" id="cb194-2" title="2">A <span class="op">=</span> array([[<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>]])</a>
-<a class="sourceLine" id="cb194-3" title="3">At <span class="op">=</span> linalg.inv(A)</a>
-<a class="sourceLine" id="cb194-4" title="4"><span class="op">&gt;&gt;&gt;</span> LinAlgError: Singular matrix</a></code></pre></div>
+<div class="sourceCode" id="cb196"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb196-1" title="1"><span class="im">from</span> numpy <span class="im">import</span> linalg, array</a>
+<a class="sourceLine" id="cb196-2" title="2">A <span class="op">=</span> array([[<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>]])</a>
+<a class="sourceLine" id="cb196-3" title="3">At <span class="op">=</span> linalg.inv(A)</a>
+<a class="sourceLine" id="cb196-4" title="4"><span class="op">&gt;&gt;&gt;</span> LinAlgError: Singular matrix</a></code></pre></div>
 <p>エラーが出ました！💀この行列では逆行列は作れないのでした！こういうこともあります。<br />
 うまくいくかどうかの条件はありますが、今回は難しい数学はしません。<a href="#fn74" class="footnote-ref" id="fnref74"><sup>74</sup></a></p>
 
@@ -4137,13 +4170,13 @@ looseというパラメータがソース推定であります。<br />
 よく使われる方法は<span class="math inline"><em>X</em></span>のL2ノルム<a href="#fn75" class="footnote-ref" id="fnref75"><sup>75</sup></a>が最も小さくなる解を仮の解とする方法です。<br />
 無理やり上記の<span class="math inline"><em>A</em><em>X</em> = <em>Y</em></span>を<span class="math inline"><em>X</em> = <em>A</em><sup>†</sup><em>Y</em></span>の形にしてしまいます。<br />
 これは疑似逆行列と言います。<a href="#fn76" class="footnote-ref" id="fnref76"><sup>76</sup></a>便利ですね！では実装してみます。</p>
-<div class="sourceCode" id="cb195"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb195-1" title="1"><span class="im">from</span> numpy <span class="im">import</span> linalg, array</a>
-<a class="sourceLine" id="cb195-2" title="2">A <span class="op">=</span> [[<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]]  <span class="co"># 足と首の数</span></a>
-<a class="sourceLine" id="cb195-3" title="3">At <span class="op">=</span> linalg.pinv(A)  <span class="co"># 擬似逆行列</span></a>
-<a class="sourceLine" id="cb195-4" title="4">Y <span class="op">=</span> array([<span class="dv">10</span>, <span class="dv">3</span>])  <span class="co"># 足10本と首3本</span></a>
-<a class="sourceLine" id="cb195-5" title="5">At <span class="op">@</span> Y  <span class="co"># 擬似逆行列の掛け算</span></a>
-<a class="sourceLine" id="cb195-6" title="6"></a>
-<a class="sourceLine" id="cb195-7" title="7"><span class="op">&gt;&gt;&gt;</span> array([<span class="fl">1.5</span>, <span class="fl">1.</span> , <span class="fl">0.5</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb197-1" title="1"><span class="im">from</span> numpy <span class="im">import</span> linalg, array</a>
+<a class="sourceLine" id="cb197-2" title="2">A <span class="op">=</span> [[<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]]  <span class="co"># 足と首の数</span></a>
+<a class="sourceLine" id="cb197-3" title="3">At <span class="op">=</span> linalg.pinv(A)  <span class="co"># 擬似逆行列</span></a>
+<a class="sourceLine" id="cb197-4" title="4">Y <span class="op">=</span> array([<span class="dv">10</span>, <span class="dv">3</span>])  <span class="co"># 足10本と首3本</span></a>
+<a class="sourceLine" id="cb197-5" title="5">At <span class="op">@</span> Y  <span class="co"># 擬似逆行列の掛け算</span></a>
+<a class="sourceLine" id="cb197-6" title="6"></a>
+<a class="sourceLine" id="cb197-7" title="7"><span class="op">&gt;&gt;&gt;</span> array([<span class="fl">1.5</span>, <span class="fl">1.</span> , <span class="fl">0.5</span>])</a></code></pre></div>
 <p>適当に数を決めたら少数が出てきました👻<br />
 この割り算は、実は色々なパターンがあるのですが、<br />
 代表的なパターンとしては、例えば下記があります。<br />
@@ -4233,8 +4266,8 @@ pythonのlambda式、読みにくくて嫌われてるけどね。</p>
 <pre data-frame="single"><code>from multiprocessing import Pool</code></pre>
 <p>使い方は、pythonのmap関数に近いものですので、並列化する時は必ず何か関数を定義して下さい。<br />
 (ちなみに、poolのmapはlambda式を食べることが出来ません)</p>
-<div class="sourceCode" id="cb200" data-frame="single"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb200-1" title="1"><span class="kw">def</span> test(i):</a>
-<a class="sourceLine" id="cb200-2" title="2">    <span class="cf">return</span> i <span class="op">*</span> <span class="dv">8</span></a></code></pre></div>
+<div class="sourceCode" id="cb202" data-frame="single"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb202-1" title="1"><span class="kw">def</span> test(i):</a>
+<a class="sourceLine" id="cb202-2" title="2">    <span class="cf">return</span> i <span class="op">*</span> <span class="dv">8</span></a></code></pre></div>
 <p>これをwith文を使ってPoolの中にぶちこみます。</p>
 <pre data-frame="single"><code>with Pool(4) as pool:
   result = pool.map(test, [1, 2, 3, 4])
@@ -4290,12 +4323,26 @@ environ[&#39;OMP_NUM_THREADS&#39;] = str(1)</code></pre>
 ほら、全脳解析でコネクティビティが出るじゃないですか。<br />
 それを数値化してくれる便利なやつです。<br />
 (僕の中ではその程度の認識。ただし、多分あってる。)</p>
-<p>pythonでgraph理論でなにかやりたい場合はこうです。</p>
-<pre data-frame="single"><code>pip install bctpy</code></pre>
-<p>これでbctpyがインストールされました。<br />
+<p>pythonでgraph理論でなにかやりたい場合は有力な選択肢として<br />
+- bctpy<br />
+- NetworkX</p>
+<p>の二つがあります。<br />
+このうち、bctpyはmatlabのbctからの移植で、脳特化型です。<br />
+NetworkXはエンジニアさんたちの汎用的な道具です。<br />
+どちらかと言うと、bctの方が重み付けにいい感じ。<br />
+NetworkXの方が量子化されている感じです。<br />
+僕の感想ですが、現状ではbctの方が使いやすい。</p>
+<pre data-frame="single"><code>pip install bctpy
+pip install networkx</code></pre>
+<p>これでbctpyとNetworkXがインストールされました。<br />
 公式サイトはこれです。<br />
-https://github.com/aestrivex/bctpy<br />
-コネクティビティの結果である三角行列を突っ込みたいですね。<br />
+<a href="https://github.com/aestrivex/bctpy">https://github.com/aestrivex/bctpy</a><br />
+<a href="https://networkx.org/">https://networkx.org/</a></p>
+<p>bctpyのドキュメントは隠れています。<br />
+<a href="https://github.com/aestrivex/bctpy/tree/master/docs/_build/html">https://github.com/aestrivex/bctpy/tree/master/docs/_build/html</a></p>
+<p>うーん…これは、なにか生成させたかったのかな。<br />
+他の見方もあったのかも知れない。</p>
+<p>さて、コネクティビティの結果である三角行列を突っ込みたいですね。<br />
 突っ込みます。</p>
 <pre data-frame="single"><code>import bct</code></pre>
 <p>例えばconmatというnumpy三角行列があったとして、こいつを放り込むなら<br />
@@ -4303,13 +4350,32 @@ https://github.com/aestrivex/bctpy<br />
 (方向ありの行列なら三角行列にはならないのでそのままでいいです)</p>
 <pre data-frame="single"><code>dcon = conmat + conmat.T</code></pre>
 <p>global efficiencyを重み付けありで計算したいならこうと思います。</p>
-<pre data-frame="single"><code>bct.efficiency_wei(dcon)</code></pre>
-<p>すると、スカラー値が算出されます。そう、グラフ理論ってのは、基本<br />
-「このネットワークを表すスカラー値を出す」的なやつですよ。<br />
+<pre data-frame="single"><code>global_efficiency = bct.efficiency_wei(con)</code></pre>
+<p>ね、簡単でしょ？<br />
+この場合はそれぞれの距離を求めてからglobal efficiencyを計算します。<br />
+重み付きかどうかは選べるみたいです。<br />
+重みがついていない場合は<span class="math inline"><em>b</em><em>c</em><em>t</em>.<em>e</em><em>f</em><em>f</em><em>i</em><em>c</em><em>i</em><em>e</em><em>n</em><em>c</em><em>y</em><sub><em>b</em></sub><em>i</em><em>n</em></span>です。</p>
+<p>すると、Global efficiencyの場合にはスカラー値が算出されます。<br />
+「このネットワークを表すスカラー値を出す」とか<br />
+「この点がどのくらい他と繋がっているか点ごとに出す」的な事をするのが<br />
+グラフ理論です。(数学者に怒られる表現)<br />
 中には、閾値を設けて「これ以上の繋がり具合なら繋がってる」とみなして<br />
-計算するやつとかもあります、というかそういうのが主じゃないかな？<br />
-この記事見て色々遊んでもいいかもですね。<br />
-https://qiita.com/maskot1977/items/e1819b7a1053eb9f7d61</p>
+計算するやつとかもあります。</p>
+<p>では、NetworkXの方を使ってみましょうか。<br />
+ここでは量子化につよいNetworkXの強みを活かしてMinimum spanning treeを<br />
+作って、それのGlobal efficiencyを作ってみましょう。<br />
+Global efficiencyは元々重みがついている方がレアですね。</p>
+<pre data-frame="single"><code>import networkx as nx
+graph = nx.Graph(con)
+mst = nx.minimum_spanning_tree(graph)
+global_efficiency = nx.global_efficiency(mst)</code></pre>
+<p>もちろん、途中で元のnumpyのデータに戻すことも出来るので、<br />
+NetworkXとbctpyを組み合わせて使うことも出来ます。<br />
+さっきのMinimum spanning treeをnumpyの行列に戻してみましょう。</p>
+<pre data-frame="single"><code>np_con = nx.to_numpy_array(mst)</code></pre>
+<p>いいですね。これで貴方もグラフ理論で脳解析が出来るわけです。<br />
+ここは、メソッドが星の数ほどあるので、貴方はどれを使うのが良いのか<br />
+頑張って考えねばなりません。</p>
 
 <h2 id="おすすめの参考書">おすすめの参考書</h2>
 <p>ステルスマーケティングです。</p>

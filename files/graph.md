@@ -14,7 +14,10 @@ pythonでgraph理論でなにかやりたい場合は有力な選択肢として
 
 の二つがあります。
 このうち、bctpyはmatlabのbctからの移植で、脳特化型です。
-NetworkXはエンジニアさんたちの道具です。
+NetworkXはエンジニアさんたちの汎用的な道具です。
+どちらかと言うと、bctの方が重み付けにいい感じ。
+NetworkXの方が量子化されている感じです。
+僕の感想ですが、現状ではbctの方が使いやすい。
 
 ```{frame=single}
 pip install bctpy
@@ -63,5 +66,27 @@ global_efficiency = bct.efficiency_wei(con)
 グラフ理論です。(数学者に怒られる表現)
 中には、閾値を設けて「これ以上の繋がり具合なら繋がってる」とみなして
 計算するやつとかもあります。
-この記事見て色々遊んでもいいかもですね。
-[https://qiita.com/maskot1977/items/e1819b7a1053eb9f7d61](https://qiita.com/maskot1977/items/e1819b7a1053eb9f7d61)
+
+では、NetworkXの方を使ってみましょうか。
+ここでは量子化につよいNetworkXの強みを活かしてMinimum spanning treeを
+作って、それのGlobal efficiencyを作ってみましょう。
+Global efficiencyは元々重みがついている方がレアですね。
+
+```{frame=single}
+import networkx as nx
+graph = nx.Graph(con)
+mst = nx.minimum_spanning_tree(graph)
+global_efficiency = nx.global_efficiency(mst)
+```
+
+もちろん、途中で元のnumpyのデータに戻すことも出来るので、
+NetworkXとbctpyを組み合わせて使うことも出来ます。
+さっきのMinimum spanning treeをnumpyの行列に戻してみましょう。
+
+```{frame=single}
+np_con = nx.to_numpy_array(mst)
+```
+
+いいですね。これで貴方もグラフ理論で脳解析が出来るわけです。
+ここは、メソッドが星の数ほどあるので、貴方はどれを使うのが良いのか
+頑張って考えねばなりません。

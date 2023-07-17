@@ -2,8 +2,22 @@
 
 ## Connectivity
 
+出落ちですが、この論文を読めば、だいたい何をすれば良いのか分かります。
+[https://www.sciencedirect.com/science/article/pii/S2451902221002925](https://www.sciencedirect.com/science/article/pii/S2451902221002925)
+
 Connectivityを脳波でやってみましょう。Connectivityは要するに、
 脳のあちこちの繋がり具合を調べる指標です。MRIとかでよくされている手法ですね。
+
+と、その前に、センサースペースで計算する場合には
+Current source densityを計算する必要があります。
+詳しくは理論編を読んでね。
+
+```{frame=single}
+from mne.preprocessing import compute_current_source_density
+epochs = compute_current_source_density(epochs)
+```
+
+ソースベースの場合にはこれは要らないはずだよ。
 
 mne-connectivityでは脳波と脳磁図でこれを計算することが出来ます。
 実装されている計算方法を列挙してみます。
