@@ -10,7 +10,7 @@
 OSというか、コンピュータ自体ですけれども。
 OSはLinux, MAC OS, Windowsどれでもいけます。
 MRIをいじるならばUnix系が必要になります。
-それぞれ各論を言いますが、僕個人としてはUbuntu linuxが好みです。
+それぞれ各論を言いますが、僕個人としてはLinuxが好みです。
 
 ### Windows
 Windowsを知らない人はいないでしょう。
@@ -20,10 +20,8 @@ MRIをやる時には性能面では劣るかも？
 機種を選べば諭吉が減りにくいというメリットがあります。
 
 ### MacOS
-言わずと知れたオシャレ系OSです。
-何かとお財布に優しくないのが玉に瑕。
-こいつはUnix系の中でもBSDの系譜であり、
-MRI研究に素の状態で使用できるのです。
+言わずと知れたオシャレ系OSです。何かとお財布に優しくないのが玉に瑕。
+Unix系の中でもBSDの系譜であり、MRI研究に素の状態で使用できるのです。
 
 ### Linux(オススメ)
 Unix系の中でもLinuxの系譜に当たるLinuxです。
@@ -40,9 +38,10 @@ Redhat系は最近CentOS事件もあって、今はDebian系が無難と思い�
 
 というわけで、僕は新しめのdebian系linuxディストリビューションである
 UBUNTU[^ubuntu]を使います。
-...今、玄人は「何故Arch linuxじゃだめなん？」と思ったよね？
+...今、玄人の君は「何故Arch linuxじゃだめなん？」と思ったよね？
 あれはローリングリリースだから、ソフトのバージョンに敏感な
-Freesurferの結果がぶれます。僕としては非推奨です。
+Freesurferの結果がぶれるので、素の状態ではMRI使うのは非推奨。
+使うなら、Dockerか何かで仮想化すればよろしいかと。
 
 [^ubuntu]:UBUNTUはCanonical社によって開発されているオープンソースのlinuxディストリビューションであり、人気があります。debianというディストリビューションをベースに作られています。ちなみに、名前は南アフリカの言葉で友愛という意味だそうです。
 
@@ -50,7 +49,6 @@ Linuxでも新しめのメジャーなLinuxディストリビューションが�
 CUDA等の技術に対応していたり、ユーザーが難しいことを考えなくて良いことが多いからです。
 debian系を使う理由はパッケージ管理ソフトのaptが優秀でユーザーが多いことです。
 MACの場合はaptの代わりに [homebrew https://brew.sh/index_ja.html](https://brew.sh/index_ja.html) を用いることになります。
-以下、UBUNTU16.04LTS以上かmacos10.12を想定して書いていきます。
 UBUNTUは下記サイトから無料でダウンロードできます。
 
 [Ubuntu https://www.ubuntulinux.jp/ubuntu](https://www.ubuntulinux.jp/ubuntu)

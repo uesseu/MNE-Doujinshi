@@ -108,49 +108,8 @@ macなら下記も必要です。
 [^curl]:unix界隈では大人気のダウンローダー
 
 ### MAYAVIがインストール出来ない
-mayaviはmne-pythonのインストールの鬼門です。
-僕はしばしばmayaviをインストールすることに失敗します。
-mayaviのドキュメントに「mayavi」のインストールなんて簡単とか書いてありますが
-騙して悪いがあれは嘘である。
-pipでインストールできないときのとっておきをお伝えします。
-ようこそ、UNIXの世界へ。
-
-まずは、gitをインストールします。
-gitのインストールはmacなら
-
-```bash
-brew install git
-```
-
-
-ubuntuなら
-
-```
-sudo apt install git
-```
-
-で簡単です。そのうえで、mayaviのソースコードを貰ってきます。
-
-```bash
-git clone https://github.com/enthought/mayavi.git
-```
-
-で、この中のsetup.pyを走らせましょう。
-
-```bash
-cd mayavi
-python setup.py install
-```
-
-ご注意ください。問答無用で今使っているpythonの中に入ってしまいます。
-もし、これでうまく行かないならば、なにかコンパイラとかが欠けているはずです。
-例えばubuntuなら
-
-```bash
-sudo apt install build-essentioal
-```
-
-とかやれば入るかも？(検証してません)
+多分今のMNE-pythonはMAYAVIは必要ないと思います。
+僕の見た限りですが。昔は大変だったんだ。
 
 ### HF5をインストールしたい
 時間周波数解析をする場合は、

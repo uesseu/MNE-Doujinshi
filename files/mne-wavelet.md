@@ -92,6 +92,8 @@ InducedPowerの計算の仕方に2つの流儀があります。
 TotalPowerからEvokedPowerを引き算してInducedPowerを計算します。
 
 ### wavelet変換の実際
+2024年4月19日のアップデートで下記の方法は古くなりました。
+全員が最新版を使ってるとはかぎらないから、古いほうから書きます。
 
 morletのやり方は臨床研究的にメジャーなやり方と僕は思っています。
 まずはEvokedPowerからやりましょう。下記のスクリプトで実行できます。
@@ -155,3 +157,22 @@ total_power, itc = tfr_morlet(epochs, n_jobs=4, freqs=freqs,
 wavelet変換は基準になる波を実際の波に掛け算して行うのですが、
 波の始まりと終わりのところだけは切れちゃうはずです。そこは十分注意して下さい。
 どの程度のwaveletの波の長さなのかについては、勉強して適当に計算して下さい。
+波の切れ端に近いところは結果がおおきく歪みます。
+
+### 新しい方法
+MNEの人達はこれ使えって言ってます。
+
+```
+mne.time_frequency.tfr_morlet(
+    inst, freqs, n_cycles, use_fft=False,
+    return_itc=True, decim=1, n_jobs=None, picks=None,
+    zero_mean=True, average=True, output='power', verbose=None)
+```
+
+これ、epochsにも入っています。
+
+```
+epochs.compute_tfr('morlet', np.arange(10, 100, 1))
+```
+
+細かいところは古いのと考えかたは同じ。気軽に使っていこう。
