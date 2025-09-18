@@ -25,7 +25,7 @@
 ## 本書の目的・限界・対象者・使い方
 MNE/python[^about-mne][^about-mne2]やfreesurfer[^about-freesurfer]を用いて脳内の電源推定…特にソースベース解析を行うための
 解析環境の構築と解析の基礎を概説します。可能な限り効率的な解析環境を構築し、楽をします。
-僕が個人的に考えている事もちょくちょく書きます。
+僕が個人的に考えている事もちょくちょく書きます。なぜなら同人誌だから。
 僕は脳波計も脳磁計も使用経験があるのですが、脳磁計はレアです。
 僕はelekta社のMEGを使っていたので脳磁計はelekta前提で書きますが、
 MNE-pythonは大抵の脳波計に対応しているので、
@@ -185,9 +185,9 @@ Wavelet変換とかICAとかPermutation検定とか、その他あらゆる事�
 ちなみに元来脳磁図用なのですが、脳波を解析することも出来ます。
 というか、脳磁計なんて値段がおかしい割に使い道が狭いので、実質脳波用。
 C言語で実装されたMNE/Cというのもありますが、古いバージョンと考えていいです。[^old]
-開発は活発で、最近新バージョンは[MNE/python 0.16.1](http://martinos.org/mne/stable/index.html)です。
-freesurferは[6.0](https://surfer.nmr.mgh.harvard.edu/)が、pythonはpython3.9が最新です。
-導入と紹介を書いていこうと思います。
+開発は活発です。[MNE/python](http://martinos.org/mne/stable/index.html)です。
+あと、freesurferについても導入と紹介を書いていこうと思います。
+[https://surfer.nmr.mgh.harvard.edu/](https://surfer.nmr.mgh.harvard.edu/)
 python2はマジでオワコンなので特別な理由がない限り使わないように。いいね？
 
 ![wavelet変換の出力例](img/wavelet.png){width=14cm}
@@ -201,6 +201,7 @@ fMRIでコネクティビティの算出が出来るようになるなど、か�
 反面、計算激重な上にサイズが大きくターミナル使う必要があります。
 Unix系OSじゃないと動きません。
 その上、違うCPU使ったら結果が変わる仕様があり、正しく扱わないとジャジャ馬と化します。
+とはいえ、最近はWSL2がでたのでwindowsでも動きます。
 最近頭部MRI研究で勢力を伸ばしつつあり、最早スタンダードの一つだそうです。フリーウェアです。
 
 \newpage

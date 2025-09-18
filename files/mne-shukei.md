@@ -117,48 +117,6 @@ from pandas import DataFrame
 DataFrame(hoge).to_csv(filename)
 ```
 
-## jupyterでのRとpadasの連携
-
-「Rをjupyterで動かすために」である程度書きましたが、再掲します。
-jupyter上で
-
-```{frame=single}
-%load_ext rpy2.ipython
-```
-
-とした後
-
-```{frame=single}
-%%R -i input -o output
-hogehoge
-```
-
-という風に記述すればhogehogeがRとして動きます。
-ここのデータの受け渡しにもpandasを使うのが良いです。
-項目には名前をつけることが出来ます。
-
-```{frame=single}
-from pandas import DataFrame
-data = Dataframe(data
-                 columns=('group',
-                          'hemisphere',
-                          'test', 'value'))
-```
-
-これで、横軸にcolumsのラベルの付いたデータフレームが出来ます。
-こいつをto_csvを使ったりjupyterとかでRにぶちこみます。
-
-```{frame=single}
-%%R -i data
-result <- aov(
-  df$value ~ df$group * df$hemisphere * df$test,
-  data=df))
-cat(result)
-```
-
-だいたいこんな感じです。
-
-
 ## RでのANOVAについて
 
 pythonのscipyでの統計もいいのですが「なんで統計ソフト使わないん？舐めてるん？」

@@ -149,9 +149,9 @@ subjectを探さねばならなくなります。重いので指定してあげ�
 
 pythonの関数に色々入れてから起動すれば、既にデータが読み込まれているので、楽です。
 ```{frame=single}
-coregistration(subject = subject,
-               subjects_dir = subjects_dir,
-               inst = file_path)
+coregistration(subject = 'hoge',
+               subjects_dir = 'MRI_DIRECTORY',
+               inst = 'eeg_file.fif')
 ```
 instはeegやmegデータ…rawでもepochでも良いらしいですが、どれかを指定して下さい。
 
@@ -187,8 +187,11 @@ projectionモードになっていたりして見にくかったりするかも�
 
 ### 手順2、BEM作成
 脳からセンサーまでの抵抗を計算せねばなりますまい。
+この式を作るためにモデルを作ります。
+BEMとは境界要素法というもので、ある点を周囲の代表として計算する方法です。
+脳は100億以上の細胞がありますから仕方ないですね。
 
-上記の通り、MRIから抽出してくる形データからBEMモデルを作ります。
+MRIから抽出してくる形データからBEMモデルを作ります。
 BEMは脳の全体を包み込むサランラップみたいなデータになります。[^bemmethod]
 頭蓋骨とか皮とか、そういう抵抗が強いものを考慮するために、BEMは三枚一組で
 出力されます。実装上は3枚あるということを意識しなくても大丈夫です。
@@ -209,7 +212,7 @@ mne watershed_bem -s subject -d subjects_dir
 再びpythonに戻り、下記を入力してみてください。
 ```{frame=single}
 from mne.viz import plot_bem
-plot_bem(subject=subject,
+plot_bem(subject='hoge',
          subjects_dir=subjects_dir,
          brain_surfaces='white',
          orientation='coronal')
@@ -236,7 +239,7 @@ freesurferの標準脳であるfsaverageが現れます。
 環境変数ってのはbashrcとかbash_profileとかに書くやつです。一応前述しています。
 ```{frame=single}
 from mne import setup_source_space
-src = setup_source_space(subject=subject,
+src = setup_source_space(subject='hoge',
                          spacing='oct6',
                          subjects_dir=subjects_dir)
 ```
@@ -267,7 +270,7 @@ MEGの場合は一枚だけで十分だそうです。
 ```{frame=single}
 from mne import make_bem_model, make_bem_solution
 conductivity = (0.3,)
-model = make_bem_model(subject='sample',
+model = make_bem_model(subject='hoge',
                        ico=4,
                        conductivity=conductivity,
                        subjects_dir=subjects_dir)

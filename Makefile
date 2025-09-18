@@ -30,6 +30,7 @@ files = files/introduction.md \
   files/graph.md \
   files/books.md \
   files/python-tips.md \
+  files/pitfall.md \
   files/atogaki.md
 
 outfile = out.pdf

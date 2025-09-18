@@ -17,19 +17,19 @@ pythonの環境は構築の方法がいくらでもあるのですが、それ�
 普通はanaconda[^conda]を使います。何故ならMNE公式がanaconda推しだからです。
 anacondaもいい所悪い所色々あってエンジニアの中には毛嫌いする向きもあります。
 僕はよりpythonistaっぽくvenv[^venv]を使っています。
-pipenv[^pipenv]やpoetry[^poetry]を使う方法もあります。
+uv[^uv]やpoetry[^poetry]を使う方法もあります。
 venvとpoetryはpython本体までは用意してくれないので、
 pyenvと併用する必要があります。
 
 [^venv]: python標準の仮想環境です。非常にシンプルで、シンプルである故にトラブルが少ないですが、少し煩雑です。
 
-[^pipenv]: 昔python公式がオヌヌメしていた仮想環境作りツールです。かなりリッチです。重いのとトラブりやすいのが欠点です。
+[^uv]: 最近の環境構築ソフト。pipの代替。
 
-[^poetry]: pipenvの代替。pipenvがpython界でメジャーになったのですが、割と不安定なところもあったので、開発されたやつです。速くて安定していて、控えめに言って神なのですが大げさかも？
+[^poetry]: 昔はpipenvがpython界でメジャーになったのですが、割と不安定なところもあったので、開発されたやつです。
 
 [^docker]:最近流行りの仮想化環境です。性能が高いのが特徴ですが、反面使いこなすのには力が必要です。
 
-[^conda]:anacondaとはContinuumAnalytics社で開発されているデータサイエンティスト向けのpythonディストリビューションです。もちろん好みに応じてpipenvなどを使うのもありですが、面倒いので書きません。
+[^conda]:anacondaとはContinuumAnalytics社で開発されているデータサイエンティスト向けのpythonディストリビューションです。
 
 [Anaconda https://www.continuum.io/downloads](https://www.continuum.io/downloads)
 
@@ -89,10 +89,6 @@ pythonを書いたことは無いけれど他の言語の玄人の人にはこ�
 - venvまたはpoetryとpyenv
 - 好みのテキストエディタ
 
-え？僕ですか？僕はvenvとvim[^vim]とipythonのCUIでやっています。
-
-[^vim]: 圧倒的なテキストエディタの一つ。僕は脳波解析も、同人誌執筆も、すべてvimで行っています。
-
 ### 逆にお勧めしないもの
 
 Windowsのnotepad.exeはお勧めしません！
@@ -148,6 +144,7 @@ ip addr
 で表示されます。
 jupyterはターミナルでctr-cを二回叩けば終了できます。
 では、左上のnewボタンからpythonを起動しましょう。
+
 ### jupyterの設定
 jupyterを使うなら、折角なので拡張しておきましょう。ターミナルで下記を叩いてください。
 
