@@ -34,45 +34,35 @@ files = files/introduction.md \
   files/atogaki.md
 
 outfile = out.pdf
+twoside = twoside.pdf
 outhtml = out.html
 
 latex_twoside = -V documentclass=ltjarticle \
   -V geometry:left=3cm \
   -V geometry:right=1cm \
-  -V geometry:twoside \
-  -V CJKmainfont=IPAexGothic# \
-  -V lang=en-US
+  -V geometry:twoside# \
+  -V CJKmainfont=IPAexGothic
 
 latex = -V documentclass=ltjarticle \
   -V geometry:left=2cm \
-  -V geometry:right=2cm \
-  -V CJKmainfont=IPAexGothic 
-  #-V luatexjapresetoptions=hiragino-pron \
-  #-V lang=en-US \
+  -V geometry:right=2cm# \
+  -V CJKmainfont=IPAexGothic
 
 markdown_extention = -f markdown+hard_line_breaks+emoji
-latex_packages = --listings --template eisvogel.tex
+latex_packages = --listings
 writer = --toc \
     --toc-depth=3 \
     -T MNE同人誌 \
     --indented-code-classes=python,bash \
     --pdf-engine=lualatex\
-    -V mainfont="Cica"
-oldwriter = --toc \
-    --toc-depth=3 \
-    -T MNE同人誌 \
-    --indented-code-classes=python,bash \
-    --pdf-engine=lualatex
+	-V mainfont=NotoSerifCJK-Regular
 
 all: $(files)
-	pandoc -o out.pdf $(writer) $(latex_packages) $(latex) $(markdown_extention) $(files)
-	xdg-open out.pdf
-
-old: $(files)
-	pandoc -o out.pdf $(oldwriter) $(latex_packages) $(latex) $(markdown_extention) $(files)
+	pandoc -o $(outfile) $(writer) $(latex_packages) $(latex) $(markdown_extention) $(files)
+	xdg-open $(outfile)
 
 twoside:
-	pandoc -o twoside.pdf $(writer) $(latex_packages) $(latex_twoside) $(markdown_extention) $(files)
+	pandoc -o $(twoside) $(writer) $(latex_packages) $(latex_twoside) $(markdown_extention) $(files)
 
 html: $(files)
-	pandoc -o out.html $(writer) $(markdown_extention) $(files) -c github.css
+	pandoc -o $(html) $(writer) $(markdown_extention) $(files) -c github.css

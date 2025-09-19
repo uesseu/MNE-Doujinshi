@@ -85,7 +85,7 @@ cons = spectral_connectivity_epochs(
 - cwt_n_cycles: morlet waveletの波の数
 - block_size,n_jobs: 一度にどのくらい計算するか
 
-この関数は、中々~~詰め込み~~多機能な関数です。
+この関数は、中々多機能な関数です。(引数多すぎだろ…)
 なんと、上記の沢山のmethodを全部できます。出来るがゆえの大変さもあります。
 
 conは三角行列です。
