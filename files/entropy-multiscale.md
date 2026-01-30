@@ -40,7 +40,7 @@ low, high = 5, 10
 result = entropy_multiscale(
     data[0][0],
     scale=list(range(high, low)),
-    dimension=5,
+    dimension=2,
     fuzzy=fuzzy
 )[0]
 ```
@@ -66,3 +66,5 @@ for ep in epochs.pick_types(eeg=True):
 ```
 
 僕がこれを使ったときに「5にしろ」ってなってしまいました。困ったなぁ。
+普通は2や3がいいらしいですよ。また、complexity_dimensionはscale毎に
+結果がかわります。

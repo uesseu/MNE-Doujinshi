@@ -14,10 +14,8 @@ pythonでgraph理論でなにかやりたい場合は有力な選択肢として
 
 の二つがあります。
 このうち、bctpyはmatlabのbctからの移植で、脳特化型です。
-NetworkXはエンジニアさんたちの汎用的な道具です。
-どちらかと言うと、bctの方が重み付けにいい感じ。
-NetworkXの方が量子化されている感じです。
-僕の感想ですが、現状ではbctの方が使いやすい。
+NetworkXはエンジニアさんたちの汎用的な道具です。bctの方が重み付けにいい感じ。
+NetworkXの方が量子化されている感じです。僕の感想ですが、現状ではbctの方が使いやすい。
 
 ```{frame=single}
 pip install bctpy
@@ -49,16 +47,15 @@ import bct
 dcon = conmat + conmat.T
 ```
 
-global efficiencyを重み付けありで計算したいならこうと思います。
+global efficiencyを重み付けありで計算したいならこうです。
 
 ```{frame=single}
 global_efficiency = bct.efficiency_wei(con)
 ```
 
-ね、簡単でしょ？
-この場合はそれぞれの距離を求めてからglobal efficiencyを計算します。
+ね、簡単でしょ？この場合はそれぞれの距離を求めてからglobal efficiencyを計算します。
 重み付きかどうかは選べるみたいです。
-重みがついていない場合は$bct.efficiency_bin$です。
+重みがついていない場合はbct.efficiency_binです。
 
 すると、Global efficiencyの場合にはスカラー値が算出されます。
 「このネットワークを表すスカラー値を出す」とか

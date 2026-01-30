@@ -1,7 +1,6 @@
 \newpage
 
 ## データのplot
-
 是非自らplotしてみてください。何をやっているのか理解が早まると思います。
 ```{frame=single}
 epochs.plot()
@@ -29,13 +28,12 @@ jupyterにそのまま表示したい場合は下記を先にjupyter上で実行
 ```{frame=single}
 %gui qt
 ```
+としてください。
 jupyterに表示するメリットはjupyter自体を実験ノート風に使えること、
 別ウィンドウに表示するメリットはrawやepoch等大きなデータを表示する時に
-スクロールさせることが出来ることです。
-(反面、バージョン管理がしんどい)
-
-実はjupyter上でスクロール出来る表示もあるのですが、重くてあまり良くないです。
-詳しくはqiitaで検索してください。親切な記事がいくらでもあります。
+スクロールさせることが出来ます。
+しかし、今の僕はjupyterはオススメしがたいものと思っています。
+理由はバージョン管理ができなかったり、コードがちらかっていく事です。
 
 ### pysurfer
 また、PySurferについては例えば下記のような感じです。
@@ -44,7 +42,6 @@ subjectやsubjects_dirはfreesurferの設定で読み替えてください。
 jupyterで下記の呪文を唱えましょう。
 ```{frame=single}
 import surfer
-%gui qt
 ```
 そしてこうです。この場合ブロードマン１を赤く塗っています。
 
@@ -94,8 +91,14 @@ hogeにはSubjectを入れてください。
 data_mean = data.mean(axis=0)
 ```
 
-mneでは三次元配列を多用しますが、とりあえずaxis=0でうまくいくことが多いですね。
-ここは適当ですが、いい感じに調整して下さい。
+mneでは三次元以上の配列を多用しますが、ここではとりあえずaxis=0で。
+場合によっては
+
+```{frame=single}
+data_mean = data.mean(axis=(1, 2))
+```
+
+とかになるかも。いい感じに調整して下さい。
 
 ```{frame=single}
 import matplotlib.pyplot as plt
@@ -120,25 +123,16 @@ axに吐き出したものはpltで色々するんですね。詳しくはググ
 
 ## 多チャンネル抜き出し
 
-もし、多チャンネルのevokedを平均したものを割り出したいなら貴方はnumpyを使うことになります。
-ここでは脳波のevokedを例にしておきます。他のデータでも応用ききます。
 下記のチャンネルを選択したいとします。
 ```{frame=single}
 channels = ['Fz', 'FCz', 'FC1', 'FC2',
             'Cz', 'C1', 'C2', 'F1', 'F2']
 ```
 
-pythonの配列では、中の項目を逆引きで探し出す.index()関数があります。
-加工した波形データは.data変数の中に格納されています。その一番初めの情報が
-チャンネル別なので、1チャンネル…例えば'Fz'なら下記のようにすれば割り出せます。
+epochsのオブジェクトにはpickという関数がありますので、それを使いましょう。
 ```{frame=single}
-evoked.data[evoked.info['ch_names'].index('Fz')]
-```
-この'Fz'をfor文で書きかえていけば良いのです。
-```{frame=single}
-data = []
-for channel in channels:
-  wave = evoked.data[evoked.info['ch_names'].index(ch)]
-  data.append(wave)
+epochs.pick(channels)
+epochs.plot()
 ```
 
+他にも色々ありますが慣れるしかないです。

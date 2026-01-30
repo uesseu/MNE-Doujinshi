@@ -7,6 +7,7 @@
 ```{frame=single}
 recon-all -i ./hoge.nii -subject (被験者番号) -all
 ```
+
 ちなみに、recon-allというのは複数のコマンドを束ねたコマンドです。
 その複数のコマンド群は下記に記載されています。
 [https://surfer.nmr.mgh.harvard.edu/fswiki/ReconAllDevTable](https://surfer.nmr.mgh.harvard.edu/fswiki/ReconAllDevTable)

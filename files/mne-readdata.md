@@ -3,8 +3,7 @@
 ## データの読み込みとフィルタリング・リサンプル(公式サイト版)
 
 ついに　MNEを使い始めます。まずは下記リンクを開けてください。
-[http://martinos.org/mne/stable/auto_tutorials/plot_artifacts_correction_filtering.html](http://martinos.org/mne/stable/python_reference.html
-)
+[https://mne.tools/stable/auto_tutorials/preprocessing/30_filtering_resampling.html](https://mne.tools/stable/auto_tutorials/preprocessing/30_filtering_resampling.html)
 ちょっと小難しい文法を使っているように見えます。
 小難しい部分は初心者は混乱するだけなので無視してください。
 難しいなら読み飛ばして、次に移ってください。簡単にまとめています。

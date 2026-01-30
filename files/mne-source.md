@@ -203,10 +203,19 @@ BEMは脳の全体を包み込むサランラップみたいなデータにな�
 
 作るためにはfreesurferによる解析データが必要となります。
 freesurferを既に使っているならSubject関連は既に馴染んだ言葉でしょうか？
+では、BEMを作りましょう。shellでやります。
 もちろんSUBJECTやSUBJECTS_DIRは読み替えてください。
 ```{frame=single}
 mne watershed_bem -s subject -d subjects_dir
 ```
+
+あるいは、shellとpython両方が必要になるのが面倒ならこれでもいいです。
+
+```{frame=single}
+from mne.bem import make_watershed_bem
+make_watershed_bem('fsaverage', overwrite=True)
+```
+
 
 これにより、freesurferのサブジェクトの中にBEMが作成されました。
 再びpythonに戻り、下記を入力してみてください。

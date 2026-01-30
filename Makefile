@@ -26,8 +26,8 @@ files = files/introduction.md \
   files/math-connectivity.md \
   files/math-mne.md \
   files/math-inverse.md \
-  files/speedup-python.md \
   files/graph.md \
+  files/speedup-python.md \
   files/books.md \
   files/python-tips.md \
   files/pitfall.md \
